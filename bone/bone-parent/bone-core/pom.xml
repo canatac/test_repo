@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.ortens.bone-core</groupId>
+	<artifactId>bone-core</artifactId>
+	<packaging>ejb</packaging>
+	<version>3.1-SNAPSHOT</version>
+	<name>bone-core</name>
+
+	
+	<parent>
+	    <groupId>org.ortens.bone-parent</groupId>
+	    <artifactId>bone-parent</artifactId>
+	    <version>3.1-SNAPSHOT</version>
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
+		<exec-maven-plugin.version>1.2</exec-maven-plugin.version>
+		<source.version>1.6</source.version>
+		<target.version>1.6</target.version>
+		<maven-assembly-plugin.version>2.2.1</maven-assembly-plugin.version>
+		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
+		<mysql-connector-java.version>5.1.17</mysql-connector-java.version>
+		<poi.version>3.7</poi.version>
+		<junit-version>4.8.1</junit-version>
+		<glassfish-version>3.1</glassfish-version>
+		<arquillian-bom.version>1.0.0.Final</arquillian-bom.version>
+		<exec-maven-plugin.version>1.2</exec-maven-plugin.version>
+		<maven-ejb-plugin.version>2.3</maven-ejb-plugin.version>
+		<javaee-api.version>6.0</javaee-api.version>
+		<ejb.version>3.1</ejb.version>
+		<maven-compiler-plugin.version>2.0.2</maven-compiler-plugin.version>
+		<javaee-endorsed-api.version>6.0</javaee-endorsed-api.version>
+		<eclipselink.version>2.3.2</eclipselink.version>
+		<maven-war-plugin.version>2.3</maven-war-plugin.version>
+		<javax.persistence.version>2.0.0</javax.persistence.version>
+		<maven-surefire-plugin.version>2.11</maven-surefire-plugin.version>
+		<jersey-test-framework.version>1.0.3</jersey-test-framework.version>
+		<commons-lang.version>3.1</commons-lang.version>
+		<vaadin.version>6.8.4</vaadin.version>
+		<jpacontainer-addon-agpl-3.0.version>2.1.0</jpacontainer-addon-agpl-3.0.version>
+		<shiro-core.version>1.1.0</shiro-core.version>
+		<shiro-web.version>1.1.0</shiro-web.version>
+		<slf4j-api.version>1.6.1</slf4j-api.version>
+	 <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
+	</properties>
+	<build>
+		<finalName>bone-core</finalName>
+		<directory>target</directory>
+		<outputDirectory>target/classes</outputDirectory>
+		<testOutputDirectory>target/test-classes</testOutputDirectory>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<testSourceDirectory>src/test/java</testSourceDirectory>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+			</testResource>
+		</testResources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<source>${source.version}</source>
+					<target>${target.version}</target>
+					<showDeprecation>true</showDeprecation>
+					<encoding>ISO-8859-1</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-ejb-plugin</artifactId>
+		        <version>2.3</version>
+		        <configuration>
+		         <ejbVersion>${ejb.version}</ejbVersion>
+
+		          <!-- this is false by default -->
+<!-- 		          <generateClient>true</generateClient> -->
+		        </configuration>
+		      </plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+	    <dependency>
+			<groupId>org.glassfish</groupId>
+		    <artifactId>javax.annotation</artifactId>
+		    <version>3.1</version>
+		</dependency>
+			<!-- EJB EMBEDDED CONTAINER DEPENDENCIES -->
+		<dependency>
+			<groupId>org.glassfish.extras</groupId>
+			<artifactId>glassfish-embedded-all</artifactId>
+			<version>${glassfish-version}</version>
+			<scope>provided</scope>
+ 		</dependency>
+		<dependency>
+		   <groupId>org.eclipse.persistence</groupId>
+		   <artifactId>eclipselink</artifactId>
+		   <version>${eclipselink.version}</version>
+		   <scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+		    <artifactId>vaadin</artifactId>
+		    <version>${vaadin.version}</version>
+		</dependency>
+		<dependency>
+		   <groupId>com.vaadin.addon</groupId>
+		   <artifactId>jpacontainer-addon-agpl-3.0</artifactId>
+		   <version>${jpacontainer-addon-agpl-3.0.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql-connector-java.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>${poi.version}</version>
+		</dependency>
+		<dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang.version}</version>
+        </dependency>
+            
+		        <!-- Java EE 6 API -->
+        <dependency>
+        	<groupId>javax</groupId>
+        	<artifactId>javaee-api</artifactId>
+        	<version>${javaee-api.version}</version>
+        	<scope>provided</scope>
+        </dependency>  
+
+		
+	</dependencies>
+
+    <!-- Déclaration des profiles -->
+    <profiles>
+    		<profile>
+			<id>endorsed</id>
+			<activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+					<name>sun.boot.class.path</name>
+				</property>
+            </activation>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<version>${maven-compiler-plugin.version}</version>
+						<configuration>
+							<compilerArguments>
+								<bootclasspath>
+${settings.localRepository}/javax/javaee-endorsed-api/${javaee-endorsed-api.version}/javaee-endorsed-api-${javaee-endorsed-api.version}.jar${path.separator}${sun.boot.class.path}
+								</bootclasspath>
+							</compilerArguments>
+						</configuration>
+						<dependencies>
+							<dependency>
+								<groupId>javax</groupId>
+								<artifactId>javaee-endorsed-api</artifactId>
+								<version>${javaee-endorsed-api.version}</version>
+								
+							</dependency>
+							
+		                    <dependency>
+		                        <groupId>org.glassfish</groupId>
+		                        <artifactId>javax.annotation</artifactId>
+		                        <version>3.1</version>
+		                    </dependency>
+
+		                </dependencies>
+						
+					</plugin>
+					
+				</plugins>
+			</build>
+        </profile>
+        
+                <!-- ICARUS-07-1 -->
+        <profile>
+            <id>LOCAL</id>
+            <!-- Configure TEST Directories -->
+            <build>
+                <testResources>
+                    <testResource>
+                        <directory>src/test/resources</directory>
+                    </testResource>
+                    <testResource>
+                        <directory>src/test/resources-container-LOCAL</directory>
+                    </testResource>
+                </testResources>
+            </build>
+            <dependencies>
+                <!-- Arquillian for Glassfish Remote Container -->
+                <dependency>
+                    <groupId>org.jboss.arquillian.container</groupId>
+                    <artifactId>arquillian-glassfish-remote-3.1</artifactId>
+                    <version>1.0.0.CR3</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.glassfish.deployment</groupId>
+                    <artifactId>deployment-client</artifactId>
+                    <version>3.1.1</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+        
+    </profiles>	
+
+	<pluginRepositories>
+			    <pluginRepository>
+			        <id>maven2-repository.dev.java.net</id>
+			        <name>Java.net Repository for Maven</name>
+			        <url>http://download.java.net/maven/glassfish/</url>
+			    </pluginRepository>
+	</pluginRepositories>
+	
+</project>

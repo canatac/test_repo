@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation=" 
+	http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+
+	
+    <!-- all declarations in shiro.ini file -->
+	<filter>
+		<filter-name>ShiroFilter</filter-name>
+		<filter-class>org.apache.shiro.web.servlet.IniShiroFilter</filter-class>
+	</filter>
+
+
+	<!-- Make sure any request you want accessible to Shiro is filtered. /* 
+		catches all -->
+	<!-- requests. Usually this filter mapping is defined first (before all 
+		others) to -->
+	<!-- ensure that Shiro works in subsequent filters in the filter chain: -->
+	<filter-mapping>
+		<filter-name>ShiroFilter</filter-name>
+<!-- 		<url-pattern>/shiro/*</url-pattern> -->
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+
+
+	<persistence-context-ref>
+	    <description>Persistence context for JndiProviders. 
+			Unit name should be same as in your persistence.xml</description>
+	    <persistence-context-ref-name>persistence/em</persistence-context-ref-name>
+	    <persistence-unit-name>pu</persistence-unit-name>
+	</persistence-context-ref>
+	
+	
+</web-app>

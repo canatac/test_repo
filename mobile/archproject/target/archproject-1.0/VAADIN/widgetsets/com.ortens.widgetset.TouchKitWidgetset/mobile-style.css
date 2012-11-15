@@ -1,0 +1,510 @@
+/* @override 
+	http://localhost:8080/VaadinTouch/VAADIN/widgetsets/org.vaadin.marcus.vaadintouch.widgetset.VaadinTouchWidgetset/mobile-style.css
+	http://localhost:8080/TouchKit/VAADIN/widgetsets/org.vaadin.touchkit.widgetset.TouchKitWidgetset/mobile-style.css
+	http://localhost:8080/TouchKitSampler/VAADIN/widgetsets/org.vaadin.touchkitsampler.widgetset.TouchkitsamplerWidgetset/mobile-style.css
+	http://localhost:8080/TouchKit/VAADIN/widgetsets/com.vaadin.touchkit.widgetset.TouchKitWidgetset/mobile-style.css
+*/
+
+/* Preload some images to avoid flickering on activation */
+.preload {
+	position: absolute;
+	left: -1000px;
+	background: url('images/back_button_touched.png') no-repeat;
+	background: url('images/chevron_touched.png') no-repeat;
+	background: url('images/item_background_touched.png') no-repeat;
+}
+
+.v-mobilelayout {
+	background: #ddd;
+	color: black; 
+	
+	font-family: Helvetica; 
+	font-size: 14px;
+	
+	margin: 0;
+	padding: 0;
+	
+	width: 100% !important;
+	min-height: 100% !important;
+	height: auto !important;
+	position: relative;
+	
+	overflow-x: hidden;
+	overflow-y: visible;
+	
+	-webkit-text-size-adjust: none; 
+	-moz-text-size-adjust: none; 
+	-webkit-user-select: none;
+	-moz-user-select: none;	
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	-moz-tap-highlight-color: rgba(0,0,0,0);
+	-webkit-text-size-adjust: none;
+	-moz-text-size-adjust: none;
+
+}
+
+.v-mobilelayout .v-mobilelayout-header {
+	background-color: #6e84a1;
+	color: #515b66;
+	background: url(images/header_middle.png);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#acb9ca), to(#6e84a1));
+	
+	display: block;
+	height: 40px;
+	
+	font-size: 20px;
+	text-decoration: none;
+	text-shadow: 0px 1px 0px #222;
+	
+	border-bottom: 1px solid rgb(45, 54, 66);
+	border-top: 1px solid #bbb;
+}
+
+.v-mobilelayout .v-mobilelayout-header .v-mobilelayout-caption {
+	position: absolute;
+	height: 31px;
+	line-height: 31px;
+	max-width: 70%;
+	left: 30px;
+	top:  6px;
+	
+	color: #fff;
+	
+	font-size: 16pt;
+	font-weight: bold;
+	text-shadow: 0px -1px 1px rgba(0,0,0,.5);
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	z-index: 0;
+}
+
+.v-mobilelayout .v-mobilelayout-header .v-mobilelayout-button {	
+	z-index: 100;
+	opacity: 1;
+	
+	font-weight: bold;
+    text-align: center;
+    color: white;
+    text-shadow: rgba(0,0,0,0.6) 0px -1px 0px;
+    white-space: nowrap;
+    
+    
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 12px;
+    
+    height: 31px;
+    line-height: 31px;
+	position: absolute;
+  	-webkit-transform: translate(0,0);
+  	top: 6px;
+  	margin-left: 5px;
+	max-width: 60px;
+	padding-right: 4px;
+
+	-webkit-border-image : url('images/back_button.png') 0 4 0 13;
+	-moz-border-image : url('images/back_button.png') 0 4 0 13;
+  	border-width : 0 4px 0 13px;
+}
+
+.v-mobilelayout .v-mobilelayout-header .v-mobilelayout-button:active,
+.v-mobilelayout .v-mobilelayout-header .v-mobilelayout-button.active {
+	-webkit-border-image : url('images/back_button_touched.png') 0 4 0 13;
+	-moz-border-image : url('images/back_button_touched.png') 0 4 0 13;
+  	border-width : 0 4px 0 13px;
+}
+
+
+/* Touch Layout */
+.v-mobilelayout .v-mobilelayout-content .v-touchlayout {
+	padding: 10px 10px 10px 10px;
+	min-height: 100% !important;
+}
+
+.v-mobilelayout .v-mobilelayout-content .v-touchlayout .v-csslayout-margin {
+	width: auto !important; 
+	min-height: 100% !important;
+}
+.v-mobilelayout .v-mobilelayout-content .v-touchlayout .v-csslayout-container {
+	width: auto !important; 
+	min-height: 100% !important;
+}
+
+.v-mobilelayout .v-mobilelayout-content .v-touchlayout > .v-csslayout-margin > .v-csslayout-container > .v-label,
+.v-mobilelayout .v-mobilelayout-content .v-touchlayout > .v-csslayout-margin > .v-csslayout-container > .v-panel,
+.v-mobilelayout .v-mobilelayout-content .v-touchlayout > .v-csslayout-margin > .v-csslayout-container > .v-verticallayout,
+.v-mobilelayout .v-mobilelayout-content .v-touchlayout > .v-csslayout-margin > .v-csslayout-container > .v-horizontallayout,
+.v-mobilelayout .v-mobilelayout-content .v-touchlayout > .v-csslayout-margin > .v-csslayout-container > .v-csslayout,
+.v-mobilelayout .v-mobilelayout-content .v-touchlayout > .v-csslayout-margin > .v-csslayout-container > .v-gridlayout{
+	/* The layouts usually try to force some width, 
+	 * we want the width to be consistent through the app */
+	width: auto !important; 
+
+	background-color: #FFFFFF;
+	border: 1px solid #999999;
+	color: #222222;
+
+	margin-bottom: 10px;
+	margin-top: 5px;
+	padding: 10px;
+		
+	-webkit-border-top-left-radius: 8px;
+	-moz-border-radius-topleft: 8px;
+	-webkit-border-top-right-radius: 8px;
+	-moz-border-radius-topright: 8px;
+	-webkit-border-bottom-left-radius: 8px;
+	-moz-border-radius-bottomleft: 8px;
+	-webkit-border-bottom-right-radius: 8px;
+	-moz-border-radius-bottomright: 8px;
+	-webkit-border-top-left-radius: 8px;
+	-moz-border-radius-topleft: 8px;
+}
+
+.v-mobilelayout .v-mobilelayout-content .v-touchlayout > .v-csslayout-margin > .v-csslayout-container > .v-caption {
+	margin-left: 10px;
+	
+	color: #5c728f;
+	
+	font-weight: bold;
+	font-size: 12pt;
+	text-shadow: 0px 1px 0px #fff;
+}
+
+.v-mobilelayout .v-mobilelayout-content .v-touchlayout > .v-csslayout-margin > .v-csslayout-container > .v-accordion,
+.v-mobilelayout .v-mobilelayout-content .v-touchlayout > .v-csslayout-margin > .v-csslayout-container > .v-tabsheet {
+	max-width: 100%;
+}
+
+
+/** Panel **/
+.v-mobilelayout .v-mobilelayout-content .v-touchlayout .v-panel-captionwrap {
+	display: none;
+}
+
+.v-mobilelayout .v-mobilelayout-content .v-touchlayout .v-panel {
+	height: auto !important;
+}
+.v-mobilelayout .v-mobilelayout-content .v-touchlayout .v-panel-content {
+	border: none;
+	height: auto !important;
+}
+
+.v-mobilelayout .v-mobilelayout-content .v-touchlayout .v-panel-deco {
+	display: none;
+}
+
+
+.v-mobilelayout .v-touchlayout .v-tree .v-tree-node-caption {
+	padding-bottom: 5px;
+}
+
+
+/** Table **/
+.v-mobilelayout .v-touchlayout .v-table .v-table-cell-wrapper {
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+/** TouchMenu **/
+
+.v-touchmenu {
+	width: auto !important; 
+	height: 100% !important;
+	
+	margin-top: 5px;
+	margin-bottom: 20px;
+	
+	list-style-image: none;
+	list-style-type: none;
+	padding: 0;
+}
+
+
+.v-touchmenu .v-touchmenu-caption {
+	max-width:90%;
+	display: block;
+	
+	color: #333;
+	
+	white-space : nowrap;
+  	overflow: hidden;
+  	text-overflow: ellipsis;
+    text-shadow: none;
+    font-size: 17px;
+    font-weight: bold;
+}
+.v-touchmenu .v-touchmenu-description {
+	color: #555;
+	margin-left: 10px;
+	font-size: 14px;
+}
+.v-touchmenu .v-icon {
+	position: absolute;
+}
+
+.v-touchmenu .v-touchmenu-item.v-touchmenu-w-icon .v-touchmenu-caption {
+	margin-left: 20px;
+}
+
+.v-touchmenu .v-touchmenu-item.v-touchmenu-w-icon .v-touchmenu-description{
+	margin-left: 30px;
+}
+.v-touchmenu .v-touchmenu-item.v-touchmenu-w-desc {
+	height: 32px;
+	
+	padding-top: 4px;
+	padding-bottom: 4px;
+	
+	line-height:1
+}
+
+.v-touchmenu .v-touchmenu-item.v-touchmenu-w-desc.v-touchmenu-w-icon .v-icon {
+	padding-top: 8px;
+}
+
+
+.v-touchmenu .v-touchmenu-item {
+	height: 20px;
+	
+	background: #FFFFFF url(images/chevron.png) no-repeat right center;
+		
+	border: 1px solid #999999;
+    margin: -1px 0 0 0;
+    padding: 10px;
+    
+    text-decoration: none;
+}
+
+.v-touchmenu .v-touchmenu-item.v-touchmenu-item:active,
+.v-touchmenu .v-touchmenu-item.v-touchmenu-item.active {
+	background-image: url('images/chevron_touched.png'), url('images/item_background_touched.png');
+	background-position: right center;
+	background-repeat: no-repeat, repeat-x;
+}
+
+.v-touchmenu .v-touchmenu-item.v-touchmenu-item.active .v-touchmenu-caption,
+.v-touchmenu .v-touchmenu-item.v-touchmenu-item:active .v-touchmenu-caption {
+	color: #fff;
+}
+
+.v-touchmenu .v-touchmenuitem .v-button-caption {
+	max-width: 90%;
+	display: block;
+	
+	color: #333;
+    
+    text-shadow: none;
+    font-size: 17px;
+    font-weight: bold;
+    white-space : nowrap;
+  	overflow: hidden;
+  	text-overflow: ellipsis;
+}
+
+.v-touchmenu .v-touchmenuitem .v-touchmenuitem-description {
+	color: #555;
+	margin-left: 10px;
+}
+
+
+.v-touchmenu .v-touchmenuitem:active .v-button-caption {
+	color: #fff;	
+}
+.v-touchmenu .v-touchmenuitem:active .v-touchmenuitem-description {
+	color: #ddd;
+}
+
+.v-touchmenu .v-touchmenuitem .v-button-wrap {
+	background-image: none;
+	padding: 0;
+	margin: 0;
+}
+
+.v-touchmenu .v-touchmenu-item:first-child {
+	-webkit-border-top-left-radius: 8px;
+	-moz-border-radius-topleft: 8px;
+    -webkit-border-top-right-radius: 8px;
+	-moz-border-radius-topright: 8px;
+}
+
+.v-touchmenu .v-touchmenu-item:last-child {
+	-webkit-border-bottom-left-radius: 8px;
+	-moz-border-radius-bottomleft: 8px;
+    -webkit-border-bottom-right-radius: 8px;
+	-moz-border-radius-bottomright: 8px;
+}
+
+/** Form **/
+.v-mobilelayout .v-form {
+	width: auto !important;
+}
+
+.v-mobilelayout .v-formlayout {
+	width: auto !important;
+	
+	margin: 0;
+    
+    text-decoration: none;
+	background: #FFFFFF;
+	border: 1px solid #999999;
+	
+	-webkit-border-top-left-radius: 8px;
+	-moz-border-radius-topleft: 8px;
+    -webkit-border-top-right-radius: 8px;
+	-moz-border-radius-topright: 8px;
+	-webkit-border-bottom-left-radius: 8px;
+	-moz-border-radius-bottomleft: 8px;
+    -webkit-border-bottom-right-radius: 8px;
+	-moz-border-radius-bottomright: 8px;
+}
+
+.v-mobilelayout .v-formlayout table {
+	width: auto !important;
+}
+.v-mobilelayout .v-formlayout-captioncell {
+	padding-left: 10px;
+	font-weight: bold;
+}
+
+.v-mobilelayout .v-formlayout table tr td {
+	height: 20px;
+	border-bottom: 1px solid #999999;
+	padding: 10px;
+}
+
+.v-mobilelayout .v-formlayout table tr td.v-formlayout-errorcell {
+	padding: 0px !important;
+}
+
+.v-mobilelayout .v-formlayout table tr.v-formlayout-lastrow td {
+	padding: 10px;
+}
+
+.v-mobilelayout .v-formlayout table tr.v-formlayout-lastrow td {
+	border-bottom: none;
+	padding: 10px;
+}
+.v-mobilelayout .v-formlayout-row .v-formlayout-contentcell .v-textfield {
+	width: 95% !important;
+	
+	outline: none !important;
+	border: none !important;
+	border-image: none !important;
+	background-image: none !important;
+	
+	color: #617898;
+}
+.v-mobilelayout .v-formlayout-row .v-formlayout-contentcell .v-datefield {
+	width: 90% !important;
+}
+
+.v-mobilelayout .v-formlayout-row .v-formlayout-contentcell .v-filterselect,
+.v-mobilelayout .v-formlayout-row .v-formlayout-contentcell .v-filterselect-input {
+	width: 80% !important;
+	
+	outline: none !important;
+	border: none !important;
+	border-image: none !important;
+	background-image: none !important;
+	background: transparent;
+	
+	color: #617898;
+}
+
+
+/*** Animation classes ***/
+
+/** Header **/
+
+/* Back button */
+.v-mobilelayout .v-mobilelayout-header .v-mobilelayout-button.left {
+	-webkit-transform: translateX(-100px);
+	-moz-transform: translateX(-100px);
+	opacity: 0;
+}
+
+.v-mobilelayout .v-mobilelayout-header .v-mobilelayout-button.right {
+	-webkit-transform: translateX(100px);
+	-moz-transform: translateX(100px);
+	opacity: 0;
+}
+
+.v-mobilelayout .v-mobilelayout-header .v-mobilelayout-button {
+	-webkit-transform: translateX(0);
+	-moz-transform: translateX(0);
+}
+
+.v-mobilelayout .v-mobilelayout-header .v-mobilelayout-button.animate {
+	-webkit-transition-property: -webkit-transform, opacity;
+	-webkit-transition-property: -moz-transform, opacity;
+	-webkit-transition-duration: 0.6s, 0.2s;
+	-moz-transition-duration: 0.6s, 0.2s;
+}
+
+
+/* Caption */
+.v-mobilelayout .v-mobilelayout-header .v-mobilelayout-caption.left {
+	-webkit-transform: translateX(-150px);
+	-moz-transform: translateX(-150px);
+	opacity: 0;
+	z-index: 10;
+}
+
+.v-mobilelayout .v-mobilelayout-header .v-mobilelayout-caption.right {
+	-webkit-transform: translateX(150px);
+	-moz-transform: translateX(150px);
+	opacity: 0;
+	z-index: 30;
+}
+
+.v-mobilelayout .v-mobilelayout-header .v-mobilelayout-caption {
+	-webkit-transform: translate(70px);
+	-moz-transform: translate(70px);
+	opacity: 1;
+	z-index: 20;
+}
+
+.v-mobilelayout .v-mobilelayout-header .v-mobilelayout-caption.animate {
+	-webkit-transition-property: -webkit-transform, opacity;
+	-webkit-transition-property: -moz-transform, opacity;
+	-webkit-transition-duration: 0.6s, 0.2s;
+	-moz-transition-duration: 0.6s, 0.2s;
+}
+
+
+/** Content **/
+
+.v-mobilelayout .v-mobilelayout-content.animate {
+	-webkit-transition-property: -webkit-transform;
+	-moz-transition-property: -moz-transform;
+	-webkit-transition-duration: 0.6s;
+	-moz-transition-duration: 0.8s;
+}
+
+.v-mobilelayout-content {
+	display: block;
+	position: relative;
+	float: left;
+	width: 100% !important;
+	z-index: 30;
+	-webkit-transform: translate(0, 0);
+	margin-right: -100%;
+}
+.v-mobilelayout-content:last-child {
+	margin-right: 0;
+}
+.v-mobilelayout-content.left {
+	-webkit-transform: translate(-100%, 0);
+	-moz-transform: translate(-100%, 0);
+}
+.v-mobilelayout-content.right {
+	-webkit-transform: translate(100%, 0);
+	-moz-transform: translate(100%, 0);
+	
+}
+
+
+.v-mobilelayout .v-mobilelayout-content.loading {
+	background-image: url(images/spinner.gif);	background-repeat: no-repeat;	background-position: 50%;
+	min-height: 100%;
+}

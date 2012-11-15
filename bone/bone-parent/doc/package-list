@@ -1,0 +1,5 @@
+org.ortens.formulaire.client.ui.component
+org.ortens.formulaire.client.ui.jpacontainer
+org.ortens.formulaire.core.bean
+org.ortens.formulaire.core.model
+org.ortens.formulaire.core.service

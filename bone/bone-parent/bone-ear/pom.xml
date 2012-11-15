@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <!-- Artefact Metadata -->
+    <parent>
+        <artifactId>bone-parent</artifactId>
+        <groupId>org.ortens.bone-parent</groupId>
+        <version>3.1-SNAPSHOT</version>
+    </parent>
+    <groupId>org.ortens.bone-ear</groupId>
+    <artifactId>bone-ear</artifactId>
+    <version>3.1-SNAPSHOT</version>
+    <packaging>ear</packaging>
+
+    <!-- Project Name -->
+    <name>bone-ear</name>
+
+	<properties>		
+		<commons-lang.version>3.1</commons-lang.version>
+		<maven-ear-plugin.version>2.6</maven-ear-plugin.version>
+	</properties>
+	
+    <!-- Build Section -->
+    <build>
+        <plugins>
+            <!-- Java EE EAR Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
+                <version>${maven-ear-plugin.version}</version>
+                <configuration>
+                    <version>6</version>
+		            <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <modules>
+                        <webModule>
+                            <groupId>com.ortens</groupId>
+                            <artifactId>archproject</artifactId>
+                            <bundleFileName>archproject-1.0.war</bundleFileName>
+                            <contextRoot>/archproject</contextRoot>
+                        </webModule>
+                        <ejbModule>
+                            <groupId>org.ortens.bone-core</groupId>
+                            <artifactId>bone-core</artifactId>
+                            <bundleFileName>bone-core.jar</bundleFileName>
+                        </ejbModule>
+                        <webModule>
+                            <groupId>org.ortens.bone-client</groupId>
+                            <artifactId>bone-client</artifactId>
+                            <bundleFileName>bone-client.war</bundleFileName>
+                            <contextRoot>/bone-client</contextRoot>
+                        </webModule>
+                        
+                    </modules>
+                    <displayName>${project.artifactId}</displayName>
+                    <generateApplicationXml>true</generateApplicationXml>
+                </configuration>
+            </plugin>            
+        </plugins>
+        
+        <!-- Deploiement du EAR Final -->
+        <finalName>${project.artifactId}</finalName>
+    </build>
+ 
+    <!-- Dependencies Section -->
+    <dependencies>
+        <!-- Mobile Module -->
+        <dependency>
+	        <groupId>com.ortens</groupId>
+	        <artifactId>archproject</artifactId>
+	        <version>1.0</version>
+                <type>war</type>
+	</dependency>
+        <!-- EJB Module -->
+        <dependency>
+	        <groupId>org.ortens.bone-core</groupId>
+	        <artifactId>bone-core</artifactId>
+	        <version>3.1-SNAPSHOT</version>
+	        <type>ejb</type>
+	    </dependency>
+        <!-- WAR Module -->
+        <dependency>
+            <groupId>org.ortens.bone-client</groupId>
+            <artifactId>bone-client</artifactId>
+            <version>3.1-SNAPSHOT</version>
+            <type>war</type>
+        </dependency>
+        
+        <!-- Apache Comons Lang  -->
+		<dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang.version}</version>
+        </dependency>
+     </dependencies>
+</project>

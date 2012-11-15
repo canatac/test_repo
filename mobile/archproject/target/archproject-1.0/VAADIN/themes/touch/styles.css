@@ -1,0 +1,23 @@
+@import url(../reindeer/styles.css);
+
+html > * {
+	-webkit-text-size-adjust: none;
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+/* The loading-indicator looks out of place in an iPhone app */
+.v-loading-indicator,
+.v-loading-indicator-delay,
+.v-loading-indicator-wait {
+	position: absolute;
+	left: -1000px;
+}
+
+.v-view {
+	min-height: 100% !important;
+	height: auto !important;
+	overflow: visible !important;
+	background: #ddd;
+	width: 100%;
+	overflow: hidden;
+}	
