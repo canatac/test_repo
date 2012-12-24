@@ -50,8 +50,21 @@
         <jpacontainer-addon-agpl-3.0.version>2.1.0</jpacontainer-addon-agpl-3.0.version>
         <maven-project-info-reports-plugin.version>2.4</maven-project-info-reports-plugin.version>
         <slf4j-api.version>1.6.6</slf4j-api.version>
+        <junit.version>4.10</junit.version>
     </properties>
     
+	<dependencyManagement>
+	    <dependencies>
+	        <dependency>
+	            <groupId>org.jboss.arquillian</groupId>
+	            <artifactId>arquillian-bom</artifactId>
+	            <version>1.0.3.Final</version>
+	            <scope>import</scope>
+	            <type>pom</type>
+	        </dependency>
+	    </dependencies>
+	</dependencyManagement>
+	    
     <!-- Build Section -->
     <build>
         <plugins>
@@ -111,6 +124,10 @@
                 <artifactId>versions-maven-plugin</artifactId>
                 <version>${versions-maven-plugin.version}</version>
             </plugin>
+            <plugin>
+			    <artifactId>maven-surefire-plugin</artifactId>
+			    <version>2.12</version>
+			</plugin>
         </plugins>
     </build>
     
@@ -118,12 +135,22 @@
     <dependencies>
 
         <!-- Java EE 6 API -->
+        <!-- cf.https://community.jboss.org/wiki/WhatsTheCauseOfThisExceptionJavalangClassFormatErrorAbsentCode
+        This dependency provides you with the Java EE APIs, not the implementations. 
+        While this dependency works for compiling, it cannot be used for executing code (that includes tests).-->
+<!--         <dependency> -->
+<!--             <groupId>javax</groupId> -->
+<!--             <artifactId>javaee-api</artifactId> -->
+<!--             <version>${javaee-api.version}</version> -->
+<!--             <scope>provided</scope> -->
+<!--         </dependency> -->
         <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>${javaee-api.version}</version>
-            <scope>provided</scope>
-        </dependency>
+	        <groupId>org.jboss.spec</groupId>
+	        <artifactId>jboss-javaee-6.0</artifactId>
+	        <version>1.0.0.Final</version>
+	        <type>pom</type>
+	        <scope>provided</scope>
+    	</dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -146,7 +173,17 @@
             <artifactId>jpacontainer-addon-agpl-3.0</artifactId>
             <version>${jpacontainer-addon-agpl-3.0.version}</version>
         </dependency>
-        
+        <dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+        <dependency>
+		    <groupId>org.jboss.arquillian.junit</groupId>
+		    <artifactId>arquillian-junit-container</artifactId>
+		    <scope>test</scope>
+		</dependency>   
     </dependencies>
     <reporting>
         <plugins>
@@ -157,7 +194,7 @@
                 <configuration>
                     <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet>
 
-                    <docletPath>/opt/local/share/java/UmlGraph-5.6.jar</docletPath> -->
+                    <docletPath>/opt/local/share/java/UmlGraph-5.6.jar</docletPath>
                     <docletArtifact>
                         <groupId>org.umlgraph</groupId>
                         <artifactId>doclet</artifactId>

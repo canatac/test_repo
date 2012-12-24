@@ -23,7 +23,7 @@
 		<maven-assembly-plugin.version>2.2.1</maven-assembly-plugin.version>
 		<maven-compiler-plugin.version>2.3.2</maven-compiler-plugin.version>
 		<mysql-connector-java.version>5.1.17</mysql-connector-java.version>
-		<poi.version>3.7</poi.version>
+		<poi.version>3.8</poi.version>
 		<junit-version>4.8.1</junit-version>
 		<glassfish-version>3.1</glassfish-version>
 		<arquillian-bom.version>1.0.0.Final</arquillian-bom.version>
@@ -44,8 +44,23 @@
 		<shiro-core.version>1.1.0</shiro-core.version>
 		<shiro-web.version>1.1.0</shiro-web.version>
 		<slf4j-api.version>1.6.1</slf4j-api.version>
+		<poi-examples.version>3.8</poi-examples.version>
+		<commons-io.version>1.3.2</commons-io.version>
 	 <netbeans.hint.deploy.server>gfv3ee6</netbeans.hint.deploy.server>
 	</properties>
+	
+	<dependencyManagement>
+	    <dependencies>
+	        <dependency>
+	            <groupId>org.jboss.arquillian</groupId>
+	            <artifactId>arquillian-bom</artifactId>
+	            <version>1.0.3.Final</version>
+	            <scope>import</scope>
+	            <type>pom</type>
+	        </dependency>
+	    </dependencies>
+	</dependencyManagement>
+	
 	<build>
 		<finalName>bone-core</finalName>
 		<directory>target</directory>
@@ -90,6 +105,25 @@
 	</build>
 
 	<dependencies>
+	<!-- JUnit Core -->
+	      <dependency>
+	          <groupId>junit</groupId>
+	          <artifactId>junit</artifactId>
+	          <version>4.8.2</version>
+	          <scope>test</scope>
+	      </dependency>
+      	<dependency>
+			<groupId>net.sf.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>2.0</version>
+		</dependency>
+      
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-examples</artifactId>
+			<version>${poi-examples.version}</version>
+		</dependency>
+     
 	    <dependency>
 			<groupId>org.glassfish</groupId>
 		    <artifactId>javax.annotation</artifactId>
@@ -100,7 +134,8 @@
 			<groupId>org.glassfish.extras</groupId>
 			<artifactId>glassfish-embedded-all</artifactId>
 			<version>${glassfish-version}</version>
-			<scope>provided</scope>
+<!-- 			<scope>provided</scope> -->
+			<scope>runtime</scope>
  		</dependency>
 		<dependency>
 		   <groupId>org.eclipse.persistence</groupId>
@@ -134,7 +169,12 @@
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang.version}</version>
         </dependency>
-            
+        <dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons-io.version}</version>
+		</dependency>
+		            
 		        <!-- Java EE 6 API -->
         <dependency>
         	<groupId>javax</groupId>
@@ -142,87 +182,65 @@
         	<version>${javaee-api.version}</version>
         	<scope>provided</scope>
         </dependency>  
-
-		
+		<dependency>
+		  <groupId>org.slf4j</groupId>
+		  <artifactId>slf4j-api</artifactId>
+		  <version>${slf4j-api.version}</version>
+		</dependency>
+				<!-- Arquillian JUnit Extension -->
+      <dependency>
+          <groupId>org.jboss.arquillian.junit</groupId>
+          <artifactId>arquillian-junit-container</artifactId>
+          <version>1.0.0.CR7</version>
+          <scope>test</scope>
+      </dependency>
+	    <!-- Arquillian for Glassfish Remote Container -->
+<!--       <dependency> -->
+<!--           <groupId>org.jboss.arquillian.container</groupId> -->
+<!--           <artifactId>arquillian-glassfish-remote-3.1</artifactId> -->
+<!--           <version>1.0.0.CR2</version> -->
+<!--           <scope>test</scope> -->
+<!--           <exclusions> -->
+<!--               <exclusion> -->
+<!--                   <groupId>org.jboss.arquillian.container</groupId> -->
+<!--                   <artifactId>arquillian-container-spi</artifactId> -->
+<!--               </exclusion> -->
+<!--           </exclusions> -->
+<!--       </dependency>    -->
+<!-- Arquillian for Glassfish Remote Container -->
+      <dependency>
+          <groupId>org.jboss.arquillian.container</groupId>
+          <artifactId>arquillian-glassfish-remote-3.1</artifactId>
+          <version>1.0.0.CR2</version>
+          <scope>test</scope>
+          <exclusions>
+              <exclusion>
+                  <groupId>org.jboss.arquillian.container</groupId>
+                  <artifactId>arquillian-container-spi</artifactId>
+              </exclusion>
+          </exclusions>
+      </dependency>
 	</dependencies>
 
-    <!-- Déclaration des profiles -->
+<!--     Déclaration des profiles -->
     <profiles>
     		<profile>
-			<id>endorsed</id>
-			<activation>
-                <activeByDefault>true</activeByDefault>
-                <property>
-					<name>sun.boot.class.path</name>
-				</property>
-            </activation>
-
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-compiler-plugin</artifactId>
-						<version>${maven-compiler-plugin.version}</version>
-						<configuration>
-							<compilerArguments>
-								<bootclasspath>
-${settings.localRepository}/javax/javaee-endorsed-api/${javaee-endorsed-api.version}/javaee-endorsed-api-${javaee-endorsed-api.version}.jar${path.separator}${sun.boot.class.path}
-								</bootclasspath>
-							</compilerArguments>
-						</configuration>
-						<dependencies>
-							<dependency>
-								<groupId>javax</groupId>
-								<artifactId>javaee-endorsed-api</artifactId>
-								<version>${javaee-endorsed-api.version}</version>
-								
-							</dependency>
-							
-		                    <dependency>
-		                        <groupId>org.glassfish</groupId>
-		                        <artifactId>javax.annotation</artifactId>
-		                        <version>3.1</version>
-		                    </dependency>
-
-		                </dependencies>
-						
-					</plugin>
-					
-				</plugins>
-			</build>
-        </profile>
-        
-                <!-- ICARUS-07-1 -->
-        <profile>
-            <id>LOCAL</id>
-            <!-- Configure TEST Directories -->
-            <build>
-                <testResources>
-                    <testResource>
-                        <directory>src/test/resources</directory>
-                    </testResource>
-                    <testResource>
-                        <directory>src/test/resources-container-LOCAL</directory>
-                    </testResource>
-                </testResources>
-            </build>
-            <dependencies>
-                <!-- Arquillian for Glassfish Remote Container -->
-                <dependency>
-                    <groupId>org.jboss.arquillian.container</groupId>
-                    <artifactId>arquillian-glassfish-remote-3.1</artifactId>
-                    <version>1.0.0.CR3</version>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.glassfish.deployment</groupId>
-                    <artifactId>deployment-client</artifactId>
-                    <version>3.1.1</version>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-        
+    <id>arquillian-glassfish-embedded</id>
+    <dependencies>
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-glassfish-embedded-3.1</artifactId>
+            <version>1.0.0.CR2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.main.extras</groupId>
+            <artifactId>glassfish-embedded-all</artifactId>
+            <version>3.1.2</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</profile>    
     </profiles>	
 
 	<pluginRepositories>

@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE resources PUBLIC
+    "-//GlassFish.org//DTD GlassFish Application Server 3.1 Resource Definitions//EN"
+    "http://glassfish.org/dtds/glassfish-resources_1_5.dtd">
+<resources>
+    <!-- Bases de donnees SOURCES aka MIGXXXX -->
+    <!-- MIGBFCT -->
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="oracle.jdbc.pool.OracleDataSource" res-type="javax.sql.DataSource" steady-pool-size="0" allow-non-component-callers="true" name="MIGBFCT" is-connection-validation-required="true" connection-creation-retry-attempts="6" fail-all-connections="true" transaction-isolation-level="read-committed" ping="true">
+        <property name="User" value="SYSADM"></property>
+        <property name="Password" value="SYSADM"></property>
+        <property name="ServerName" value="rac-cluster-bis"></property>
+        <property name="DriverType" value="thin"></property>
+        <property name="ExplicitCachingEnabled" value="true"></property>
+        <property name="MaxStatements" value="0"></property>
+        <property name="ServiceName" value="MIGBFCT"></property>
+        <property name="NetworkProtocol" value="tcp"></property>
+        <property name="ImplicitCachingEnabled" value="true"></property>
+        <property name="PortNumber" value="1521"></property>
+        <property name="LoginTimeout" value="0"></property>
+    </jdbc-connection-pool>
+    <!-- MIGALPM -->
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="oracle.jdbc.pool.OracleDataSource" res-type="javax.sql.DataSource" steady-pool-size="0" allow-non-component-callers="true" name="MIGALPM" is-connection-validation-required="true" connection-creation-retry-attempts="6" fail-all-connections="true" transaction-isolation-level="read-committed" ping="true">
+        <property name="User" value="SYSADM"></property>
+        <property name="Password" value="SYSADM"></property>
+        <property name="ServerName" value="rac-cluster-bis"></property>
+        <property name="DriverType" value="thin"></property>
+        <property name="ExplicitCachingEnabled" value="true"></property>
+        <property name="MaxStatements" value="0"></property>
+        <property name="ServiceName" value="MIGALPM"></property>
+        <property name="NetworkProtocol" value="tcp"></property>
+        <property name="ImplicitCachingEnabled" value="true"></property>
+        <property name="PortNumber" value="1521"></property>
+        <property name="LoginTimeout" value="0"></property>
+    </jdbc-connection-pool>
+    <!-- MIGPDLO -->
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="oracle.jdbc.pool.OracleDataSource" res-type="javax.sql.DataSource" steady-pool-size="0" allow-non-component-callers="true" name="MIGPDLO" is-connection-validation-required="true" connection-creation-retry-attempts="6" fail-all-connections="true" transaction-isolation-level="read-committed" ping="true">
+        <property name="User" value="SYSADM"></property>
+        <property name="Password" value="SYSADM"></property>
+        <property name="ServerName" value="RAC-CLUSTER-BIS"></property>
+        <property name="DriverType" value="thin"></property>
+        <property name="ExplicitCachingEnabled" value="true"></property>
+        <property name="MaxStatements" value="0"></property>
+        <property name="ServiceName" value="MIGPDLO"></property>
+        <property name="NetworkProtocol" value="tcp"></property>
+        <property name="ImplicitCachingEnabled" value="true"></property>
+        <property name="PortNumber" value="1521"></property>
+        <property name="LoginTimeout" value="0"></property>
+    </jdbc-connection-pool>
+    <!-- MIGAULO -->
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="oracle.jdbc.pool.OracleDataSource" res-type="javax.sql.DataSource" steady-pool-size="0" allow-non-component-callers="true" name="MIGAULO" is-connection-validation-required="true" connection-creation-retry-attempts="6" fail-all-connections="true" transaction-isolation-level="read-committed" ping="true">
+        <property name="User" value="SYSADM"></property>
+        <property name="Password" value="SYSADM"></property>
+        <property name="ServerName" value="RAC-CLUSTER-BIS"></property>
+        <property name="ExplicitCachingEnabled" value="true"></property>
+        <property name="MaxStatements" value="0"></property>
+        <property name="NetworkProtocol" value="tcp"></property>
+        <property name="ImplicitCachingEnabled" value="true"></property>
+        <property name="PortNumber" value="1521"></property>
+        <property name="LoginTimeout" value="0"></property>
+        <property name="ServiceName" value="MIGAULO"></property>
+        <property name="DriverType" value="thin"></property>
+    </jdbc-connection-pool>
+    <!-- MIGRALP -->
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="oracle.jdbc.pool.OracleDataSource" res-type="javax.sql.DataSource" steady-pool-size="0" allow-non-component-callers="true" name="MIGRALP" is-connection-validation-required="true" connection-creation-retry-attempts="6" fail-all-connections="true" transaction-isolation-level="read-committed" ping="true">
+        <property name="User" value="SYSADM"></property>
+        <property name="Password" value="SYSADM"></property>
+        <property name="ServerName" value="RAC-CLUSTER-BIS"></property>
+        <property name="DriverType" value="thin"></property>
+        <property name="ExplicitCachingEnabled" value="true"></property>
+        <property name="MaxStatements" value="0"></property>
+        <property name="ServiceName" value="MIGRALP"></property>
+        <property name="NetworkProtocol" value="tcp"></property>
+        <property name="ImplicitCachingEnabled" value="true"></property>
+        <property name="PortNumber" value="1521"></property>
+        <property name="LoginTimeout" value="0"></property>
+    </jdbc-connection-pool>
+    <!-- MIGPYRE -->
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="oracle.jdbc.pool.OracleDataSource" res-type="javax.sql.DataSource" steady-pool-size="0" allow-non-component-callers="true" name="MIGPYRE" is-connection-validation-required="true" connection-creation-retry-attempts="6" fail-all-connections="true" transaction-isolation-level="read-committed" ping="true">
+        <property name="User" value="SYSADM"></property>
+        <property name="Password" value="SYSADM"></property>
+        <property name="ServerName" value="RAC-CLUSTER-BIS"></property>
+        <property name="DriverType" value="thin"></property>
+        <property name="ExplicitCachingEnabled" value="true"></property>
+        <property name="MaxStatements" value="0"></property>
+        <property name="ServiceName" value="MIGPYRE"></property>
+        <property name="NetworkProtocol" value="tcp"></property>
+        <property name="ImplicitCachingEnabled" value="true"></property>
+        <property name="PortNumber" value="1521"></property>
+        <property name="LoginTimeout" value="0"></property>
+    </jdbc-connection-pool>
+	
+	
+    <!-- Bases de donnees CIBLES aka BACXXXX -->
+    <!-- Couple BFCT et ALPM -->
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="oracle.jdbc.pool.OracleDataSource" res-type="javax.sql.DataSource" steady-pool-size="0" allow-non-component-callers="true" name="BACNAT" is-connection-validation-required="true" connection-creation-retry-attempts="6" fail-all-connections="true" transaction-isolation-level="read-committed" ping="true">
+        <property name="User" value="SYSADM"></property>
+        <property name="Password" value="SYSADM"></property>
+        <property name="ServerName" value="rac-cluster-bis"></property>
+        <property name="DriverType" value="thin"></property>
+        <property name="ExplicitCachingEnabled" value="true"></property>
+        <property name="MaxStatements" value="0"></property>
+        <property name="ServiceName" value="BACNAT"></property>
+        <property name="NetworkProtocol" value="tcp"></property>
+        <property name="ImplicitCachingEnabled" value="true"></property>
+        <property name="PortNumber" value="1521"></property>
+        <property name="LoginTimeout" value="0"></property>
+    </jdbc-connection-pool>
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="oracle.jdbc.pool.OracleDataSource" res-type="javax.sql.DataSource" steady-pool-size="0" allow-non-component-callers="true" name="BACBFCT" is-connection-validation-required="true" connection-creation-retry-attempts="6" fail-all-connections="true" transaction-isolation-level="read-committed" ping="true">
+        <property name="User" value="SYSADM"></property>
+        <property name="Password" value="SYSADM"></property>
+        <property name="ServerName" value="rac-cluster-bis"></property>
+        <property name="DriverType" value="thin"></property>
+        <property name="ExplicitCachingEnabled" value="true"></property>
+        <property name="MaxStatements" value="0"></property>
+        <property name="ServiceName" value="BACBFCT"></property>
+        <property name="NetworkProtocol" value="tcp"></property>
+        <property name="ImplicitCachingEnabled" value="true"></property>
+        <property name="PortNumber" value="1521"></property>
+        <property name="LoginTimeout" value="0"></property>
+    </jdbc-connection-pool>
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="oracle.jdbc.pool.OracleDataSource" res-type="javax.sql.DataSource" steady-pool-size="0" allow-non-component-callers="true" name="BACALPM" is-connection-validation-required="true" connection-creation-retry-attempts="6" fail-all-connections="true" transaction-isolation-level="read-committed" ping="true">
+        <property name="User" value="SYSADM"></property>
+        <property name="Password" value="SYSADM"></property>
+        <property name="ServerName" value="rac-cluster-bis"></property>
+        <property name="DriverType" value="thin"></property>
+        <property name="ExplicitCachingEnabled" value="true"></property>
+        <property name="MaxStatements" value="0"></property>
+        <property name="ServiceName" value="BACALPM"></property>
+        <property name="NetworkProtocol" value="tcp"></property>
+        <property name="ImplicitCachingEnabled" value="true"></property>
+        <property name="PortNumber" value="1521"></property>
+        <property name="LoginTimeout" value="0"></property>
+    </jdbc-connection-pool>
+    <!-- Couple PDLO et PYRE -->
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="oracle.jdbc.pool.OracleDataSource" res-type="javax.sql.DataSource" steady-pool-size="0" allow-non-component-callers="true" name="BACNPLPR" is-connection-validation-required="true" connection-creation-retry-attempts="6" transaction-isolation-level="read-committed" ping="true" fail-all-connections="true">
+        <property name="User" value="SYSADM"></property>
+        <property name="Password" value="SYSADM"></property>
+        <property name="ServerName" value="rac-cluster-bis"></property>
+        <property name="DriverType" value="thin"></property>
+        <property name="ExplicitCachingEnabled" value="true"></property>
+        <property name="MaxStatements" value="0"></property>
+        <property name="ServiceName" value="BACNPLPR"></property>
+        <property name="NetworkProtocol" value="tcp"></property>
+        <property name="ImplicitCachingEnabled" value="true"></property>
+        <property name="PortNumber" value="1521"></property>
+        <property name="LoginTimeout" value="0"></property>
+    </jdbc-connection-pool>
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="oracle.jdbc.pool.OracleDataSource" res-type="javax.sql.DataSource" steady-pool-size="0" allow-non-component-callers="true" name="BACPDLO" is-connection-validation-required="true" connection-creation-retry-attempts="6" transaction-isolation-level="read-committed" fail-all-connections="true" ping="true">
+        <property name="User" value="SYSADM"></property>
+        <property name="Password" value="SYSADM"></property>
+        <property name="DataSourceName" value="OracleDataSource"></property>
+        <property name="ServerName" value="rac-cluster-bis"></property>
+        <property name="DriverType" value="thin"></property>
+        <property name="ExplicitCachingEnabled" value="true"></property>
+        <property name="MaxStatements" value="0"></property>
+        <property name="ServiceName" value="BACPDLO"></property>
+        <property name="NetworkProtocol" value="tcp"></property>
+        <property name="ImplicitCachingEnabled" value="true"></property>
+        <property name="PortNumber" value="1521"></property>
+        <property name="LoginTimeout" value="0"></property>
+    </jdbc-connection-pool>
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="oracle.jdbc.pool.OracleDataSource" res-type="javax.sql.DataSource" steady-pool-size="0" allow-non-component-callers="true" name="BACPYRE" is-connection-validation-required="true" connection-creation-retry-attempts="6" fail-all-connections="true" transaction-isolation-level="read-committed" ping="true">
+        <property name="User" value="SYSADM"></property>
+        <property name="Password" value="SYSADM"></property>
+        <property name="ServerName" value="RAC-CLUSTER-BIS"></property>
+        <property name="DriverType" value="thin"></property>
+        <property name="ExplicitCachingEnabled" value="true"></property>
+        <property name="MaxStatements" value="0"></property>
+        <property name="ServiceName" value="BACPYRE"></property>
+        <property name="NetworkProtocol" value="tcp"></property>
+        <property name="ImplicitCachingEnabled" value="true"></property>
+        <property name="PortNumber" value="1521"></property>
+        <property name="LoginTimeout" value="0"></property>
+    </jdbc-connection-pool>
+    <!-- Couple AULO et RALP -->
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="oracle.jdbc.pool.OracleDataSource" res-type="javax.sql.DataSource" steady-pool-size="0" allow-non-component-callers="true" name="BACNRAAU" is-connection-validation-required="true" connection-creation-retry-attempts="6" fail-all-connections="true" transaction-isolation-level="read-committed" ping="true">
+        <property name="User" value="SYSADM"></property>
+        <property name="Password" value="SYSADM"></property>
+        <property name="DataSourceName" value="OracleDataSource"></property>
+        <property name="ServerName" value="rac-cluster-bis"></property>
+        <property name="DriverType" value="thin"></property>
+        <property name="ExplicitCachingEnabled" value="true"></property>
+        <property name="MaxStatements" value="0"></property>
+        <property name="ServiceName" value="BACNRAAU"></property>
+        <property name="NetworkProtocol" value="tcp"></property>
+        <property name="ImplicitCachingEnabled" value="true"></property>
+        <property name="PortNumber" value="1521"></property>
+        <property name="LoginTimeout" value="0"></property>
+    </jdbc-connection-pool>
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="oracle.jdbc.pool.OracleDataSource" res-type="javax.sql.DataSource" steady-pool-size="0" allow-non-component-callers="true" name="BACAULO" is-connection-validation-required="true" connection-creation-retry-attempts="6" transaction-isolation-level="read-committed" ping="true" fail-all-connections="true">
+        <property name="User" value="SYSADM"></property>
+        <property name="Password" value="SYSADM"></property>
+        <property name="ServerName" value="rac-cluster-bis"></property>
+        <property name="DriverType" value="thin"></property>
+        <property name="ExplicitCachingEnabled" value="true"></property>
+        <property name="MaxStatements" value="0"></property>
+        <property name="ServiceName" value="BACAULO"></property>
+        <property name="NetworkProtocol" value="tcp"></property>
+        <property name="ImplicitCachingEnabled" value="true"></property>
+        <property name="PortNumber" value="1521"></property>
+        <property name="LoginTimeout" value="0"></property>
+    </jdbc-connection-pool>
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="oracle.jdbc.pool.OracleDataSource" res-type="javax.sql.DataSource" steady-pool-size="0" allow-non-component-callers="true" name="BACRALP" is-connection-validation-required="true" connection-creation-retry-attempts="6" transaction-isolation-level="read-committed" fail-all-connections="true" ping="true">
+        <property name="User" value="SYSADM"></property>
+        <property name="Password" value="SYSADM"></property>
+        <property name="DataSourceName" value="OracleDataSource"></property>
+        <property name="ServerName" value="rac-cluster-bis"></property>
+        <property name="DriverType" value="thin"></property>
+        <property name="ExplicitCachingEnabled" value="true"></property>
+        <property name="MaxStatements" value="0"></property>
+        <property name="ServiceName" value="BACRALP"></property>
+        <property name="NetworkProtocol" value="tcp"></property>
+        <property name="ImplicitCachingEnabled" value="true"></property>
+        <property name="PortNumber" value="1521"></property>
+        <property name="LoginTimeout" value="0"></property>
+    </jdbc-connection-pool>
+	
+	
+    <!-- Bases de donnees INTEGRATION aka INTEGXXXX -->
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="oracle.jdbc.pool.OracleDataSource" res-type="javax.sql.DataSource" steady-pool-size="0" allow-non-component-callers="true" name="INTEGNAT" is-connection-validation-required="true" connection-creation-retry-attempts="6" fail-all-connections="true" transaction-isolation-level="read-committed" ping="true">
+        <property name="User" value="SYSADM"></property>
+        <property name="Password" value="SYSADM"></property>
+        <property name="ServerName" value="rac-cluster-bis"></property>
+        <property name="DriverType" value="thin"></property>
+        <property name="ExplicitCachingEnabled" value="true"></property>
+        <property name="MaxStatements" value="0"></property>
+        <property name="ServiceName" value="INTEGNAT"></property>
+        <property name="NetworkProtocol" value="tcp"></property>
+        <property name="ImplicitCachingEnabled" value="true"></property>
+        <property name="PortNumber" value="1521"></property>
+        <property name="LoginTimeout" value="0"></property>
+    </jdbc-connection-pool>
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="oracle.jdbc.pool.OracleDataSource" res-type="javax.sql.DataSource" steady-pool-size="0" allow-non-component-callers="true" name="INTNAT2" is-connection-validation-required="true" connection-creation-retry-attempts="6" fail-all-connections="true" transaction-isolation-level="read-committed" ping="true">
+        <property name="User" value="SYSADM"></property>
+        <property name="Password" value="SYSADM"></property>
+        <property name="ServerName" value="RAC-CLUSTER-BIS"></property>
+        <property name="DriverType" value="thin"></property>
+        <property name="ExplicitCachingEnabled" value="true"></property>
+        <property name="MaxStatements" value="0"></property>
+        <property name="ServiceName" value="INTNAT2"></property>
+        <property name="NetworkProtocol" value="tcp"></property>
+        <property name="ImplicitCachingEnabled" value="true"></property>
+        <property name="PortNumber" value="1521"></property>
+        <property name="LoginTimeout" value="0"></property>
+    </jdbc-connection-pool>
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="oracle.jdbc.pool.OracleDataSource" res-type="javax.sql.DataSource" steady-pool-size="0" allow-non-component-callers="true" name="INTNAT3" is-connection-validation-required="true" connection-creation-retry-attempts="6" fail-all-connections="true" transaction-isolation-level="read-committed" ping="true">
+        <property name="User" value="SYSADM"></property>
+        <property name="Password" value="SYSADM"></property>
+        <property name="ServerName" value="RAC-CLUSTER-BIS"></property>
+        <property name="DriverType" value="thin"></property>
+        <property name="ExplicitCachingEnabled" value="true"></property>
+        <property name="MaxStatements" value="0"></property>
+        <property name="ServiceName" value="INTNAT3"></property>
+        <property name="NetworkProtocol" value="tcp"></property>
+        <property name="ImplicitCachingEnabled" value="true"></property>
+        <property name="PortNumber" value="1521"></property>
+        <property name="LoginTimeout" value="0"></property>
+    </jdbc-connection-pool>
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="oracle.jdbc.pool.OracleDataSource" res-type="javax.sql.DataSource" steady-pool-size="0" allow-non-component-callers="true" name="INTEGRE1" is-connection-validation-required="true" connection-creation-retry-attempts="6" fail-all-connections="true" transaction-isolation-level="read-committed" ping="true">
+        <property name="User" value="SYSADM"></property>
+        <property name="Password" value="SYSADM"></property>
+        <property name="ServerName" value="RAC-CLUSTER-BIS"></property>
+        <property name="DriverType" value="thin"></property>
+        <property name="ExplicitCachingEnabled" value="true"></property>
+        <property name="MaxStatements" value="0"></property>
+        <property name="ServiceName" value="INTEGRE1"></property>
+        <property name="NetworkProtocol" value="tcp"></property>
+        <property name="ImplicitCachingEnabled" value="true"></property>
+        <property name="PortNumber" value="1521"></property>
+        <property name="LoginTimeout" value="0"></property>
+    </jdbc-connection-pool>
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="oracle.jdbc.pool.OracleDataSource" res-type="javax.sql.DataSource" steady-pool-size="0" allow-non-component-callers="true" name="INTEGRE2" is-connection-validation-required="true" connection-creation-retry-attempts="6" fail-all-connections="true" transaction-isolation-level="read-committed" ping="true">
+        <property name="User" value="SYSADM"></property>
+        <property name="Password" value="SYSADM"></property>
+        <property name="ServerName" value="RAC-CLUSTER-BIS"></property>
+        <property name="DriverType" value="thin"></property>
+        <property name="ExplicitCachingEnabled" value="true"></property>
+        <property name="MaxStatements" value="0"></property>
+        <property name="ServiceName" value="INTEGRE2"></property>
+        <property name="NetworkProtocol" value="tcp"></property>
+        <property name="ImplicitCachingEnabled" value="true"></property>
+        <property name="PortNumber" value="1521"></property>
+        <property name="LoginTimeout" value="0"></property>
+    </jdbc-connection-pool>
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="oracle.jdbc.pool.OracleDataSource" res-type="javax.sql.DataSource" steady-pool-size="0" allow-non-component-callers="true" name="INTEGRE3" is-connection-validation-required="true" connection-creation-retry-attempts="6" fail-all-connections="true" transaction-isolation-level="read-committed" ping="true">
+        <property name="User" value="SYSADM"></property>
+        <property name="Password" value="SYSADM"></property>
+        <property name="ServerName" value="RAC-CLUSTER-BIS"></property>
+        <property name="ExplicitCachingEnabled" value="true"></property>
+        <property name="MaxStatements" value="0"></property>
+        <property name="ServiceName" value="INTEGRE3"></property>
+        <property name="NetworkProtocol" value="tcp"></property>
+        <property name="ImplicitCachingEnabled" value="true"></property>
+        <property name="PortNumber" value="1521"></property>
+        <property name="LoginTimeout" value="0"></property>
+        <property name="DriverType" value="thin"></property>
+    </jdbc-connection-pool>
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="oracle.jdbc.pool.OracleDataSource" res-type="javax.sql.DataSource" steady-pool-size="0" allow-non-component-callers="true" name="INTEGRE4" is-connection-validation-required="true" connection-creation-retry-attempts="6" ping="true" transaction-isolation-level="read-committed" fail-all-connections="true">
+        <property name="User" value="SYSADM"></property>
+        <property name="Password" value="SYSADM"></property>
+        <property name="ServerName" value="RAC-CLUSTER-BIS"></property>
+        <property name="DriverType" value="thin"></property>
+        <property name="ExplicitCachingEnabled" value="true"></property>
+        <property name="MaxStatements" value="0"></property>
+        <property name="ServiceName" value="INTEGRE4"></property>
+        <property name="NetworkProtocol" value="tcp"></property>
+        <property name="ImplicitCachingEnabled" value="true"></property>
+        <property name="PortNumber" value="1521"></property>
+        <property name="LoginTimeout" value="0"></property>
+    </jdbc-connection-pool>
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="oracle.jdbc.pool.OracleDataSource" res-type="javax.sql.DataSource" steady-pool-size="0" allow-non-component-callers="true" name="INTEGRE5" is-connection-validation-required="true" connection-creation-retry-attempts="6" transaction-isolation-level="read-committed" ping="true" fail-all-connections="true">
+        <property name="User" value="SYSADM"></property>
+        <property name="Password" value="SYSADM"></property>
+        <property name="ServerName" value="RAC-CLUSTER-BIS"></property>
+        <property name="DriverType" value="thin"></property>
+        <property name="ExplicitCachingEnabled" value="true"></property>
+        <property name="MaxStatements" value="0"></property>
+        <property name="ServiceName" value="INTEGRE5"></property>
+        <property name="NetworkProtocol" value="tcp"></property>
+        <property name="ImplicitCachingEnabled" value="true"></property>
+        <property name="PortNumber" value="1521"></property>
+        <property name="LoginTimeout" value="0"></property>
+    </jdbc-connection-pool>
+    <jdbc-connection-pool connection-validation-method="auto-commit" datasource-classname="oracle.jdbc.pool.OracleDataSource" res-type="javax.sql.DataSource" steady-pool-size="0" allow-non-component-callers="true" name="INTEGRE6" is-connection-validation-required="true" connection-creation-retry-attempts="6" fail-all-connections="true" transaction-isolation-level="read-committed" ping="true">
+        <property name="User" value="SYSADM"></property>
+        <property name="Password" value="SYSADM"></property>
+        <property name="ServerName" value="RAC-CLUSTER-BIS"></property>
+        <property name="DriverType" value="thin"></property>
+        <property name="ExplicitCachingEnabled" value="true"></property>
+        <property name="MaxStatements" value="0"></property>
+        <property name="ServiceName" value="INTEGRE6"></property>
+        <property name="NetworkProtocol" value="tcp"></property>
+        <property name="ImplicitCachingEnabled" value="true"></property>
+        <property name="PortNumber" value="1521"></property>
+        <property name="LoginTimeout" value="0"></property>
+    </jdbc-connection-pool>
+	
+	
+    <!-- Entrees JNDI pour les bases de donnees -->
+    <jdbc-resource pool-name="MIGBFCT" jndi-name="jdbc/migbfct"></jdbc-resource>
+    <jdbc-resource pool-name="MIGALPM" jndi-name="jdbc/migalpm"></jdbc-resource>
+    <jdbc-resource pool-name="MIGPDLO" jndi-name="jdbc/migpdlo"></jdbc-resource>
+    <jdbc-resource pool-name="MIGAULO" jndi-name="jdbc/migaulo"></jdbc-resource>
+    <jdbc-resource pool-name="MIGRALP" jndi-name="jdbc/migralp"></jdbc-resource>
+    <jdbc-resource pool-name="MIGPYRE" jndi-name="jdbc/migpyre"></jdbc-resource>
+    <jdbc-resource pool-name="BACNAT" jndi-name="jdbc/bacnat"></jdbc-resource>
+    <jdbc-resource pool-name="BACBFCT" jndi-name="jdbc/bacbfct"></jdbc-resource>
+    <jdbc-resource pool-name="BACALPM" jndi-name="jdbc/bacalpm"></jdbc-resource>
+    <jdbc-resource pool-name="BACNPLPR" jndi-name="jdbc/bacnplpr"></jdbc-resource>
+    <jdbc-resource pool-name="BACPDLO" jndi-name="jdbc/bacpdlo"></jdbc-resource>
+    <jdbc-resource pool-name="BACPYRE" jndi-name="jdbc/bacpyre"></jdbc-resource>
+    <jdbc-resource pool-name="BACNRAAU" jndi-name="jdbc/bacnraau"></jdbc-resource>
+    <jdbc-resource pool-name="BACAULO" jndi-name="jdbc/bacaulo"></jdbc-resource>
+    <jdbc-resource pool-name="BACRALP" jndi-name="jdbc/bacralp"></jdbc-resource>
+    <jdbc-resource pool-name="INTEGNAT" jndi-name="jdbc/integnat"></jdbc-resource>
+    <jdbc-resource pool-name="INTNAT2" jndi-name="jdbc/intnat2"></jdbc-resource>
+    <jdbc-resource pool-name="INTNAT3" jndi-name="jdbc/intnat3"></jdbc-resource>
+    <jdbc-resource pool-name="INTEGRE1" jndi-name="jdbc/integre1"></jdbc-resource>
+    <jdbc-resource pool-name="INTEGRE2" jndi-name="jdbc/integre2"></jdbc-resource>
+    <jdbc-resource pool-name="INTEGRE3" jndi-name="jdbc/integre3"></jdbc-resource>
+    <jdbc-resource pool-name="INTEGRE4" jndi-name="jdbc/integre4"></jdbc-resource>
+    <jdbc-resource pool-name="INTEGRE5" jndi-name="jdbc/integre5"></jdbc-resource>
+    <jdbc-resource pool-name="INTEGRE6" jndi-name="jdbc/integre6"></jdbc-resource>
+	
+	
+    <!-- Ressources specifiques d'objets de configuration -->
+    <!-- Objet de configuration de connexion aux DATASOURCES -->
+    <custom-resource res-type="java.util.Properties" jndi-name="config/datasources" factory-class="org.glassfish.resources.custom.factory.PropertiesFactory">
+        <property name="fetchSize" value="5000"></property>
+        <property name="RALP" value="jdbc/migralp"></property>
+        <property name="PDLO" value="jdbc/migpdlo"></property>
+        <property name="AULO" value="jdbc/migaulo"></property>
+        <property name="BFCT_REG_INTEG" value="jdbc/integre1"></property>
+        <property name="BFCT_REG_PREPROD" value="jdbc/bacbfct"></property>
+        <property name="BFCT_REG_PROD" value="jdbc/bacbfct"></property>
+        <property name="ALPM_REG_INTEG" value="jdbc/integre2"></property>
+        <property name="ALPM_REG_PREPROD" value="jdbc/bacalpm"></property>
+        <property name="ALPM_REG_PROD" value="jdbc/bacalpm"></property>
+        <property name="BFCT_NAT_INTEG" value="jdbc/integnat"></property>
+        <property name="BFCT_NAT_PREPROD" value="jdbc/bacnat"></property>
+        <property name="BFCT_NAT_PROD" value="jdbc/bacnat"></property>
+        <property name="ALPM_NAT_INTEG" value="jdbc/integnat"></property>
+        <property name="ALPM_NAT_PREPROD" value="jdbc/bacnat"></property>
+        <property name="ALPM_NAT_PROD" value="jdbc/bacnat"></property>
+        <property name="AULO_NAT_INTEG" value="jdbc/intnat2"></property>
+        <property name="AULO_REG_INTEG" value="jdbc/integre4"></property>
+        <property name="PDLO_NAT_INTEG" value="jdbc/intnat2"></property>
+        <property name="PDLO_REG_INTEG" value="jdbc/integre5"></property>
+        <property name="RALP_NAT_INTEG" value="jdbc/intnat2"></property>
+        <property name="RALP_REG_INTEG" value="jdbc/integre3"></property>
+        <property name="AULO_NAT_PREPROD" value="jdbc/bacnraau"></property>
+        <property name="AULO_REG_PREPROD" value="jdbc/bacaulo"></property>
+        <property name="PDLO_NAT_PREPROD" value="jdbc/bacnplpr"></property>
+        <property name="PDLO_REG_PREPROD" value="jdbc/bacpdlo"></property>
+        <property name="RALP_NAT_PREPROD" value="jdbc/bacnraau"></property>
+        <property name="RALP_REG_PREPROD" value="jdbc/bacralp"></property>
+        <property name="ALPM" value="jdbc/migalpm"></property>
+        <property name="BFCT" value="jdbc/migbfct"></property>
+        <property name="AULO_NAT_PROD" value="jdbc/bacnraau"></property>
+        <property name="AULO_REG_PROD" value="jdbc/bacaulo"></property>
+        <property name="PDLO_REG_PROD" value="jdbc/bacpdlo"></property>
+        <property name="PDLO_NAT_PROD" value="jdbc/bacnplpr"></property>
+        <property name="RALP_NAT_PROD" value="jdbc/bacnraau"></property>
+        <property name="RALP_REG_PROD" value="jdbc/bacralp"></property>
+        <property name="PYRE_NAT_INTEG" value="jdbc/intnat3"></property>
+        <property name="PYRE_NAT_PREPROD" value="jdbc/bacnplpr"></property>
+        <property name="PYRE_NAT_PROD" value="jdbc/bacnplpr"></property>
+        <property name="PYRE_REG_INTEG" value="jdbc/integre6"></property>
+        <property name="PYRE_REG_PREPROD" value="jdbc/bacpyre"></property>
+        <property name="PYRE_REG_PROD" value="jdbc/bacpyre"></property>
+        <property name="PYRE" value="jdbc/migpyre"></property>
+    </custom-resource>
+    <!-- Objet de configuration de connexion au serveur de MAILING -->
+    <custom-resource res-type="java.util.Properties" jndi-name="config/mail" factory-class="org.glassfish.resources.custom.factory.PropertiesFactory">
+        <property name="destination" value="sebastien.hebert@efs.sante.fr,adrien.soucachet@efs.sante.fr,joachim.rodrigues.ext@efs.sante.fr,can.atac.externe@efs.sante.fr,anthony.coue@efs.sante.fr,darko.stankovski.ext@efs.sante.fr,damien.bouvet.ext@efs.sante.fr,fabienne.blanchard@efs.sante.fr,frederic.dienot@efs.sante.fr,fadoua.gouchi@efs.sante.fr"></property>
+        <property name="jndiURL" value="mail/errorMsgSender"></property>
+        <property name="destinationIT" value="adrien.soucachet@efs.sante.fr,anthony.coue@efs.sante.fr"></property>
+    </custom-resource>
+    <!-- Objet de configuration de connexion au bus de MESSAGERIE -->
+    <custom-resource res-type="java.util.Properties" jndi-name="config/activemq" factory-class="org.glassfish.resources.custom.factory.PropertiesFactory">
+        <property name="java.naming.factory.initial" value="org.apache.activemq.jndi.ActiveMQInitialContextFactory"></property>
+        <property name="connectionFactoryNames" value="jms/activemq"></property>
+        <property name="connection.jms/activemq.brokerURL" value="failover:(tcp://maq1srv07.efs.sante.ban:30616)"></property>
+        <property name="connection.jms/activemq.username" value="system"></property>
+        <property name="connection.jms/activemq.password" value="manager"></property>
+        <property name="queue.jms/rddungNotifyQueue" value="rddungNotifyQueue-prod"></property>
+    </custom-resource>
+	
+	
+    <!-- Ressources SESSION MAIL -->
+    <mail-resource host="crossroads.efs.sante.ban" jndi-name="mail/errorMsgSender" from="rddung-no-reply@efs.sante.fr" user="sebastien.hebert"></mail-resource>
+</resources>

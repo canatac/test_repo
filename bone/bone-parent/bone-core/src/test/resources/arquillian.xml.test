@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <arquillian xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+          xmlns="http://jboss.org/schema/arquillian"
+          xsi:schemaLocation="http://jboss.org/schema/arquillian 
+          http://jboss.org/schema/arquillian/arquillian-1.0.xsd">
+      <container qualifier="LOCALHOST" default="true">
+          <configuration>
+              <!-- Si un login est requis <property name="adminUser">admin</property> -->
+              <!-- Si un mot de passe est requis <property name="adminPassword">adminadmin</property> -->
+              <property name="adminHttps">false</property>
+              <property name="adminHost">localhost</property>
+              <property name="adminPort">4848</property>
+          </configuration>
+      </container>
+  </arquillian>

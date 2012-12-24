@@ -1,0 +1,29 @@
+# ACTION : 3 valeurs possibles
+# - EXCEL fait seulement l'export de données à partir de la base vers un fichier excel, 
+# mais n'insère pas de nouvelles lignes.
+# - DATA insère uniquement les lignes mais n'exporte pas vers un fichier
+# - TOUT Fait les deux opérations successivement.
+# 
+# REGION : le nom de la région dont on veut générer le rapport d'erreurs
+# Sert pour trouver les répertoires de fichiers à parcourir
+# et pour construire le nom du fichier d'export Excel.
+# 
+# START_FOLDER : le dossier racine où se trouvent les répertoires à parcourir
+# et où sera créé le fichier d'export.
+# 
+# Attention il faut aussi renseigner les propriétés système suivantes 
+# qui donnent les paramètres de connexion à la base de données
+# - MYSQL_HOST : l'hôte Mysql
+# - MYSQL_PORT : le port Mysql
+# - MYSQL_DB : le nom de la base Mysql
+# - MYSQL_USER : le login de l'utilisateur Mysql
+# - MYSQL_PASSWORD : le mot de passe de l'utilisateur Mysql
+# 
+
+DBDRIVER = org.gjt.mm.mysql.Driver
+DBURL =jdbc:mysql://
+MYSQL_HOST =localhost
+MYSQL_PORT =3306
+MYSQL_DB =rapports
+MYSQL_USER =root
+MYSQL_PASSWORD =tdskwtre
