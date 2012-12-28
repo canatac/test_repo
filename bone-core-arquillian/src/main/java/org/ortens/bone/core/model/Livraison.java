@@ -3,8 +3,12 @@ package org.ortens.bone.core.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.Size;
 //import org.hibernate.validator.constraints.NotEmpty;
 
@@ -26,11 +30,8 @@ public class Livraison extends BaseEntity implements Serializable{
 //	@NotEmpty(message = "title is required")
 	private String title;
 
-	@Column(length = DESCRIPTION_COLUMN_LENGTH, nullable = false)
-	@Size(max = DESCRIPTION_MAX_COLUMN_SIZE)
-	private String description;
-	
-	private List<Changement> changements = new ArrayList<Changement>();
+
+	private Set<Changement> changements;
 	
 	@Override
 	public String getDisplayText() {
@@ -49,22 +50,14 @@ public class Livraison extends BaseEntity implements Serializable{
 	}
 
 
-	public String getDescription() {
-		return description;
-	}
 
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-
-	public List<Changement> getChangements() {
+	public Set<Changement> getChangements() {
 		return changements;
 	}
 
 
-	public void setChangements(List<Changement> changements) {
+	public void setChangements(Set<Changement> changements) {
 		this.changements = changements;
 	}
 	

@@ -16,9 +16,20 @@ import org.ortens.bone.core.model.BaseEntity;
 @Entity
 public class Company extends BaseEntity implements Serializable{
 
-    @Override
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4762552808204582937L;
+	private String displayText;
+    
     public String getDisplayText() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        System.out.println("Company.getDisplayText()");
+        return displayText;
+    }    
+
+    public void setDisplayText(String text){
+    	System.out.println("Company.setDisplayText()");
+    	this.displayText = text;
     }
     
 }

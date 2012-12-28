@@ -3,7 +3,11 @@ package org.ortens.bone.core.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
@@ -23,19 +27,15 @@ public class Changement extends BaseEntity implements Serializable{
 	@Size(max = TITLE_MAX_COLUMN_SIZE)
 	private String title;
 
-	@Column(length = DESCRIPTION_COLUMN_LENGTH, nullable = false)
-	@Size(max = DESCRIPTION_MAX_COLUMN_SIZE)
-	private String description;
-	
-	@ManyToMany(mappedBy = "changements", fetch = FetchType.LAZY)
-	private List<Livraison> livrables = new ArrayList<Livraison>();
+	@ManyToMany(targetEntity = Livraison.class, mappedBy = "changements", cascade = CascadeType.ALL)
+	private Set<Livraison> livrables;
 
-	@ManyToMany(mappedBy = "travaux", fetch = FetchType.LAZY)
-	private List<Demand> demandes = new ArrayList<Demand>();
+	@ManyToMany(targetEntity = Demand.class, mappedBy = "travaux", cascade = CascadeType.ALL)
+	private Set<Demand> demandes;
 	
 	public Changement(String title, String description){
 		this.title=title;
-		this.description=description;
+		this.setDescription(description);
 	}
 
 	public Changement() {
@@ -58,32 +58,12 @@ public class Changement extends BaseEntity implements Serializable{
 	}
 
 
-	public String getDescription() {
-		return description;
-	}
-
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-
-	public List<Livraison> getLivraisons() {
-		return livrables;
-	}
-
-
-	public void setLivraisons(List<Livraison> livraisons) {
-		this.livrables = livraisons;
-	}
-
-
-	public List<Demand> getDemandes() {
+	public Set<Demand> getDemandes() {
 		return demandes;
 	}
 
 
-	public void setDemandes(List<Demand> demandes) {
+	public void setDemandes(Set<Demand> demandes) {
 		this.demandes = demandes;
 	}
 
@@ -91,6 +71,14 @@ public class Changement extends BaseEntity implements Serializable{
 	public void setGpa(float f) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public Set<Livraison> getLivrables() {
+		return livrables;
+	}
+
+	public void setLivrables(Set<Livraison> livrables) {
+		this.livrables = livrables;
 	}
 
 

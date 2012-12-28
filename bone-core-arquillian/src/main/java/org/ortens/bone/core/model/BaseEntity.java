@@ -23,6 +23,7 @@ public abstract class BaseEntity {
     private Long id;
     private Date createdOn;
     private Date modifiedOn;
+    private String description;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -102,4 +103,12 @@ public abstract class BaseEntity {
         }
         return true;
     }
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }

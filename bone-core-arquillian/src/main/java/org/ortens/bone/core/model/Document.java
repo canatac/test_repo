@@ -16,9 +16,22 @@ import org.ortens.bone.core.model.BaseEntity;
 @Entity
 public class Document extends BaseEntity implements Serializable{
 
-    @Override
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5801276181939722068L;
+	private String displayText;
+    
     public String getDisplayText() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        System.out.println("Document.getDisplayText()");
+        return displayText;
+    }    
+
+    public void setDisplayText(String text){
+    	System.out.println("Document.setDisplayText()");
+    	this.displayText = text;
     }
+
     
 }

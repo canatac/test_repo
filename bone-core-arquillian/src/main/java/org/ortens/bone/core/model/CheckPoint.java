@@ -9,25 +9,31 @@ import org.ortens.bone.core.model.BaseEntity;
 @Entity
 public class CheckPoint extends BaseEntity implements Serializable{
 
-	@Override
-	public String getDisplayText() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3228476214430949468L;
+	private String displayText;
+    
+    public String getDisplayText() {
+        System.out.println("CheckPoint.getDisplayText()");
+        return displayText;
+    }    
+
+    public void setDisplayText(String text){
+    	System.out.println("CheckPoint.setDisplayText()");
+    	this.displayText = text;
+    }
 
 	private String label;
-	private String description;
+
 	public String getLabel() {
 		return label;
 	}
 	public void setLabel(String label) {
 		this.label = label;
 	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
+
 	
 }

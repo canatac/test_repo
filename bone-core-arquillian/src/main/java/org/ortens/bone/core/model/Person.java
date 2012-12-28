@@ -6,6 +6,8 @@ package org.ortens.bone.core.model;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 /**
  *
@@ -13,23 +15,19 @@ import javax.persistence.Entity;
  */
 @Entity
 public class Person extends BaseEntity implements Serializable{
-
-	private String description;
-	
-    @Override
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3270127104902998688L;
+	private String displayText;
+    
     public String getDisplayText() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        System.out.println("Person.getDisplayText()");
+        return displayText;
+    }    
+
+    public void setDisplayText(String text){
+    	System.out.println("Person.setDisplayText()");
+    	this.displayText = text;
     }
-
-	public String getDescription() {
-		System.out.println("PersonTRUE-getter");
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-		System.out.println("PersonTRUE");
-	}
-    
-    
 }

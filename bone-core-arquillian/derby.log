@@ -1,10 +1,10 @@
 ----------------------------------------------------------------
-Tue Dec 18 11:15:43 CET 2012:
-Amorçage de Derby version The Apache Software Foundation - Apache Derby - 10.8.1.2 - (1095077) : instance a816c00e-013b-ad83-0440-00000131dad0 
-dans le répertoire de base de données C:\Documents and Settings\can.atac-ext\Mes documents\GitHub\test_repo\arquillian-tutorial\target\databases\derby  avec le chargeur de classe sun.misc.Launcher$AppClassLoader@35ce36
+Thu Dec 27 11:25:29 CET 2012:
+Amorçage de Derby version The Apache Software Foundation - Apache Derby - 10.8.1.2 - (1095077) : instance a816c00e-013b-dbe5-31c1-0000016285d8 
+dans le répertoire de base de données C:\Documents and Settings\can.atac-ext\Mes documents\GitHub\test_repo\bone-core-arquillian\target\databases\derby  avec le chargeur de classe sun.misc.Launcher$AppClassLoader@df6ccd
 
 java.vendor=Sun Microsystems Inc.
 java.runtime.version=1.6.0_27-b07
-user.dir=C:\Documents and Settings\can.atac-ext\Mes documents\GitHub\test_repo\arquillian-tutorial
+user.dir=C:\Documents and Settings\can.atac-ext\Mes documents\GitHub\test_repo\bone-core-arquillian
 derby.system.home=null
 Chargeur de classe de la base de données démarré - derby.database.classpath=''

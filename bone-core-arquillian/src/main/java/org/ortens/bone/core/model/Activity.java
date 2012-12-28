@@ -4,23 +4,40 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.ortens.bone.core.model.BaseEntity;
 
 @Entity
 public class Activity extends BaseEntity implements Serializable{
 
-	@Override
-	public String getDisplayText() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6652125573817337161L;
+
+	private String displayText;
+    
+    public String getDisplayText() {
+        System.out.println("Activity.getDisplayText()");
+        return displayText;
+    }    
+
+    public void setDisplayText(String text){
+    	System.out.println("Activity.setDisplayText()");
+    	this.displayText = text;
+    }
 	
 	private String	clientId;
 	private String	employeeId;
-	private String	description; 
 	private String	label;
-	private Date	date;
+	
+	
+	//@MapKeyTemporal(value = null)
+	
+	private Date	prestationDate;
+	
 	public String getClientId() {
 		return clientId;
 	}
@@ -33,24 +50,18 @@ public class Activity extends BaseEntity implements Serializable{
 	public void setEmployeeId(String employeeId) {
 		this.employeeId = employeeId;
 	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
+
 	public String getLabel() {
 		return label;
 	}
 	public void setLabel(String label) {
 		this.label = label;
 	}
-	public Date getDate() {
-		return date;
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getPrestationDate() {
+		return prestationDate;
 	}
-	public void setDate(Date date) {
-		this.date = date;
+	public void setPrestationDate(Date prestationDate) {
+		this.prestationDate = prestationDate;
 	}
-	
-
 }
