@@ -37,10 +37,10 @@ public class Changement extends BaseEntity implements Serializable{
 	@Size(max = TITLE_MAX_COLUMN_SIZE)
 	private String title;
 
-	@ManyToMany(mappedBy = "changements")
+	@ManyToMany(mappedBy = "changements",cascade=CascadeType.REMOVE)
 	private Set<Livraison> livrables = new HashSet<Livraison>(0);
 
-	@ManyToMany(mappedBy = "travaux")
+	@ManyToMany(mappedBy = "travaux",cascade=CascadeType.REMOVE)
 	private Set<Demand> demandes = new HashSet<Demand>(0);
 	
 	public Changement(String title, String description){

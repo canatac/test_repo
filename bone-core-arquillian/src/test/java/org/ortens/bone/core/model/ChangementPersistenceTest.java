@@ -66,8 +66,70 @@ public class ChangementPersistenceTest {
         utx.begin();
         em.joinTransaction();
         System.out.println("Dumping old records...");
+        //em.createQuery("delete from Changement").executeUpdate();
+        
+        
+        String fetchingAllChangementsInJpql = "select g from Changement g order by g.id";
+        String fetchingAllLivraisonsInJpql = "select l from Livraison l order by l.id";
+        String fetchingAllDemandsInJpql = "select d from Demand d order by d.id";
+
+        // when
+        System.out.println("CLEAN DATA - Selecting (using JPQL)...");
+        List<Changement> changements = em.createQuery(fetchingAllChangementsInJpql, Changement.class).getResultList();
+        List<Livraison> livraisons = em.createQuery(fetchingAllLivraisonsInJpql, Livraison.class).getResultList();
+        List<Demand> demands = em.createQuery(fetchingAllDemandsInJpql, Demand.class).getResultList();
+
+        // then
+        System.out.println("Found " + changements.size() + " changements (using JPQL):");
+        System.out.println("Found " + livraisons.size() + " livraisons (using JPQL):");
+        System.out.println("Found " + demands.size() + " demands (using JPQL):");
+        
+        for (Changement changement : changements) {
+            System.out.println("* " + changement);
+            Iterator<Demand> it = changement.getDemandes().iterator();
+            while (it.hasNext()){
+            	System.out.println("YES une demande ! => remove");
+            	Demand demand = it.next();
+            	changement.getDemandes().remove(demand);
+            }
+            Iterator<Livraison> it2 = changement.getLivrables().iterator();
+            while (it2.hasNext()){
+            	System.out.println("YES une livraison ! => remove");
+            	Livraison livraison = it2.next();
+            	changement.getLivrables().remove(livraison);
+            }
+            em.merge(changement);
+        }
+        
+//        for (Livraison livraison : livraisons) {
+//            System.out.println("* " + livraison);
+//            Iterator<Changement> it3 = livraison.getChangements().iterator();
+//            while (it3.hasNext()){
+//            	System.out.println("YES un changement ! => remove");
+//            	it3.remove();
+//            }
+//            em.persist(livraison);
+//        }
+//        for (Demand demand : demands) {
+//            System.out.println("* " + demand);
+//            Iterator<Changement> it4 = demand.getTravaux().iterator();
+//            while (it4.hasNext()){
+//            	System.out.println("YES un changement ! => remove");
+//            	it4.remove();
+//            }
+//            em.persist(demand);
+//        }
+        
+        utx.commit();
+        
+        utx.begin();
+        em.joinTransaction();
+        em.createQuery("delete from Livraison").executeUpdate();
+        em.createQuery("delete from Demand").executeUpdate();
         em.createQuery("delete from Changement").executeUpdate();
         utx.commit();
+        
+        
     }
 
     private void insertData() throws Exception {
@@ -86,7 +148,7 @@ public class ChangementPersistenceTest {
             
             em.persist(livraison);
             em.persist(demand);
-            em.persist(changement);
+            //em.persist(changement);
             
             changement.setDescription(title);
             changement.getDemandes().add(demand);
