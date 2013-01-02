@@ -21,7 +21,6 @@ import java.util.HashSet;
 import java.util.Set;
 import org.junit.Assert;
 import org.ortens.bone.core.model.Solution;
-import org.ortens.bone.core.model.Solution_;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;

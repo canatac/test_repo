@@ -20,9 +20,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.logging.Logger;
+
 import org.junit.Assert;
 import org.ortens.bone.core.model.Changement;
-import org.ortens.bone.core.model.Changement_;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -30,6 +31,9 @@ import javax.persistence.criteria.Root;
 
 @RunWith(Arquillian.class)
 public class ChangementPersistenceTest {
+	
+	public static Logger _logger = Logger.getLogger(ChangementPersistenceTest.class.getName());
+	
     @Deployment
     public static Archive<?> createDeployment() {
         return ShrinkWrap.create(WebArchive.class, "test.war")
@@ -65,108 +69,46 @@ public class ChangementPersistenceTest {
     private void clearData() throws Exception {
         utx.begin();
         em.joinTransaction();
-        System.out.println("Dumping old records...");
+        _logger.info("Dumping old records...");
         //em.createQuery("delete from Changement").executeUpdate();
         
-        
         String fetchingAllChangementsInJpql = "select g from Changement g order by g.id";
-//        String fetchingAllLivraisonsInJpql = "select l from Livraison l order by l.id";
-//        String fetchingAllDemandsInJpql = "select d from Demand d order by d.id";
 
         // when
-        System.out.println("CLEAN DATA - Selecting (using JPQL)...");
+        _logger.info("CLEAN DATA - Selecting (using JPQL)...");
         List<Changement> changements = em.createQuery(fetchingAllChangementsInJpql, Changement.class).getResultList();
-        
 
         // then
-        System.out.println("Found " + changements.size() + " changements (using JPQL):");
-        
-        
+        _logger.info("Found " + changements.size() + " changements (using JPQL):");
+              
         for (Changement changement : changements) {
         	if (changement != null){
         		em.remove(changement);
-        		System.out.println("em.remove(changement)");
+        		_logger.info("em.remove(changement)");
         		}
-//            System.out.println("* " + changement);
-//            Iterator<Demand> it = changement.getDemandes().iterator();
-//            while (it.hasNext()){
-//            	System.out.println("YES une demande ! => remove");
-//            	Demand demand = it.next();
-//            	changement.getDemandes().remove(demand);
-//            }
-//            Iterator<Livraison> it2 = changement.getLivrables().iterator();
-//            while (it2.hasNext()){
-//            	System.out.println("YES une livraison ! => remove");
-//            	Livraison livraison = it2.next();
-//            	changement.getLivrables().remove(livraison);
-//            }
-//            em.merge(changement);
-//            System.out.println("em.merge(changement)");
         }
-//        List<Livraison> livraisons = em.createQuery(fetchingAllLivraisonsInJpql, Livraison.class).getResultList();
-//        System.out.println("Found " + livraisons.size() + " livraisons (using JPQL):");
-//        
-//        for (Livraison livraison : livraisons) {
-//            System.out.println("* " + livraison);
-//            Iterator<Changement> it3 = livraison.getChangements().iterator();
-//            while (it3.hasNext()){
-//            	System.out.println("YES un changement ! => remove");
-//            	Changement changement = it3.next();
-//            	livraison.getChangements().remove(changement);
-//            }
-//            em.merge(livraison);
-//            System.out.println("em.merge(livraison)");
-//        }
-//        List<Demand> demands = em.createQuery(fetchingAllDemandsInJpql, Demand.class).getResultList();
-//        System.out.println("Found " + demands.size() + " demands (using JPQL):");
-//        for (Demand demand : demands) {
-//            System.out.println("* " + demand);
-//            Iterator<Changement> it4 = demand.getTravaux().iterator();
-//            while (it4.hasNext()){
-//            	System.out.println("YES un changement ! => remove");
-//            	Changement changement = it4.next();
-//            	demand.getTravaux().remove(changement);
-//            }
-//            em.merge(demand);
-//            System.out.println("em.merge(demand)");
-//        }
-        
-
-        
-
-        
-//        em.createQuery("delete from Livraison").executeUpdate();
-//
-//        
-//
-//        
-//        em.createQuery("delete from Demand").executeUpdate();
-//
-//
-//
-//        
-//        em.createQuery("delete from Changement").executeUpdate();
         utx.commit();
         
     }
 
     private void insertData() throws Exception {
-    	demand.setDescription("toto");
+    	demand.setDescription("TestDemand");
     	Set<Demand> demandes = new HashSet<Demand>();
     	demandes.add(demand);
-    	livraison.setDescription("toto");
+    	livraison.setDescription("TestLivraison");
     	Set<Livraison> livraisons = new HashSet<Livraison>();
     	livraisons.add(livraison);
     	
         utx.begin();
         em.joinTransaction();
-        System.out.println("Inserting records...");
+        _logger.info("Inserting records...");
+
         for (String title : CHANGEMENT_TITLES) {
+
             Changement changement = new Changement();
             
             em.persist(livraison);
             em.persist(demand);
-            //em.persist(changement);
             
             changement.setDescription(title);
             changement.getDemandes().add(demand);
@@ -198,11 +140,11 @@ public class ChangementPersistenceTest {
         String fetchingAllChangementsInJpql = "select g from Changement g order by g.id";
 
         // when
-        System.out.println("Selecting (using JPQL)...");
+        _logger.info("Selecting (using JPQL)...");
         List<Changement> changements = em.createQuery(fetchingAllChangementsInJpql, Changement.class).getResultList();
         
         // then
-        System.out.println("Found " + changements.size() + " changements (using JPQL):");
+        _logger.info("Found " + changements.size() + " changements (using JPQL):");
         
         assertContainsAllChangements(changements);
     }
@@ -211,16 +153,16 @@ public class ChangementPersistenceTest {
         Assert.assertEquals(CHANGEMENT_TITLES.length, retrievedChangements.size());
         final Set<String> retrievedChangementTitles = new HashSet<String>();
         for (Changement changement : retrievedChangements) {
-            System.out.println("* " + changement);
+            _logger.info("* " + changement);
             Iterator<Demand> it = changement.getDemandes().iterator();
             while (it.hasNext()){
-            	System.out.println("YES une demande !");
-            	System.out.println(it.next());
+            	_logger.info("YES une demande !");
+            	_logger.info(it.next().getDescription());
             }
             Iterator<Livraison> it2 = changement.getLivrables().iterator();
             while (it2.hasNext()){
-            	System.out.println("YES une livraison !");
-            	System.out.println(it2.next());
+            	_logger.info("YES une livraison !");
+            	_logger.info(it2.next().getDescription());
             }
             retrievedChangementTitles.add(changement.getDescription());
         }
@@ -242,11 +184,11 @@ public class ChangementPersistenceTest {
         // No WHERE clause, which implies select all
 
         // when
-        System.out.println("Selecting (using Criteria)...");
+        _logger.info("Selecting (using Criteria)...");
         List<Changement> changements = em.createQuery(criteria).getResultList();
 
         // then
-        System.out.println("Found " + changements.size() + " changements (using Criteria):");
+        _logger.info("Found " + changements.size() + " changements (using Criteria):");
         assertContainsAllChangements(changements);
     }
 }
