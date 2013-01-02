@@ -41,7 +41,7 @@ public
 
 
 
-	@ManyToMany()
+//	@ManyToMany()
 	private Set<Changement> travaux = new HashSet<Changement>(0);
 	
 	public Demand() {
@@ -53,9 +53,6 @@ public
 		this.title = title;
 	}
 
-	public String getTitleFull() {
-		return title + " " + this.getDescription();
-	}
 
 	public String getTitle() {
 		return title;
@@ -69,28 +66,16 @@ public
 
     
     public String getDisplayText() {
-        System.out.println("Demand.getDisplayText()");
+        
         return displayText;
     }    
 
     public void setDisplayText(String text){
-    	System.out.println("Demand.setDisplayText()");
+    	
     	this.displayText = text;
     }
 
-	@Override
-	public String toString() {
-
-		String exp = "%s [id = %d title = %s ,description = %s]";
-		return String.format(exp, super.toString(), getId(), getTitleFull(),
-				getDescription());
-	}
-
-	public String getOrderedTitleFullDescription() {
-		return getDescription() + ", " + title;
-	}
-
-
+	@ManyToMany()
 	public Set<Changement> getTravaux() {
 		return travaux;
 	}

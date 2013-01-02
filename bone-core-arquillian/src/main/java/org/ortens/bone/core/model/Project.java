@@ -23,12 +23,12 @@ public class Project extends BaseEntity implements Serializable{
 	private String displayText;
     
     public String getDisplayText() {
-        System.out.println("Project.getDisplayText()");
+        
         return displayText;
     }    
 
     public void setDisplayText(String text){
-    	System.out.println("Project.setDisplayText()");
+    	
     	this.displayText = text;
     }
     

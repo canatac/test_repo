@@ -24,12 +24,12 @@ public class Document extends BaseEntity implements Serializable{
 	private String displayText;
     
     public String getDisplayText() {
-        System.out.println("Document.getDisplayText()");
+        
         return displayText;
     }    
 
     public void setDisplayText(String text){
-    	System.out.println("Document.setDisplayText()");
+    	
     	this.displayText = text;
     }
 

@@ -20,12 +20,12 @@ public class Activity extends BaseEntity implements Serializable{
 	private String displayText;
     
     public String getDisplayText() {
-        System.out.println("Activity.getDisplayText()");
+        
         return displayText;
     }    
 
     public void setDisplayText(String text){
-    	System.out.println("Activity.setDisplayText()");
+    	
     	this.displayText = text;
     }
 	

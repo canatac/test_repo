@@ -23,12 +23,12 @@ public class Solution extends BaseEntity implements Serializable{
 	private String displayText;
     
     public String getDisplayText() {
-        System.out.println("Solution.getDisplayText()");
+        
         return displayText;
     }    
 
     public void setDisplayText(String text){
-    	System.out.println("Solution.setDisplayText()");
+    	
     	this.displayText = text;
     }
     

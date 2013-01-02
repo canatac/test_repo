@@ -22,12 +22,12 @@ public class Person extends BaseEntity implements Serializable{
 	private String displayText;
     
     public String getDisplayText() {
-        System.out.println("Person.getDisplayText()");
+        
         return displayText;
     }    
 
     public void setDisplayText(String text){
-    	System.out.println("Person.setDisplayText()");
+    	
     	this.displayText = text;
     }
 }

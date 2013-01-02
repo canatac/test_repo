@@ -17,12 +17,12 @@ public class CheckPoint extends BaseEntity implements Serializable{
 	private String displayText;
     
     public String getDisplayText() {
-        System.out.println("CheckPoint.getDisplayText()");
+        
         return displayText;
     }    
 
     public void setDisplayText(String text){
-    	System.out.println("CheckPoint.setDisplayText()");
+    	
     	this.displayText = text;
     }
 

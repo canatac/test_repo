@@ -28,12 +28,12 @@ public class Journal extends BaseEntity implements Serializable {
 	private String displayText;
     
     public String getDisplayText() {
-        System.out.println("Journal.getDisplayText()");
+        
         return displayText;
     }    
 
     public void setDisplayText(String text){
-    	System.out.println("Journal.setDisplayText()");
+    	
     	this.displayText = text;
     }
 

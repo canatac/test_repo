@@ -23,12 +23,12 @@ public class Company extends BaseEntity implements Serializable{
 	private String displayText;
     
     public String getDisplayText() {
-        System.out.println("Company.getDisplayText()");
+        
         return displayText;
     }    
 
     public void setDisplayText(String text){
-    	System.out.println("Company.setDisplayText()");
+    	
     	this.displayText = text;
     }
     

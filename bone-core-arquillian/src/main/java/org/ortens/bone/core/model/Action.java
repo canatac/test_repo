@@ -24,12 +24,12 @@ public class Action extends BaseEntity implements Serializable{
 	private String displayText;
     
     public String getDisplayText() {
-        System.out.println("Action.getDisplayText()");
+        
         return displayText;
     }    
 
     public void setDisplayText(String text){
-    	System.out.println("Action.setDisplayText()");
+    	
     	this.displayText = text;
     }
 

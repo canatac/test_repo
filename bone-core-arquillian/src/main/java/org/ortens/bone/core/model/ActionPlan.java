@@ -23,12 +23,12 @@ public class ActionPlan extends BaseEntity implements Serializable{
 	private String displayText;
     
     public String getDisplayText() {
-        System.out.println("ActionPlan.getDisplayText()");
+        
         return displayText;
     }    
 
     public void setDisplayText(String text){
-    	System.out.println("ActionPlan.setDisplayText()");
+    	
     	this.displayText = text;
     }
 

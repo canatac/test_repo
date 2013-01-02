@@ -37,10 +37,10 @@ public class Changement extends BaseEntity implements Serializable{
 	@Size(max = TITLE_MAX_COLUMN_SIZE)
 	private String title;
 
-	@ManyToMany(mappedBy = "changements",cascade=CascadeType.REMOVE)
+//	@ManyToMany(mappedBy = "changements",targetEntity=Livraison.class,cascade=CascadeType.REMOVE)
 	private Set<Livraison> livrables = new HashSet<Livraison>(0);
 
-	@ManyToMany(mappedBy = "travaux",cascade=CascadeType.REMOVE)
+//	@ManyToMany(mappedBy = "travaux",targetEntity=Demand.class,cascade=CascadeType.REMOVE)
 	private Set<Demand> demandes = new HashSet<Demand>(0);
 	
 	public Changement(String title, String description){
@@ -54,12 +54,12 @@ public class Changement extends BaseEntity implements Serializable{
 
     
     public String getDisplayText() {
-        System.out.println("Changement.getDisplayText()");
+        
         return displayText;
     }    
 
     public void setDisplayText(String text){
-    	System.out.println("Changement.setDisplayText()");
+    	
     	this.displayText = text;
     }
 
@@ -73,7 +73,7 @@ public class Changement extends BaseEntity implements Serializable{
 		this.title = title;
 	}
 
-
+	@ManyToMany(mappedBy = "travaux",targetEntity=Demand.class,cascade=CascadeType.REMOVE)
 	public Set<Demand> getDemandes() {
 		return demandes;
 	}
@@ -88,7 +88,7 @@ public class Changement extends BaseEntity implements Serializable{
 		// TODO Auto-generated method stub
 		
 	}
-
+	@ManyToMany(mappedBy = "changements",targetEntity=Livraison.class,cascade=CascadeType.REMOVE)
 	public Set<Livraison> getLivrables() {
 		return livrables;
 	}

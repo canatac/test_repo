@@ -34,7 +34,7 @@ public class Livraison extends BaseEntity implements Serializable{
 	private String title;
 
 
-	@ManyToMany()
+//	@ManyToMany()
 	private Set<Changement> changements = new HashSet<Changement>(0);
 	
 	private String displayText;
@@ -44,12 +44,12 @@ public class Livraison extends BaseEntity implements Serializable{
 	}
 	
     public String getDisplayText() {
-        System.out.println("Livraison.getDisplayText()");
+        
         return displayText;
     }    
 
     public void setDisplayText(String text){
-    	System.out.println("Livraison.setDisplayText()");
+    	
     	this.displayText = text;
     }
 
@@ -65,7 +65,7 @@ public class Livraison extends BaseEntity implements Serializable{
 
 
 
-
+	@ManyToMany()
 	public Set<Changement> getChangements() {
 		return changements;
 	}
