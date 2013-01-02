@@ -33,7 +33,7 @@ public class ChangementPersistenceTest {
     @Deployment
     public static Archive<?> createDeployment() {
         return ShrinkWrap.create(WebArchive.class, "test.war")
-            .addClasses(Changement.class, Demand.class, Livraison.class,BaseEntity.class)
+            .addClasses(BaseEntity.class, Demand.class, Livraison.class, Changement.class)
             .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
             .addAsWebInfResource("jbossas-ds.xml"); //arquillian-jbossas-managed profile. Can stay without perturbing arquillian-glassfish-embedded test 
@@ -70,65 +70,83 @@ public class ChangementPersistenceTest {
         
         
         String fetchingAllChangementsInJpql = "select g from Changement g order by g.id";
-        String fetchingAllLivraisonsInJpql = "select l from Livraison l order by l.id";
-        String fetchingAllDemandsInJpql = "select d from Demand d order by d.id";
+//        String fetchingAllLivraisonsInJpql = "select l from Livraison l order by l.id";
+//        String fetchingAllDemandsInJpql = "select d from Demand d order by d.id";
 
         // when
         System.out.println("CLEAN DATA - Selecting (using JPQL)...");
         List<Changement> changements = em.createQuery(fetchingAllChangementsInJpql, Changement.class).getResultList();
-        List<Livraison> livraisons = em.createQuery(fetchingAllLivraisonsInJpql, Livraison.class).getResultList();
-        List<Demand> demands = em.createQuery(fetchingAllDemandsInJpql, Demand.class).getResultList();
+        
 
         // then
         System.out.println("Found " + changements.size() + " changements (using JPQL):");
-        System.out.println("Found " + livraisons.size() + " livraisons (using JPQL):");
-        System.out.println("Found " + demands.size() + " demands (using JPQL):");
+        
         
         for (Changement changement : changements) {
-            System.out.println("* " + changement);
-            Iterator<Demand> it = changement.getDemandes().iterator();
-            while (it.hasNext()){
-            	System.out.println("YES une demande ! => remove");
-            	Demand demand = it.next();
-            	changement.getDemandes().remove(demand);
-            }
-            Iterator<Livraison> it2 = changement.getLivrables().iterator();
-            while (it2.hasNext()){
-            	System.out.println("YES une livraison ! => remove");
-            	Livraison livraison = it2.next();
-            	changement.getLivrables().remove(livraison);
-            }
-            em.merge(changement);
+        	if (changement != null){
+        		em.remove(changement);
+        		System.out.println("em.remove(changement)");
+        		}
+//            System.out.println("* " + changement);
+//            Iterator<Demand> it = changement.getDemandes().iterator();
+//            while (it.hasNext()){
+//            	System.out.println("YES une demande ! => remove");
+//            	Demand demand = it.next();
+//            	changement.getDemandes().remove(demand);
+//            }
+//            Iterator<Livraison> it2 = changement.getLivrables().iterator();
+//            while (it2.hasNext()){
+//            	System.out.println("YES une livraison ! => remove");
+//            	Livraison livraison = it2.next();
+//            	changement.getLivrables().remove(livraison);
+//            }
+//            em.merge(changement);
+//            System.out.println("em.merge(changement)");
         }
-        
+//        List<Livraison> livraisons = em.createQuery(fetchingAllLivraisonsInJpql, Livraison.class).getResultList();
+//        System.out.println("Found " + livraisons.size() + " livraisons (using JPQL):");
+//        
 //        for (Livraison livraison : livraisons) {
 //            System.out.println("* " + livraison);
 //            Iterator<Changement> it3 = livraison.getChangements().iterator();
 //            while (it3.hasNext()){
 //            	System.out.println("YES un changement ! => remove");
-//            	it3.remove();
+//            	Changement changement = it3.next();
+//            	livraison.getChangements().remove(changement);
 //            }
-//            em.persist(livraison);
+//            em.merge(livraison);
+//            System.out.println("em.merge(livraison)");
 //        }
+//        List<Demand> demands = em.createQuery(fetchingAllDemandsInJpql, Demand.class).getResultList();
+//        System.out.println("Found " + demands.size() + " demands (using JPQL):");
 //        for (Demand demand : demands) {
 //            System.out.println("* " + demand);
 //            Iterator<Changement> it4 = demand.getTravaux().iterator();
 //            while (it4.hasNext()){
 //            	System.out.println("YES un changement ! => remove");
-//            	it4.remove();
+//            	Changement changement = it4.next();
+//            	demand.getTravaux().remove(changement);
 //            }
-//            em.persist(demand);
+//            em.merge(demand);
+//            System.out.println("em.merge(demand)");
 //        }
         
-        utx.commit();
+
         
-        utx.begin();
-        em.joinTransaction();
-        em.createQuery("delete from Livraison").executeUpdate();
-        em.createQuery("delete from Demand").executeUpdate();
-        em.createQuery("delete from Changement").executeUpdate();
-        utx.commit();
+
         
+//        em.createQuery("delete from Livraison").executeUpdate();
+//
+//        
+//
+//        
+//        em.createQuery("delete from Demand").executeUpdate();
+//
+//
+//
+//        
+//        em.createQuery("delete from Changement").executeUpdate();
+        utx.commit();
         
     }
 
@@ -182,7 +200,7 @@ public class ChangementPersistenceTest {
         // when
         System.out.println("Selecting (using JPQL)...");
         List<Changement> changements = em.createQuery(fetchingAllChangementsInJpql, Changement.class).getResultList();
-
+        
         // then
         System.out.println("Found " + changements.size() + " changements (using JPQL):");
         
