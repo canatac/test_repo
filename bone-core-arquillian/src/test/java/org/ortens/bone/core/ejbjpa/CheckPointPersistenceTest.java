@@ -1,4 +1,4 @@
-package org.ortens.bone.core.model;
+package org.ortens.bone.core.ejbjpa;
 
 import java.util.List;
 import javax.inject.Inject;
@@ -20,28 +20,29 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.Assert;
-import org.ortens.bone.core.model.Company;
-import org.ortens.bone.core.model.Company_;
+import org.ortens.bone.core.model.BaseEntity;
+import org.ortens.bone.core.model.CheckPoint;
+import org.ortens.bone.core.model.CheckPoint_;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 @RunWith(Arquillian.class)
-public class CompanyPersistenceTest {
+public class CheckPointPersistenceTest {
     @Deployment
     public static Archive<?> createDeployment() {
         return ShrinkWrap.create(WebArchive.class, "test.war")
-            .addClasses(Company.class, BaseEntity.class)
+            .addClasses(CheckPoint.class, BaseEntity.class)
             .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
             .addAsWebInfResource("jbossas-ds.xml"); //arquillian-jbossas-managed profile. Can stay without perturbing arquillian-glassfish-embedded test 
     }
  
-    private static final String[] COMPANY_TITLES = {
-        "ACME SARL",
-        "LOKOUM SAS",
-        "CHEAP SA"
+    private static final String[] CHECKPOINT_TITLES = {
+        "Debt Recovery",
+        "Project Planning",
+        "Budget Planning"
     };
     
     @PersistenceContext
@@ -61,7 +62,7 @@ public class CompanyPersistenceTest {
         utx.begin();
         em.joinTransaction();
         System.out.println("Dumping old records...");
-        em.createQuery("delete from Company").executeUpdate();
+        em.createQuery("delete from CheckPoint").executeUpdate();
         utx.commit();
     }
 
@@ -69,10 +70,10 @@ public class CompanyPersistenceTest {
         utx.begin();
         em.joinTransaction();
         System.out.println("Inserting records...");
-        for (String title : COMPANY_TITLES) {
-            Company company = new Company();
-            company.setDescription(title);
-            em.persist(company);
+        for (String title : CHECKPOINT_TITLES) {
+            CheckPoint checkPoint = new CheckPoint();
+            checkPoint.setDescription(title);
+            em.persist(checkPoint);
         }
         utx.commit();
         // clear the persistence context (first-level cache)
@@ -89,49 +90,49 @@ public class CompanyPersistenceTest {
         utx.commit();
     }
     @Test
-    public void shouldFindAllCompaniesUsingJpqlQuery() throws Exception {
+    public void shouldFindAllCheckPointsUsingJpqlQuery() throws Exception {
         // given
-        String fetchingAllCompaniesInJpql = "select g from Company g order by g.id";
+        String fetchingAllCheckPointsInJpql = "select g from CheckPoint g order by g.id";
 
         // when
         System.out.println("Selecting (using JPQL)...");
-        List<Company> companies = em.createQuery(fetchingAllCompaniesInJpql, Company.class).getResultList();
+        List<CheckPoint> checkPoints = em.createQuery(fetchingAllCheckPointsInJpql, CheckPoint.class).getResultList();
 
         // then
-        System.out.println("Found " + companies.size() + " companies (using JPQL):");
-        assertContainsAllCompanies(companies);
+        System.out.println("Found " + checkPoints.size() + " checkPoints (using JPQL):");
+        assertContainsAllCheckPoints(checkPoints);
     }
     
-    private static void assertContainsAllCompanies(Collection<Company> retrievedCompanies) {
-        Assert.assertEquals(COMPANY_TITLES.length, retrievedCompanies.size());
-        final Set<String> retrievedCompanyTitles = new HashSet<String>();
-        for (Company company : retrievedCompanies) {
-            System.out.println("* " + company);
-            retrievedCompanyTitles.add(company.getDescription());
+    private static void assertContainsAllCheckPoints(Collection<CheckPoint> retrievedCheckPoints) {
+        Assert.assertEquals(CHECKPOINT_TITLES.length, retrievedCheckPoints.size());
+        final Set<String> retrievedCheckPointTitles = new HashSet<String>();
+        for (CheckPoint checkPoint : retrievedCheckPoints) {
+            System.out.println("* " + checkPoint);
+            retrievedCheckPointTitles.add(checkPoint.getDescription());
         }
-        Assert.assertTrue(retrievedCompanyTitles.containsAll(Arrays.asList(COMPANY_TITLES)));
+        Assert.assertTrue(retrievedCheckPointTitles.containsAll(Arrays.asList(CHECKPOINT_TITLES)));
     }
     
     @Test
-    public void shouldFindAllCompaniesUsingCriteriaApi() throws Exception {
+    public void shouldFindAllCheckPointsUsingCriteriaApi() throws Exception {
         // given
         CriteriaBuilder builder = em.getCriteriaBuilder();
-        CriteriaQuery<Company> criteria = builder.createQuery(Company.class);
+        CriteriaQuery<CheckPoint> criteria = builder.createQuery(CheckPoint.class);
         		
-        Root<Company> company = criteria.from(Company.class);
-        criteria.select(company);
+        Root<CheckPoint> checkPoint = criteria.from(CheckPoint.class);
+        criteria.select(checkPoint);
         // TIP: If you don't want to use the JPA 2 Metamodel,
         // you can change the get() method call to get("id")
-        //criteria.orderBy(builder.asc(company.get(Company_.id)));
-        criteria.orderBy(builder.asc(company.get("id")));
+        //criteria.orderBy(builder.asc(checkPoint.get(CheckPoint_.id)));
+        criteria.orderBy(builder.asc(checkPoint.get("id")));
         // No WHERE clause, which implies select all
 
         // when
         System.out.println("Selecting (using Criteria)...");
-        List<Company> companies = em.createQuery(criteria).getResultList();
+        List<CheckPoint> checkPoints = em.createQuery(criteria).getResultList();
 
         // then
-        System.out.println("Found " + companies.size() + " companies (using Criteria):");
-        assertContainsAllCompanies(companies);
+        System.out.println("Found " + checkPoints.size() + " checkPoints (using Criteria):");
+        assertContainsAllCheckPoints(checkPoints);
     }
 }

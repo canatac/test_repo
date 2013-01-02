@@ -1,4 +1,4 @@
-package org.ortens.bone.core.model;
+package org.ortens.bone.core.ejbjpa;
 
 import java.util.List;
 import javax.inject.Inject;
@@ -20,29 +20,30 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.Assert;
-import org.ortens.bone.core.model.Journal;
-import org.ortens.bone.core.model.Journal_;
+import org.ortens.bone.core.model.BaseEntity;
+import org.ortens.bone.core.model.Problem;
+import org.ortens.bone.core.model.Problem_;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 @RunWith(Arquillian.class)
-public class JournalPersistenceTest {
+public class ProblemPersistenceTest {
     @Deployment
     public static Archive<?> createDeployment() {
         return ShrinkWrap.create(WebArchive.class, "test.war")
-            .addClasses(Journal.class, BaseEntity.class)
+            .addClasses(Problem.class, BaseEntity.class)
             .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
             .addAsWebInfResource("jbossas-ds.xml"); //arquillian-jbossas-managed profile. Can stay without perturbing arquillian-glassfish-embedded test 
     }
  
-    private static final String[] JOURNAL_TITLES = {
-        "DAILY",
-        "MONTHLY",
-        "SEMESTRIAL",
-        "ANNUAL"
+    private static final String[] PROBLEM_TITLES = {
+        "BUG",
+        "SYSTEM CRASH",
+        "BUILD FAILURE",
+        "ABSENCE"
     };
     
     @PersistenceContext
@@ -62,7 +63,7 @@ public class JournalPersistenceTest {
         utx.begin();
         em.joinTransaction();
         System.out.println("Dumping old records...");
-        em.createQuery("delete from Journal").executeUpdate();
+        em.createQuery("delete from Problem").executeUpdate();
         utx.commit();
     }
 
@@ -70,10 +71,10 @@ public class JournalPersistenceTest {
         utx.begin();
         em.joinTransaction();
         System.out.println("Inserting records...");
-        for (String title : JOURNAL_TITLES) {
-            Journal journal = new Journal();
-            journal.setDescription(title);
-            em.persist(journal);
+        for (String title : PROBLEM_TITLES) {
+            Problem problem = new Problem();
+            problem.setDescription(title);
+            em.persist(problem);
         }
         utx.commit();
         // clear the persistence context (first-level cache)
@@ -90,49 +91,49 @@ public class JournalPersistenceTest {
         utx.commit();
     }
     @Test
-    public void shouldFindAllJournalsUsingJpqlQuery() throws Exception {
+    public void shouldFindAllProblemsUsingJpqlQuery() throws Exception {
         // given
-        String fetchingAllJournalsInJpql = "select g from Journal g order by g.id";
+        String fetchingAllProblemsInJpql = "select g from Problem g order by g.id";
 
         // when
         System.out.println("Selecting (using JPQL)...");
-        List<Journal> journals = em.createQuery(fetchingAllJournalsInJpql, Journal.class).getResultList();
+        List<Problem> problems = em.createQuery(fetchingAllProblemsInJpql, Problem.class).getResultList();
 
         // then
-        System.out.println("Found " + journals.size() + " journals (using JPQL):");
-        assertContainsAllJournals(journals);
+        System.out.println("Found " + problems.size() + " problems (using JPQL):");
+        assertContainsAllProblems(problems);
     }
     
-    private static void assertContainsAllJournals(Collection<Journal> retrievedJournals) {
-        Assert.assertEquals(JOURNAL_TITLES.length, retrievedJournals.size());
-        final Set<String> retrievedJournalTitles = new HashSet<String>();
-        for (Journal journal : retrievedJournals) {
-            System.out.println("* " + journal);
-            retrievedJournalTitles.add(journal.getDescription());
+    private static void assertContainsAllProblems(Collection<Problem> retrievedProblems) {
+        Assert.assertEquals(PROBLEM_TITLES.length, retrievedProblems.size());
+        final Set<String> retrievedProblemTitles = new HashSet<String>();
+        for (Problem problem : retrievedProblems) {
+            System.out.println("* " + problem);
+            retrievedProblemTitles.add(problem.getDescription());
         }
-        Assert.assertTrue(retrievedJournalTitles.containsAll(Arrays.asList(JOURNAL_TITLES)));
+        Assert.assertTrue(retrievedProblemTitles.containsAll(Arrays.asList(PROBLEM_TITLES)));
     }
     
     @Test
-    public void shouldFindAllJournalsUsingCriteriaApi() throws Exception {
+    public void shouldFindAllProblemsUsingCriteriaApi() throws Exception {
         // given
         CriteriaBuilder builder = em.getCriteriaBuilder();
-        CriteriaQuery<Journal> criteria = builder.createQuery(Journal.class);
+        CriteriaQuery<Problem> criteria = builder.createQuery(Problem.class);
         		
-        Root<Journal> journal = criteria.from(Journal.class);
-        criteria.select(journal);
+        Root<Problem> problem = criteria.from(Problem.class);
+        criteria.select(problem);
         // TIP: If you don't want to use the JPA 2 Metamodel,
         // you can change the get() method call to get("id")
-        //criteria.orderBy(builder.asc(journal.get(Journal_.id)));
-        criteria.orderBy(builder.asc(journal.get("id")));
+        //criteria.orderBy(builder.asc(problem.get(Problem_.id)));
+        criteria.orderBy(builder.asc(problem.get("id")));
         // No WHERE clause, which implies select all
 
         // when
         System.out.println("Selecting (using Criteria)...");
-        List<Journal> journals = em.createQuery(criteria).getResultList();
+        List<Problem> problems = em.createQuery(criteria).getResultList();
 
         // then
-        System.out.println("Found " + journals.size() + " journals (using Criteria):");
-        assertContainsAllJournals(journals);
+        System.out.println("Found " + problems.size() + " problems (using Criteria):");
+        assertContainsAllProblems(problems);
     }
 }

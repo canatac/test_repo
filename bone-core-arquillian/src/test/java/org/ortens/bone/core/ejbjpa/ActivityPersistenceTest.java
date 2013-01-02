@@ -1,4 +1,4 @@
-package org.ortens.bone.core.model;
+package org.ortens.bone.core.ejbjpa;
 
 import java.util.List;
 import javax.inject.Inject;
@@ -20,25 +20,26 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.Assert;
-import org.ortens.bone.core.model.CheckPoint;
-import org.ortens.bone.core.model.CheckPoint_;
+import org.ortens.bone.core.model.Activity;
+import org.ortens.bone.core.model.Activity_;
+import org.ortens.bone.core.model.BaseEntity;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 @RunWith(Arquillian.class)
-public class CheckPointPersistenceTest {
+public class ActivityPersistenceTest {
     @Deployment
     public static Archive<?> createDeployment() {
         return ShrinkWrap.create(WebArchive.class, "test.war")
-            .addClasses(CheckPoint.class, BaseEntity.class)
+            .addClasses(Activity.class, BaseEntity.class)
             .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
             .addAsWebInfResource("jbossas-ds.xml"); //arquillian-jbossas-managed profile. Can stay without perturbing arquillian-glassfish-embedded test 
     }
  
-    private static final String[] CHECKPOINT_TITLES = {
+    private static final String[] ACTIVITY_TITLES = {
         "Debt Recovery",
         "Project Planning",
         "Budget Planning"
@@ -54,14 +55,14 @@ public class CheckPointPersistenceTest {
     public void preparePersistenceTest() throws Exception {
         clearData();
         insertData();
-        starttransaction();
+        startTransaction();
     }
 
     private void clearData() throws Exception {
         utx.begin();
         em.joinTransaction();
         System.out.println("Dumping old records...");
-        em.createQuery("delete from CheckPoint").executeUpdate();
+        em.createQuery("delete from Activity").executeUpdate();
         utx.commit();
     }
 
@@ -69,69 +70,69 @@ public class CheckPointPersistenceTest {
         utx.begin();
         em.joinTransaction();
         System.out.println("Inserting records...");
-        for (String title : CHECKPOINT_TITLES) {
-            CheckPoint checkPoint = new CheckPoint();
-            checkPoint.setDescription(title);
-            em.persist(checkPoint);
+        for (String title : ACTIVITY_TITLES) {
+            Activity activity = new Activity();
+            activity.setDescription(title);
+            em.persist(activity);
         }
         utx.commit();
         // clear the persistence context (first-level cache)
         em.clear();
     }
 
-    private void starttransaction() throws Exception {
+    private void startTransaction() throws Exception {
         utx.begin();
         em.joinTransaction();
     }
     
     @After
-    public void committransaction() throws Exception {
+    public void commitTransaction() throws Exception {
         utx.commit();
     }
     @Test
-    public void shouldFindAllCheckPointsUsingJpqlQuery() throws Exception {
+    public void shouldFindAllActivitiesUsingJpqlQuery() throws Exception {
         // given
-        String fetchingAllCheckPointsInJpql = "select g from CheckPoint g order by g.id";
+        String fetchingAllActivitiesInJpql = "select g from Activity g order by g.id";
 
         // when
         System.out.println("Selecting (using JPQL)...");
-        List<CheckPoint> checkPoints = em.createQuery(fetchingAllCheckPointsInJpql, CheckPoint.class).getResultList();
+        List<Activity> activities = em.createQuery(fetchingAllActivitiesInJpql, Activity.class).getResultList();
 
         // then
-        System.out.println("Found " + checkPoints.size() + " checkPoints (using JPQL):");
-        assertContainsAllCheckPoints(checkPoints);
+        System.out.println("Found " + activities.size() + " activities (using JPQL):");
+        assertContainsAllActivities(activities);
     }
     
-    private static void assertContainsAllCheckPoints(Collection<CheckPoint> retrievedCheckPoints) {
-        Assert.assertEquals(CHECKPOINT_TITLES.length, retrievedCheckPoints.size());
-        final Set<String> retrievedCheckPointTitles = new HashSet<String>();
-        for (CheckPoint checkPoint : retrievedCheckPoints) {
-            System.out.println("* " + checkPoint);
-            retrievedCheckPointTitles.add(checkPoint.getDescription());
+    private static void assertContainsAllActivities(Collection<Activity> retrievedActivities) {
+        Assert.assertEquals(ACTIVITY_TITLES.length, retrievedActivities.size());
+        final Set<String> retrievedActivityTitles = new HashSet<String>();
+        for (Activity activity : retrievedActivities) {
+            System.out.println("* " + activity);
+            retrievedActivityTitles.add(activity.getDescription());
         }
-        Assert.assertTrue(retrievedCheckPointTitles.containsAll(Arrays.asList(CHECKPOINT_TITLES)));
+        Assert.assertTrue(retrievedActivityTitles.containsAll(Arrays.asList(ACTIVITY_TITLES)));
     }
     
     @Test
-    public void shouldFindAllCheckPointsUsingCriteriaApi() throws Exception {
+    public void shouldFindAllActivitiesUsingCriteriaApi() throws Exception {
         // given
         CriteriaBuilder builder = em.getCriteriaBuilder();
-        CriteriaQuery<CheckPoint> criteria = builder.createQuery(CheckPoint.class);
+        CriteriaQuery<Activity> criteria = builder.createQuery(Activity.class);
         		
-        Root<CheckPoint> checkPoint = criteria.from(CheckPoint.class);
-        criteria.select(checkPoint);
+        Root<Activity> activity = criteria.from(Activity.class);
+        criteria.select(activity);
         // TIP: If you don't want to use the JPA 2 Metamodel,
         // you can change the get() method call to get("id")
-        //criteria.orderBy(builder.asc(checkPoint.get(CheckPoint_.id)));
-        criteria.orderBy(builder.asc(checkPoint.get("id")));
+        //criteria.orderBy(builder.asc(activity.get(Activity_.id)));
+        criteria.orderBy(builder.asc(activity.get("id")));
         // No WHERE clause, which implies select all
 
         // when
         System.out.println("Selecting (using Criteria)...");
-        List<CheckPoint> checkPoints = em.createQuery(criteria).getResultList();
+        List<Activity> activities = em.createQuery(criteria).getResultList();
 
         // then
-        System.out.println("Found " + checkPoints.size() + " checkPoints (using Criteria):");
-        assertContainsAllCheckPoints(checkPoints);
+        System.out.println("Found " + activities.size() + " activities (using Criteria):");
+        assertContainsAllActivities(activities);
     }
 }

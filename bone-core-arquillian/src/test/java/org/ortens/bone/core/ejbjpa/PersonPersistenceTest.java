@@ -1,4 +1,4 @@
-package org.ortens.bone.core.model;
+package org.ortens.bone.core.ejbjpa;
 
 import java.util.List;
 import javax.inject.Inject;
@@ -20,29 +20,29 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.Assert;
-import org.ortens.bone.core.model.Project;
-import org.ortens.bone.core.model.Project_;
+import org.ortens.bone.core.model.BaseEntity;
+import org.ortens.bone.core.model.Person;
+import org.ortens.bone.core.model.Person_;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 @RunWith(Arquillian.class)
-public class ProjectPersistenceTest {
+public class PersonPersistenceTest {
     @Deployment
     public static Archive<?> createDeployment() {
         return ShrinkWrap.create(WebArchive.class, "test.war")
-            .addClasses(Project.class, BaseEntity.class)
+            .addClasses(Person.class, BaseEntity.class)
             .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
             .addAsWebInfResource("jbossas-ds.xml"); //arquillian-jbossas-managed profile. Can stay without perturbing arquillian-glassfish-embedded test 
     }
  
-    private static final String[] PROJECT_TITLES = {
-        "BUG",
-        "SYSTEM CRASH",
-        "BUILD FAILURE",
-        "ABSENCE"
+    private static final String[] PERSON_TITLES = {
+        "Director",
+        "PMO",
+        "CTO"
     };
     
     @PersistenceContext
@@ -55,14 +55,14 @@ public class ProjectPersistenceTest {
     public void preparePersistenceTest() throws Exception {
         clearData();
         insertData();
-        starttransaction();
+        startTransaction();
     }
 
     private void clearData() throws Exception {
         utx.begin();
         em.joinTransaction();
         System.out.println("Dumping old records...");
-        em.createQuery("delete from Project").executeUpdate();
+        em.createQuery("delete from Person").executeUpdate();
         utx.commit();
     }
 
@@ -70,69 +70,69 @@ public class ProjectPersistenceTest {
         utx.begin();
         em.joinTransaction();
         System.out.println("Inserting records...");
-        for (String title : PROJECT_TITLES) {
-            Project project = new Project();
-            project.setDescription(title);
-            em.persist(project);
+        for (String title : PERSON_TITLES) {
+            Person person = new Person();
+            person.setDescription(title);
+            em.persist(person);
         }
         utx.commit();
         // clear the persistence context (first-level cache)
         em.clear();
     }
 
-    private void starttransaction() throws Exception {
+    private void startTransaction() throws Exception {
         utx.begin();
         em.joinTransaction();
     }
     
     @After
-    public void committransaction() throws Exception {
+    public void commitTransaction() throws Exception {
         utx.commit();
     }
     @Test
-    public void shouldFindAllProjectsUsingJpqlQuery() throws Exception {
+    public void shouldFindAllPersonsUsingJpqlQuery() throws Exception {
         // given
-        String fetchingAllProjectsInJpql = "select g from Project g order by g.id";
+        String fetchingAllPersonsInJpql = "select g from Person g order by g.id";
 
         // when
         System.out.println("Selecting (using JPQL)...");
-        List<Project> projects = em.createQuery(fetchingAllProjectsInJpql, Project.class).getResultList();
+        List<Person> persons = em.createQuery(fetchingAllPersonsInJpql, Person.class).getResultList();
 
         // then
-        System.out.println("Found " + projects.size() + " projects (using JPQL):");
-        assertContainsAllProjects(projects);
+        System.out.println("Found " + persons.size() + " persons (using JPQL):");
+        assertContainsAllPersons(persons);
     }
     
-    private static void assertContainsAllProjects(Collection<Project> retrievedProjects) {
-        Assert.assertEquals(PROJECT_TITLES.length, retrievedProjects.size());
-        final Set<String> retrievedProjectTitles = new HashSet<String>();
-        for (Project project : retrievedProjects) {
-            System.out.println("* " + project);
-            retrievedProjectTitles.add(project.getDescription());
+    private static void assertContainsAllPersons(Collection<Person> retrievedPersons) {
+        Assert.assertEquals(PERSON_TITLES.length, retrievedPersons.size());
+        final Set<String> retrievedPersonTitles = new HashSet<String>();
+        for (Person person : retrievedPersons) {
+            System.out.println("* " + person);
+            retrievedPersonTitles.add(person.getDescription());
         }
-        Assert.assertTrue(retrievedProjectTitles.containsAll(Arrays.asList(PROJECT_TITLES)));
+        Assert.assertTrue(retrievedPersonTitles.containsAll(Arrays.asList(PERSON_TITLES)));
     }
     
     @Test
-    public void shouldFindAllProjectsUsingCriteriaApi() throws Exception {
+    public void shouldFindAllPersonsUsingCriteriaApi() throws Exception {
         // given
         CriteriaBuilder builder = em.getCriteriaBuilder();
-        CriteriaQuery<Project> criteria = builder.createQuery(Project.class);
+        CriteriaQuery<Person> criteria = builder.createQuery(Person.class);
         		
-        Root<Project> project = criteria.from(Project.class);
-        criteria.select(project);
+        Root<Person> person = criteria.from(Person.class);
+        criteria.select(person);
         // TIP: If you don't want to use the JPA 2 Metamodel,
         // you can change the get() method call to get("id")
-        //criteria.orderBy(builder.asc(project.get(Project_.id)));
-        criteria.orderBy(builder.asc(project.get("id")));
+        //criteria.orderBy(builder.asc(person.get(Person_.id)));
+        criteria.orderBy(builder.asc(person.get("id")));
         // No WHERE clause, which implies select all
 
         // when
         System.out.println("Selecting (using Criteria)...");
-        List<Project> projects = em.createQuery(criteria).getResultList();
+        List<Person> persons = em.createQuery(criteria).getResultList();
 
         // then
-        System.out.println("Found " + projects.size() + " projects (using Criteria):");
-        assertContainsAllProjects(projects);
+        System.out.println("Found " + persons.size() + " persons (using Criteria):");
+        assertContainsAllPersons(persons);
     }
 }

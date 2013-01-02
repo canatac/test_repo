@@ -48,7 +48,7 @@ public class Changement extends BaseEntity implements Serializable{
 		this.setDescription(description);
 	}
 
-	protected Changement() {
+	public Changement() {
 	}
 
 

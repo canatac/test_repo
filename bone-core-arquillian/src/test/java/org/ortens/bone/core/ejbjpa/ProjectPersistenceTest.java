@@ -1,4 +1,4 @@
-package org.ortens.bone.core.model;
+package org.ortens.bone.core.ejbjpa;
 
 import java.util.List;
 import javax.inject.Inject;
@@ -20,25 +20,26 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.Assert;
-import org.ortens.bone.core.model.Problem;
-import org.ortens.bone.core.model.Problem_;
+import org.ortens.bone.core.model.BaseEntity;
+import org.ortens.bone.core.model.Project;
+import org.ortens.bone.core.model.Project_;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 @RunWith(Arquillian.class)
-public class ProblemPersistenceTest {
+public class ProjectPersistenceTest {
     @Deployment
     public static Archive<?> createDeployment() {
         return ShrinkWrap.create(WebArchive.class, "test.war")
-            .addClasses(Problem.class, BaseEntity.class)
+            .addClasses(Project.class, BaseEntity.class)
             .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
             .addAsWebInfResource("jbossas-ds.xml"); //arquillian-jbossas-managed profile. Can stay without perturbing arquillian-glassfish-embedded test 
     }
  
-    private static final String[] PROBLEM_TITLES = {
+    private static final String[] PROJECT_TITLES = {
         "BUG",
         "SYSTEM CRASH",
         "BUILD FAILURE",
@@ -62,7 +63,7 @@ public class ProblemPersistenceTest {
         utx.begin();
         em.joinTransaction();
         System.out.println("Dumping old records...");
-        em.createQuery("delete from Problem").executeUpdate();
+        em.createQuery("delete from Project").executeUpdate();
         utx.commit();
     }
 
@@ -70,10 +71,10 @@ public class ProblemPersistenceTest {
         utx.begin();
         em.joinTransaction();
         System.out.println("Inserting records...");
-        for (String title : PROBLEM_TITLES) {
-            Problem problem = new Problem();
-            problem.setDescription(title);
-            em.persist(problem);
+        for (String title : PROJECT_TITLES) {
+            Project project = new Project();
+            project.setDescription(title);
+            em.persist(project);
         }
         utx.commit();
         // clear the persistence context (first-level cache)
@@ -90,49 +91,49 @@ public class ProblemPersistenceTest {
         utx.commit();
     }
     @Test
-    public void shouldFindAllProblemsUsingJpqlQuery() throws Exception {
+    public void shouldFindAllProjectsUsingJpqlQuery() throws Exception {
         // given
-        String fetchingAllProblemsInJpql = "select g from Problem g order by g.id";
+        String fetchingAllProjectsInJpql = "select g from Project g order by g.id";
 
         // when
         System.out.println("Selecting (using JPQL)...");
-        List<Problem> problems = em.createQuery(fetchingAllProblemsInJpql, Problem.class).getResultList();
+        List<Project> projects = em.createQuery(fetchingAllProjectsInJpql, Project.class).getResultList();
 
         // then
-        System.out.println("Found " + problems.size() + " problems (using JPQL):");
-        assertContainsAllProblems(problems);
+        System.out.println("Found " + projects.size() + " projects (using JPQL):");
+        assertContainsAllProjects(projects);
     }
     
-    private static void assertContainsAllProblems(Collection<Problem> retrievedProblems) {
-        Assert.assertEquals(PROBLEM_TITLES.length, retrievedProblems.size());
-        final Set<String> retrievedProblemTitles = new HashSet<String>();
-        for (Problem problem : retrievedProblems) {
-            System.out.println("* " + problem);
-            retrievedProblemTitles.add(problem.getDescription());
+    private static void assertContainsAllProjects(Collection<Project> retrievedProjects) {
+        Assert.assertEquals(PROJECT_TITLES.length, retrievedProjects.size());
+        final Set<String> retrievedProjectTitles = new HashSet<String>();
+        for (Project project : retrievedProjects) {
+            System.out.println("* " + project);
+            retrievedProjectTitles.add(project.getDescription());
         }
-        Assert.assertTrue(retrievedProblemTitles.containsAll(Arrays.asList(PROBLEM_TITLES)));
+        Assert.assertTrue(retrievedProjectTitles.containsAll(Arrays.asList(PROJECT_TITLES)));
     }
     
     @Test
-    public void shouldFindAllProblemsUsingCriteriaApi() throws Exception {
+    public void shouldFindAllProjectsUsingCriteriaApi() throws Exception {
         // given
         CriteriaBuilder builder = em.getCriteriaBuilder();
-        CriteriaQuery<Problem> criteria = builder.createQuery(Problem.class);
+        CriteriaQuery<Project> criteria = builder.createQuery(Project.class);
         		
-        Root<Problem> problem = criteria.from(Problem.class);
-        criteria.select(problem);
+        Root<Project> project = criteria.from(Project.class);
+        criteria.select(project);
         // TIP: If you don't want to use the JPA 2 Metamodel,
         // you can change the get() method call to get("id")
-        //criteria.orderBy(builder.asc(problem.get(Problem_.id)));
-        criteria.orderBy(builder.asc(problem.get("id")));
+        //criteria.orderBy(builder.asc(project.get(Project_.id)));
+        criteria.orderBy(builder.asc(project.get("id")));
         // No WHERE clause, which implies select all
 
         // when
         System.out.println("Selecting (using Criteria)...");
-        List<Problem> problems = em.createQuery(criteria).getResultList();
+        List<Project> projects = em.createQuery(criteria).getResultList();
 
         // then
-        System.out.println("Found " + problems.size() + " problems (using Criteria):");
-        assertContainsAllProblems(problems);
+        System.out.println("Found " + projects.size() + " projects (using Criteria):");
+        assertContainsAllProjects(projects);
     }
 }

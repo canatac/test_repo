@@ -1,4 +1,4 @@
-package org.ortens.bone.core.model;
+package org.ortens.bone.core.ejbjpa;
 
 import java.util.List;
 import javax.inject.Inject;
@@ -20,28 +20,29 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.Assert;
-import org.ortens.bone.core.model.Solution;
+import org.ortens.bone.core.model.BaseEntity;
+import org.ortens.bone.core.model.Company;
+import org.ortens.bone.core.model.Company_;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 @RunWith(Arquillian.class)
-public class SolutionPersistenceTest {
+public class CompanyPersistenceTest {
     @Deployment
     public static Archive<?> createDeployment() {
         return ShrinkWrap.create(WebArchive.class, "test.war")
-            .addClasses(Solution.class, BaseEntity.class)
+            .addClasses(Company.class, BaseEntity.class)
             .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
             .addAsWebInfResource("jbossas-ds.xml"); //arquillian-jbossas-managed profile. Can stay without perturbing arquillian-glassfish-embedded test 
     }
  
-    private static final String[] SOLUTION_TITLES = {
-        "BUG",
-        "SYSTEM CRASH",
-        "BUILD FAILURE",
-        "ABSENCE"
+    private static final String[] COMPANY_TITLES = {
+        "ACME SARL",
+        "LOKOUM SAS",
+        "CHEAP SA"
     };
     
     @PersistenceContext
@@ -61,7 +62,7 @@ public class SolutionPersistenceTest {
         utx.begin();
         em.joinTransaction();
         System.out.println("Dumping old records...");
-        em.createQuery("delete from Solution").executeUpdate();
+        em.createQuery("delete from Company").executeUpdate();
         utx.commit();
     }
 
@@ -69,10 +70,10 @@ public class SolutionPersistenceTest {
         utx.begin();
         em.joinTransaction();
         System.out.println("Inserting records...");
-        for (String title : SOLUTION_TITLES) {
-            Solution solution = new Solution();
-            solution.setDescription(title);
-            em.persist(solution);
+        for (String title : COMPANY_TITLES) {
+            Company company = new Company();
+            company.setDescription(title);
+            em.persist(company);
         }
         utx.commit();
         // clear the persistence context (first-level cache)
@@ -89,49 +90,49 @@ public class SolutionPersistenceTest {
         utx.commit();
     }
     @Test
-    public void shouldFindAllSolutionsUsingJpqlQuery() throws Exception {
+    public void shouldFindAllCompaniesUsingJpqlQuery() throws Exception {
         // given
-        String fetchingAllSolutionsInJpql = "select g from Solution g order by g.id";
+        String fetchingAllCompaniesInJpql = "select g from Company g order by g.id";
 
         // when
         System.out.println("Selecting (using JPQL)...");
-        List<Solution> solutions = em.createQuery(fetchingAllSolutionsInJpql, Solution.class).getResultList();
+        List<Company> companies = em.createQuery(fetchingAllCompaniesInJpql, Company.class).getResultList();
 
         // then
-        System.out.println("Found " + solutions.size() + " solutions (using JPQL):");
-        assertContainsAllSolutions(solutions);
+        System.out.println("Found " + companies.size() + " companies (using JPQL):");
+        assertContainsAllCompanies(companies);
     }
     
-    private static void assertContainsAllSolutions(Collection<Solution> retrievedSolutions) {
-        Assert.assertEquals(SOLUTION_TITLES.length, retrievedSolutions.size());
-        final Set<String> retrievedSolutionTitles = new HashSet<String>();
-        for (Solution solution : retrievedSolutions) {
-            System.out.println("* " + solution);
-            retrievedSolutionTitles.add(solution.getDescription());
+    private static void assertContainsAllCompanies(Collection<Company> retrievedCompanies) {
+        Assert.assertEquals(COMPANY_TITLES.length, retrievedCompanies.size());
+        final Set<String> retrievedCompanyTitles = new HashSet<String>();
+        for (Company company : retrievedCompanies) {
+            System.out.println("* " + company);
+            retrievedCompanyTitles.add(company.getDescription());
         }
-        Assert.assertTrue(retrievedSolutionTitles.containsAll(Arrays.asList(SOLUTION_TITLES)));
+        Assert.assertTrue(retrievedCompanyTitles.containsAll(Arrays.asList(COMPANY_TITLES)));
     }
     
     @Test
-    public void shouldFindAllSolutionsUsingCriteriaApi() throws Exception {
+    public void shouldFindAllCompaniesUsingCriteriaApi() throws Exception {
         // given
         CriteriaBuilder builder = em.getCriteriaBuilder();
-        CriteriaQuery<Solution> criteria = builder.createQuery(Solution.class);
+        CriteriaQuery<Company> criteria = builder.createQuery(Company.class);
         		
-        Root<Solution> solution = criteria.from(Solution.class);
-        criteria.select(solution);
+        Root<Company> company = criteria.from(Company.class);
+        criteria.select(company);
         // TIP: If you don't want to use the JPA 2 Metamodel,
         // you can change the get() method call to get("id")
-        //criteria.orderBy(builder.asc(solution.get(Solution_.id)));
-        criteria.orderBy(builder.asc(solution.get("id")));
+        //criteria.orderBy(builder.asc(company.get(Company_.id)));
+        criteria.orderBy(builder.asc(company.get("id")));
         // No WHERE clause, which implies select all
 
         // when
         System.out.println("Selecting (using Criteria)...");
-        List<Solution> solutions = em.createQuery(criteria).getResultList();
+        List<Company> companies = em.createQuery(criteria).getResultList();
 
         // then
-        System.out.println("Found " + solutions.size() + " solutions (using Criteria):");
-        assertContainsAllSolutions(solutions);
+        System.out.println("Found " + companies.size() + " companies (using Criteria):");
+        assertContainsAllCompanies(companies);
     }
 }

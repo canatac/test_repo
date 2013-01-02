@@ -1,4 +1,4 @@
-package org.ortens.bone.core.model;
+package org.ortens.bone.core.ejbjpa;
 
 import java.util.List;
 import javax.inject.Inject;
@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.Assert;
+import org.ortens.bone.core.model.BaseEntity;
 import org.ortens.bone.core.model.Document;
 import org.ortens.bone.core.model.Document_;
 

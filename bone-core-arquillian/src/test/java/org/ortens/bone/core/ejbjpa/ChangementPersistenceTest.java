@@ -1,4 +1,4 @@
-package org.ortens.bone.core.model;
+package org.ortens.bone.core.ejbjpa;
 
 import java.util.List;
 import javax.inject.Inject;
@@ -23,7 +23,10 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import org.junit.Assert;
+import org.ortens.bone.core.model.BaseEntity;
 import org.ortens.bone.core.model.Changement;
+import org.ortens.bone.core.model.Demand;
+import org.ortens.bone.core.model.Livraison;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
