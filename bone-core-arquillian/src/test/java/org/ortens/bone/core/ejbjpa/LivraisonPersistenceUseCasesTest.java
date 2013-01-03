@@ -123,87 +123,125 @@ public class LivraisonPersistenceUseCasesTest {
     	 *		|__changement4
     	 *				|__demand6
     	 */
-    	
-    	
-    	demand.setDescription("TestDemand");
-    	Set<Demand> demands = new HashSet<Demand>();
-    	demands.add(demand);
-    	
-    	demand2.setDescription("TestDemand2");
-    	Set<Demand> demands2 = new HashSet<Demand>();
-    	demands2.add(demand2);
-    	
-    	demand3.setDescription("TestDemand3");
-    	Set<Demand> demands3 = new HashSet<Demand>();
-    	demands3.add(demand3);
-    	
-    	demand4.setDescription("TestDemand4");
-    	Set<Demand> demands4 = new HashSet<Demand>();
-    	demands4.add(demand4);
-    	
-    	demand5.setDescription("TestDemand5");
-    	Set<Demand> demands5 = new HashSet<Demand>();
-    	demands5.add(demand5);
-    	
-    	demand6.setDescription("TestDemand6");
-    	Set<Demand> demands6 = new HashSet<Demand>();
-    	demands6.add(demand6);
-    	
-    	//
-    	
-    	changement.setDescription("TestChangement");
-    	changement.getDemandes().addAll(demands);
+
+    	Set<Demand> demands = new HashSet<Demand>();   	
+    	Set<Demand> demands2 = new HashSet<Demand>();    	
+    	Set<Demand> demands3 = new HashSet<Demand>();    	
+    	Set<Demand> demands4 = new HashSet<Demand>();    	
+    	Set<Demand> demands5 = new HashSet<Demand>();    	
+    	Set<Demand> demands6 = new HashSet<Demand>();    	    	
     	Set<Changement> changements = new HashSet<Changement>();
-    	changements.add(changement);
-
-    	changement2.setDescription("TestChangement2");
-    	changement2.getDemandes().addAll(demands2);
-    	changement2.getDemandes().addAll(demands3);
     	Set<Changement> changements2 = new HashSet<Changement>();
-    	changements2.add(changement2);
+    	Livraison livraison = new Livraison();
+        Livraison livraison2 = new Livraison(); 
     	
-    	changement3.setDescription("TestChangement3");
-    	changement3.getDemandes().addAll(demands4);
-    	changement3.getDemandes().addAll(demands5);
-    	Set<Changement> changements3 = new HashSet<Changement>();
-    	changements3.add(changement3);
-    	
-    	changement4.setDescription("TestChangement4");
-    	changement4.getDemandes().addAll(demands6);
-    	Set<Changement> changements4 = new HashSet<Changement>();
-    	changements4.add(changement4);
-  	
-        utx.begin();
+        // DEMAND
+        
+        demand.setDescription("TestDemand");  	
+    	demand2.setDescription("TestDemand2");   	
+    	demand3.setDescription("TestDemand3");  	
+    	demand4.setDescription("TestDemand4"); 	
+    	demand5.setDescription("TestDemand5");   	
+    	demand6.setDescription("TestDemand6");
+        
+    	utx.begin();
         em.joinTransaction();
-        _logger.info("Inserting records...");
-
+        _logger.info("Inserting records...demand");
+   	
         em.persist(demand);
         em.persist(demand2);
         em.persist(demand3);
         em.persist(demand4);
         em.persist(demand5);
         em.persist(demand6);
-        
-        em.persist(changement);
-        em.persist(changement2);
-        em.persist(changement3);
-        em.persist(changement4);
+//        utx.commit();
+    	
+        demands.add(demand);    	
+    	demands2.add(demand2);    	
+    	demands3.add(demand3);    	
+    	demands4.add(demand4);    	
+    	demands5.add(demand5);    	
+    	demands6.add(demand6);        
 
-        Livraison livraison = new Livraison();
-        Livraison livraison2 = new Livraison(); 
+        // CHANGEMENT
+    	
+    	changement.setDescription("Evolution");
+    	changement2.setDescription("Correction");
+    	changement3.setDescription("TestChangement3");
+    	changement4.setDescription("TestChangement4");
+    	
+//    	utx.begin();
+//        em.joinTransaction();
+        //_logger.info("Inserting records...changement");
         
-        livraison.setDescription(LIVRAISON_TITLES[0]);
-        livraison.getChangements().add(changement);
-        livraison.getChangements().add(changement2);
+//        em.persist(changement);
+//    	em.persist(changement2);
+//    	em.persist(changement3);
+//    	em.persist(changement4);
+//    	utx.commit();
+//    	
+//    	utx.begin();
+//        em.joinTransaction();
+        _logger.info("Getting and inserting demands to changement - 1");
+    	changement.getDemandes().addAll(demands);
+    	_logger.info("		|_____________changement.getDemandes().size() : "+changement.getDemandes().size());
+    	changement2.getDemandes().addAll(demands3);
+    	_logger.info("		|_____________changement2.getDemandes().size() : "+changement2.getDemandes().size());
+    	changement3.getDemandes().addAll(demands4);
+    	_logger.info("		|_____________changement3.getDemandes().size() : "+changement3.getDemandes().size());
+    	changement3.getDemandes().addAll(demands5);
+    	_logger.info("		|_____________changement3.getDemandes().size() : "+changement3.getDemandes().size());
+    	changement4.getDemandes().addAll(demands6);
+    	_logger.info("		|_____________changement4.getDemandes().size() : "+changement4.getDemandes().size());
+    	
+    	 _logger.info("Getting and inserting changement to demand - 2");
+     	demand.getTravaux().add(changement);
+     	_logger.info("		|_____________demand.getTravaux().size() : "+demand.getTravaux().size());
+     	demand2.getTravaux().add(changement2);
+     	_logger.info("		|_____________demand2.getTravaux().size() : "+demand2.getTravaux().size());
+     	demand3.getTravaux().add(changement2);
+     	_logger.info("		|_____________demand3.getTravaux().size() : "+demand3.getTravaux().size());
+     	demand4.getTravaux().add(changement3);
+     	_logger.info("		|_____________demand4.getTravaux().size() : "+demand4.getTravaux().size());
+     	demand5.getTravaux().add(changement3);
+     	_logger.info("		|_____________demand5.getTravaux().size() : "+demand5.getTravaux().size());
+     	demand6.getTravaux().add(changement4);
+     	_logger.info("		|_____________demand6.getTravaux().size() : "+demand6.getTravaux().size());
+    	
+//    	em.flush();
+//    	em.refresh(changement);
+//    	em.refresh(changement2);
+//    	em.refresh(changement3);
+//    	em.refresh(changement4);
+    	em.persist(changement);
+    	em.persist(changement2);
+    	em.persist(changement3);
+    	em.persist(changement4);
+    	em.persist(demand);
+    	em.persist(demand2);
+    	em.persist(demand3);
+    	em.persist(demand4);
+    	em.persist(demand5);
+    	em.persist(demand6);
+    	//    	utx.commit();
+    	
+    	
+    	changements.add(changement);
+    	changements.add(changement2);
+    	changements2.add(changement3); 
+    	changements2.add(changement4);
+
+    	livraison.setDescription(LIVRAISON_TITLES[0]);
+        livraison.getChangements().addAll(changements);
 
         livraison2.setDescription(LIVRAISON_TITLES[1]);
-        livraison2.getChangements().add(changement3);
-        livraison2.getChangements().add(changement4);
-            
-        
+        livraison2.getChangements().addAll(changements2);
+    	
+//    	utx.begin();
+//        em.joinTransaction();
+        _logger.info("Inserting records...livraison...with changements & demands");
         em.persist(livraison);
         em.persist(livraison2);
-        
 
         utx.commit();
         // clear the persistence context (first-level cache)
@@ -240,18 +278,29 @@ public class LivraisonPersistenceUseCasesTest {
         final Set<String> retrievedLivraisonTitles = new HashSet<String>();
         for (Livraison livraison : retrievedLivraisons) {
             _logger.info("* " + livraison);
-            Assert.assertEquals(2,livraison.getChangements().size());
-            
-            Iterator<Changement> it = livraison.getChangements().iterator();
-            
-            while (it.hasNext()){
-            	_logger.info("YES un changement !");
-            	_logger.info(it.next().getDescription());
+            _logger.info("---------> livraison.getDescription() : "+livraison.getDescription());
+            for (Changement changement : livraison.getChangements()){
+            	_logger.info("		|_____________changement : "+changement.getDescription());
+            	_logger.info("		|_____________changement.getDemandes().size() : "+changement.getDemandes().size());
+            	for (Demand demand : changement.getDemandes()){
+            		_logger.info("			|_____________demande : "+demand.getDescription());
+            	}
             }
             retrievedLivraisonTitles.add(livraison.getDescription());
         }
         Assert.assertTrue(retrievedLivraisonTitles.containsAll(Arrays.asList(LIVRAISON_TITLES)));
-        
+//            Iterator<Changement> it = livraison.getChangements().iterator();
+            
+//            while (it.hasNext()){
+//            	_logger.info("		|_____________changement : "+it.next().getDescription());
+//            	//
+//            	Iterator<Demand> itDemand = it.next().getDemandes().iterator();
+//            	while (itDemand.hasNext()){
+//            		_logger.info("		|_____________changement : "+it.next().getDescription());
+//            	}
+//            	
+//            	
+     
     }
     
     @Test

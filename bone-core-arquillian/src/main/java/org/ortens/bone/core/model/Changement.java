@@ -73,7 +73,7 @@ public class Changement extends BaseEntity implements Serializable{
 		this.title = title;
 	}
 
-	@ManyToMany(mappedBy = "travaux",targetEntity=Demand.class,cascade=CascadeType.REMOVE)
+	@ManyToMany(mappedBy = "travaux",targetEntity=Demand.class,cascade=CascadeType.ALL)
 	public Set<Demand> getDemandes() {
 		return demandes;
 	}
@@ -88,7 +88,7 @@ public class Changement extends BaseEntity implements Serializable{
 		// TODO Auto-generated method stub
 		
 	}
-	@ManyToMany(mappedBy = "changements",targetEntity=Livraison.class,cascade=CascadeType.REMOVE)
+	@ManyToMany(mappedBy = "changements",targetEntity=Livraison.class,cascade=CascadeType.ALL)
 	public Set<Livraison> getLivrables() {
 		return livrables;
 	}
