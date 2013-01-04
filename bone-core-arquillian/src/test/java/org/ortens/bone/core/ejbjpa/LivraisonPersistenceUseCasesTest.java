@@ -4,6 +4,11 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -57,25 +62,13 @@ public class LivraisonPersistenceUseCasesTest {
     @Inject
     UserTransaction utx;
     @Inject
-    Changement changement;
+    Changement changement,changement2,changement3,changement4;
+
     @Inject
-    Changement changement2;
+    Demand demand,demand2,demand3,demand4,demand5,demand6;
+    
     @Inject
-    Changement changement3;
-    @Inject
-    Changement changement4;
-    @Inject
-    Demand demand;
-    @Inject
-    Demand demand2;
-    @Inject
-    Demand demand3;
-    @Inject
-    Demand demand4;
-    @Inject
-    Demand demand5;
-    @Inject
-    Demand demand6;
+    Livraison livraison;
  
     @Before
     public void preparePersistenceTest() throws Exception {
@@ -91,11 +84,9 @@ public class LivraisonPersistenceUseCasesTest {
         
         String fetchingAllLivraisonsInJpql = "select l from Livraison l order by l.id";
 
-        // when
         _logger.info("CLEAN DATA - Selecting (using JPQL)...");
         List<Livraison> livraisons = em.createQuery(fetchingAllLivraisonsInJpql, Livraison.class).getResultList();
 
-        // then
         _logger.info("Found " + livraisons.size() + " livraisons (using JPQL):");
               
         for (Livraison livraison : livraisons) {
@@ -104,25 +95,56 @@ public class LivraisonPersistenceUseCasesTest {
         		_logger.info("em.remove(livraison)");
         		}
         }
+        
+        String fetchingAllChangementsInJpql = "select c from Changement c order by c.id";
+
+        _logger.info("CLEAN DATA - Selecting (using JPQL)...");
+        List<Changement> changements = em.createQuery(fetchingAllChangementsInJpql, Changement.class).getResultList();
+
+        _logger.info("Found " + changements.size() + " changements (using JPQL):");
+              
+        for (Changement changement : changements) {
+        	if (changement != null){
+        		em.remove(changement);
+        		_logger.info("em.remove(changement)");
+        		}
+        }
+        
+        String fetchingAllDemandsInJpql = "select d from Demand d order by d.id";
+
+        _logger.info("CLEAN DATA - Selecting (using JPQL)...");
+        List<Demand> demandes = em.createQuery(fetchingAllDemandsInJpql, Demand.class).getResultList();
+
+        _logger.info("Found " + demandes.size() + " demandes (using JPQL):");
+              
+        for (Demand demande : demandes) {
+        	if (demande != null){
+        		em.remove(demande);
+        		_logger.info("em.remove(demande)");
+        		}
+        }
+        
+        
+        
         utx.commit();
         
     }
 
     private void insertData() throws Exception {
-    	/*
-    	 *	livraison
-    	 * 		|__changement
-    	 * 				|__demand
-    	 *		|__changement2
-    	 *				|__demand2
-    	 *				|__demand3
-    	 *	livraison2
-    	 *		|__changement3
-    	 *				|__demand4
-    	 *				|__demand5
-    	 *		|__changement4
-    	 *				|__demand6
-    	 */
+//    	 ---------> livraison  : Document
+//            |_____________changement : Correction
+//                    |_____________demande : TestDemand2
+//                    |_____________demande : TestDemand3
+//            |_____________changement : Evolution
+//                    |_____________demande : TestDemand
+//
+//         ---------> livraison  : Software
+//            |_____________changement : TestChangement4
+//                    |_____________demande : TestDemand6
+//            |_____________changement : TestChangement3
+//                    |_____________demande : TestDemand5
+//                    |_____________demande : TestDemand4
+    	
 
     	Set<Demand> demands = new HashSet<Demand>();   	
     	Set<Demand> demands2 = new HashSet<Demand>();    	
@@ -154,7 +176,6 @@ public class LivraisonPersistenceUseCasesTest {
         em.persist(demand4);
         em.persist(demand5);
         em.persist(demand6);
-//        utx.commit();
     	
         demands.add(demand);    	
     	demands2.add(demand2);    	
@@ -170,49 +191,33 @@ public class LivraisonPersistenceUseCasesTest {
     	changement3.setDescription("TestChangement3");
     	changement4.setDescription("TestChangement4");
     	
-//    	utx.begin();
-//        em.joinTransaction();
-        //_logger.info("Inserting records...changement");
-        
-//        em.persist(changement);
-//    	em.persist(changement2);
-//    	em.persist(changement3);
-//    	em.persist(changement4);
-//    	utx.commit();
-//    	
-//    	utx.begin();
-//        em.joinTransaction();
         _logger.info("Getting and inserting demands to changement - 1");
     	changement.getDemandes().addAll(demands);
-    	_logger.info("		|_____________changement.getDemandes().size() : "+changement.getDemandes().size());
     	changement2.getDemandes().addAll(demands3);
-    	_logger.info("		|_____________changement2.getDemandes().size() : "+changement2.getDemandes().size());
     	changement3.getDemandes().addAll(demands4);
-    	_logger.info("		|_____________changement3.getDemandes().size() : "+changement3.getDemandes().size());
     	changement3.getDemandes().addAll(demands5);
-    	_logger.info("		|_____________changement3.getDemandes().size() : "+changement3.getDemandes().size());
     	changement4.getDemandes().addAll(demands6);
-    	_logger.info("		|_____________changement4.getDemandes().size() : "+changement4.getDemandes().size());
     	
-    	 _logger.info("Getting and inserting changement to demand - 2");
+//    	_logger.info("		|_____________changement.getDemandes().size() : "+changement.getDemandes().size());
+//    	_logger.info("		|_____________changement2.getDemandes().size() : "+changement2.getDemandes().size());
+//    	_logger.info("		|_____________changement3.getDemandes().size() : "+changement3.getDemandes().size());
+//    	_logger.info("		|_____________changement4.getDemandes().size() : "+changement4.getDemandes().size());
+    	
+    	_logger.info("Getting and inserting changement to demand - 2");
      	demand.getTravaux().add(changement);
-     	_logger.info("		|_____________demand.getTravaux().size() : "+demand.getTravaux().size());
      	demand2.getTravaux().add(changement2);
-     	_logger.info("		|_____________demand2.getTravaux().size() : "+demand2.getTravaux().size());
      	demand3.getTravaux().add(changement2);
-     	_logger.info("		|_____________demand3.getTravaux().size() : "+demand3.getTravaux().size());
      	demand4.getTravaux().add(changement3);
-     	_logger.info("		|_____________demand4.getTravaux().size() : "+demand4.getTravaux().size());
      	demand5.getTravaux().add(changement3);
-     	_logger.info("		|_____________demand5.getTravaux().size() : "+demand5.getTravaux().size());
      	demand6.getTravaux().add(changement4);
-     	_logger.info("		|_____________demand6.getTravaux().size() : "+demand6.getTravaux().size());
+     	
+//     	_logger.info("		|_____________demand.getTravaux().size() : "+demand.getTravaux().size());
+//     	_logger.info("		|_____________demand2.getTravaux().size() : "+demand2.getTravaux().size());
+//     	_logger.info("		|_____________demand3.getTravaux().size() : "+demand3.getTravaux().size());
+//     	_logger.info("		|_____________demand4.getTravaux().size() : "+demand4.getTravaux().size());
+//     	_logger.info("		|_____________demand5.getTravaux().size() : "+demand5.getTravaux().size());
+//     	_logger.info("		|_____________demand6.getTravaux().size() : "+demand6.getTravaux().size());
     	
-//    	em.flush();
-//    	em.refresh(changement);
-//    	em.refresh(changement2);
-//    	em.refresh(changement3);
-//    	em.refresh(changement4);
     	em.persist(changement);
     	em.persist(changement2);
     	em.persist(changement3);
@@ -223,7 +228,6 @@ public class LivraisonPersistenceUseCasesTest {
     	em.persist(demand4);
     	em.persist(demand5);
     	em.persist(demand6);
-    	//    	utx.commit();
     	
     	
     	changements.add(changement);
@@ -237,8 +241,7 @@ public class LivraisonPersistenceUseCasesTest {
         livraison2.setDescription(LIVRAISON_TITLES[1]);
         livraison2.getChangements().addAll(changements2);
     	
-//    	utx.begin();
-//        em.joinTransaction();
+
         _logger.info("Inserting records...livraison...with changements & demands");
         em.persist(livraison);
         em.persist(livraison2);
@@ -281,7 +284,7 @@ public class LivraisonPersistenceUseCasesTest {
             _logger.info("---------> livraison.getDescription() : "+livraison.getDescription());
             for (Changement changement : livraison.getChangements()){
             	_logger.info("		|_____________changement : "+changement.getDescription());
-            	_logger.info("		|_____________changement.getDemandes().size() : "+changement.getDemandes().size());
+//            	_logger.info("		|_____________changement.getDemandes().size() : "+changement.getDemandes().size());
             	for (Demand demand : changement.getDemandes()){
             		_logger.info("			|_____________demande : "+demand.getDescription());
             	}
@@ -289,18 +292,6 @@ public class LivraisonPersistenceUseCasesTest {
             retrievedLivraisonTitles.add(livraison.getDescription());
         }
         Assert.assertTrue(retrievedLivraisonTitles.containsAll(Arrays.asList(LIVRAISON_TITLES)));
-//            Iterator<Changement> it = livraison.getChangements().iterator();
-            
-//            while (it.hasNext()){
-//            	_logger.info("		|_____________changement : "+it.next().getDescription());
-//            	//
-//            	Iterator<Demand> itDemand = it.next().getDemandes().iterator();
-//            	while (itDemand.hasNext()){
-//            		_logger.info("		|_____________changement : "+it.next().getDescription());
-//            	}
-//            	
-//            	
-     
     }
     
     @Test
@@ -325,4 +316,209 @@ public class LivraisonPersistenceUseCasesTest {
         _logger.info("Found " + livraisons.size() + " livraisons (using Criteria):");
         assertContainsAllLivraisons(livraisons);
     }
+    
+    @Test
+    public void moveAChangeWithDemandsToAnotherLivraison() throws SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException, SystemException, NotSupportedException{
+    	// 2.Move a change with the demands
+    	//		|__2.1 - To another Livraison
+    	//
+    	// BEFORE :
+    	//---------
+		//   	 ---------> livraison  : Document
+		//      	|_____________changement : Correction
+		//              |_____________demande : TestDemand2
+		//              |_____________demande : TestDemand3
+		//      	|_____________changement : Evolution
+		//              |_____________demande : TestDemand
+		//
+		//   	---------> livraison  : Software
+		//      	|_____________changement : TestChangement4
+		//              |_____________demande : TestDemand6
+		//      	|_____________changement : TestChangement3
+		//              |_____________demande : TestDemand5
+		//              |_____________demande : TestDemand4
+    	// AFTER :
+    	//---------
+		//   	 ---------> livraison  : Document
+		//      	|_____________changement : Evolution
+		//              |_____________demande : TestDemand
+		//
+		//   	---------> livraison  : Software
+		//     		|_____________changement : TestChangement4
+		//              |_____________demande : TestDemand6
+		//      	|_____________changement : TestChangement3
+		//              |_____________demande : TestDemand5
+		//              |_____________demande : TestDemand4
+		//      	|_____________changement : Correction
+		//              |_____________demande : TestDemand2
+		//              |_____________demande : TestDemand3
+    	
+    	
+    	String fetchingChangementsInJpql = "select c from Changement c";
+    	String fetchingLivraisonsInJpql = "select l from Livraison l";
+    	List<Changement> changements = em.createQuery(fetchingChangementsInJpql, Changement.class).getResultList();
+    	List<Livraison> livraisons = em.createQuery(fetchingLivraisonsInJpql, Livraison.class).getResultList();
+    	
+    	_logger.info("Found " + changements.size() + " changements (using Criteria)");
+    	
+    	for(Changement changement : changements){
+    		_logger.info("Selecting (using JPQL)...");
+    		_logger.info("					|__ description  : " + changement.getDescription());
+    		if ("Correction".equals(changement.getDescription())){
+    			for(Livraison livraisonTO_REPLACE : changement.getLivrables()){
+    				if ("Document".equals(livraisonTO_REPLACE.getDescription())){
+    					for(Livraison livraisonTO_ADD : livraisons){
+    						if("Software".equals(livraisonTO_ADD.getDescription())){
+    							changement.getLivrables().remove(livraisonTO_REPLACE);
+        						changement.getLivrables().add(livraisonTO_ADD);
+    						}
+    					}
+    				}
+    			}
+    		}
+    	}
+    	utx.commit();
+    	// -------------------->> VERIFICATION
+    	utx.begin();
+        em.joinTransaction();
+        String fetchingChangementsInJpqlAFTER_MOVE = "select c from Changement c";
+    	String fetchingLivraisonsInJpqlAFTER_MOVE = "select l from Livraison l";
+    	List<Changement> changementsAFTER_MOVE = em.createQuery(fetchingChangementsInJpqlAFTER_MOVE, Changement.class).getResultList();
+    	List<Livraison> livraisonsAFTER_MOVE = em.createQuery(fetchingLivraisonsInJpqlAFTER_MOVE, Livraison.class).getResultList();
+        
+    	for(Changement changement : changementsAFTER_MOVE){
+    		if("Correction".equals(changement.getDescription())){
+    			for(Livraison livraison : changement.getLivrables()){
+    				_logger.info("livraison.getDescription() in CORRECTION : "+livraison.getDescription());
+    			}
+    		}
+    	}
+    	
+    	for(Livraison livraison : livraisonsAFTER_MOVE){
+    		if("Software".equals(livraison.getDescription())){
+    			for(Changement changement : livraison.getChangements()){
+    				_logger.info("changement.getDescription() in CORRECTION : "+changement.getDescription());
+    			}
+    		}
+    	}
+    	
+        
+
+    }
+    
+    @Test
+    public void moveADemand() throws SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException, SystemException, NotSupportedException{
+    	// 1.Move a demand
+    	//		|__1.1 - To another Changement but same Livraison
+    	//		|
+    	//		|__1.2 - To another Changement and other Livraison
+    	//
+    	
+    	// 1.1 - Move a demand to another Changement but same Livraison
+
+        String fetchingADemandInJpql = "select d from Demand d where d.description = 'TestDemand5'";
+        String fetchingChangementsInJpql = "select c from Changement c";
+
+        _logger.info("Selecting (using JPQL)...");
+        Demand demand = em.createQuery(fetchingADemandInJpql, Demand.class).getSingleResult();
+        List<Changement> changements = em.createQuery(fetchingChangementsInJpql, Changement.class).getResultList();
+        
+        _logger.info("Found demand (using JPQL) : "+demand.getDescription());
+        _logger.info("			|__ Nb of linked changements : " + demand.getTravaux().size());
+        for (Changement changement : demand.getTravaux()){
+        	_logger.info("					|__ description  : " + changement.getDescription());
+        	for (Changement changementToAddTo : changements){
+	        	if ("TestChangement4".equals(changementToAddTo.getDescription())){
+	        		demand.getTravaux().remove(changement);
+	        		demand.getTravaux().add(changementToAddTo);
+	        	}
+        	}
+        }
+        utx.commit();
+        // -------------------->> VERIFICATION
+        utx.begin();
+        em.joinTransaction();
+        Demand demandAFTER_MOVE = em.createQuery(fetchingADemandInJpql, Demand.class).getSingleResult();
+        List<Changement> changementsAFTER_MOVE = em.createQuery(fetchingChangementsInJpql, Changement.class).getResultList();
+        _logger.info("AFTER MOVE - demand (using JPQL) : "+demandAFTER_MOVE.getDescription());
+        _logger.info("			|__ Nb of linked changements : " + demandAFTER_MOVE.getTravaux().size());
+        for (Changement changement : demandAFTER_MOVE.getTravaux()){
+        	_logger.info("					|__ description  : " + changement.getDescription());
+        }
+        for (Changement changementAFTER_MOVE : changementsAFTER_MOVE){
+        	if ("TestChangement4".equals(changementAFTER_MOVE.getDescription())){
+        		_logger.info("			|__ Nb of linked demandes : " + changementAFTER_MOVE.getDemandes().size());
+        		_logger.info("AFTER MOVE - demand (using JPQL) : ");
+        		for (Demand demandAfterMoveInChangement : changementAFTER_MOVE.getDemandes()){
+	        		_logger.info("			|__ description : " + demandAfterMoveInChangement.getDescription());
+        		}
+        	}
+        }
+
+        // 1.2 - Move a demand to another Changement and another Livraison
+        String fetchingAnotherDemandInJpql = "select d from Demand d where d.description = 'TestDemand2'";
+
+        _logger.info("Selecting (using JPQL)...");
+        Demand anotherDemand = em.createQuery(fetchingAnotherDemandInJpql, Demand.class).getSingleResult();
+        
+        _logger.info("Found demand (using JPQL) : "+anotherDemand.getDescription());
+        _logger.info("			|__ Nb of linked changements : " + anotherDemand.getTravaux().size());
+        for (Changement changement : anotherDemand.getTravaux()){
+        	_logger.info("					|__ description  : " + changement.getDescription());
+        	for (Changement changementToAddTo : changements){
+        		_logger.info(" 1.2 - IN THE LOOP : changementToAddTo.getDescription() : "+changementToAddTo.getDescription());
+	        	if ("TestChangement3".equals(changementToAddTo.getDescription())){
+	        		anotherDemand.getTravaux().remove(changement);
+	        		anotherDemand.getTravaux().add(changementToAddTo);
+	        	}
+        	}
+        }
+        utx.commit();
+        // -------------------->> VERIFICATION
+        utx.begin();
+        em.joinTransaction();
+        Demand demandAfterMove2 = em.createQuery(fetchingAnotherDemandInJpql, Demand.class).getSingleResult();
+        List<Changement> changementsAfterMove2 = em.createQuery(fetchingChangementsInJpql, Changement.class).getResultList();
+        _logger.info("AFTER MOVE - demand (using JPQL) : "+demandAfterMove2.getDescription());
+        _logger.info("			|__ Nb of linked changements : " + demandAfterMove2.getTravaux().size());
+        for (Changement changement : demandAfterMove2.getTravaux()){
+        	_logger.info("					|__ description  : " + changement.getDescription());
+        }
+        for (Changement changementAfterMove : changementsAfterMove2){
+        	if ("TestChangement3".equals(changementAfterMove.getDescription())){
+        		_logger.info("			|__ Nb of linked demandes : " + changementAfterMove.getDemandes().size());
+        		_logger.info("AFTER MOVE - demand (using JPQL) : ");
+        		for (Demand demandAfterMoveInChangement : changementAfterMove.getDemandes()){
+	        		_logger.info("			|__ description : " + demandAfterMoveInChangement.getDescription());
+        		}
+        	}
+        }
+    }
+    
+//    @Test
+    public void updateOneItem(){}
+    
+//    @Test
+    public void deleteOneItem(){}
+    
+//    @Test
+    public void addOneItem(){}
+    
+//    @Test
+    public void moveSeveralItems(){}
+    
+//    @Test
+    public void updateSeveralItems(){}
+
+//    @Test
+    public void deleteSeveralItems(){}
+    
+//    @Test
+    public void addSeveralItems(){}
+    
+//    @Test
+    public void cloneOneItem(){}
+    
+//    @Test
+    public void cloneSeveralItems(){}
 }
