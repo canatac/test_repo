@@ -4,6 +4,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
@@ -519,8 +520,85 @@ public class LivraisonPersistenceUseCasesTest {
         _logger.info("==============>>>>>>>>>> OUT OF TEST : moveADemand()");
     }
     
-//    @Test
-    public void updateOneItem(){}
+    @Test
+    public void updateOneItem() throws SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException, SystemException, NotSupportedException{
+    	_logger.info("==============>>>>>>>>>> INTO TEST : updateOneItem()");
+    	//
+    	// BEFORE :
+    	//---------
+		//   	 ---------> livraison  : Document
+		//      	|_____________changement : Correction
+		//              |_____________demande : TestDemand2
+		//              |_____________demande : TestDemand3
+		//      	|_____________changement : Evolution
+		//              |_____________demande : TestDemand
+		//
+		//   	---------> livraison  : Software
+		//      	|_____________changement : TestChangement4
+		//              |_____________demande : TestDemand6
+		//      	|_____________changement : TestChangement3
+		//              |_____________demande : TestDemand5
+		//              |_____________demande : TestDemand4
+    	// AFTER :
+    	//---------
+		//   	 ---------> livraison  : Document
+		//      	|_____________changement : Correction
+		//              |_____________demande : Correction1
+		//              |_____________demande : TestDemand3
+		//      	|_____________changement : Evolution
+		//              |_____________demande : TestDemand
+		//
+		//   	---------> livraison  : Software
+		//      	|_____________changement : TestChangement4
+		//              |_____________demande : TestDemand6
+		//      	|_____________changement : TestChangement3
+		//              |_____________demande : TestDemand5
+		//              |_____________demande : TestDemand4
+    	
+    	String description = "Correction1";
+    	String descriptionOLD = "TestDemand2";
+    	Query q = em.createQuery ("UPDATE Demand d SET d.description = :description WHERE d.description = :descriptionOLD");
+    	q.setParameter ("description", description);
+    	q.setParameter ("descriptionOLD", descriptionOLD);
+    	int updated = q.executeUpdate ();
+    	
+    	
+//    	
+//    	
+//    	
+//    	
+    	String fetchingChangementInJpql = "select c from Changement c where c.description = 'Correction'";
+//    	Changement changement = em.createQuery(fetchingChangementInJpql, Changement.class).getSingleResult();
+//    	
+//    	Iterator<Demand> it = changement.getDemandes().iterator();
+//    	Demand demande = null;
+//    	while (it.hasNext()){
+//    		demande = it.next();
+//    		if ("TestDemand2".equals(demande.getDescription())){
+//    			demande.setDescription("Correction1");
+//    			
+//    			em.persist(demande);
+//    			
+//    		}
+//    	}
+//    	em.persist(changement);
+//    	utx.commit();
+//    	//-------------> VERIFICATION
+//    	utx.begin();
+//        em.joinTransaction();
+        
+        Changement changement2 = em.createQuery(fetchingChangementInJpql, Changement.class).getSingleResult();
+    	Iterator<Demand> it2 = changement2.getDemandes().iterator();
+    	Demand demande2 = null;
+    	_logger.info("changement.getDemandes() : "+changement2.getDemandes());
+    	
+    	while (it2.hasNext()){
+    		demande2 = it2.next();
+    		_logger.info("demande2.getDescription() : "+demande2.getDescription());
+    	}
+    	
+    _logger.info("==============>>>>>>>>>> OUT OF TEST : updateOneItem()");
+    }
     
 //    @Test
     public void deleteOneItem(){}
