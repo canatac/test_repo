@@ -51,6 +51,8 @@ public
 	public Demand(String title, String description) {
 		super();
 		this.title = title;
+		this.setDescription(description);
+		this.setDisplayText(description);
 	}
 
 

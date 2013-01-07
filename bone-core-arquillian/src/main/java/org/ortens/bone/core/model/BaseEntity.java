@@ -26,7 +26,7 @@ public abstract class BaseEntity {
     private String description;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="ID")
     public Long getId() {
         return id;

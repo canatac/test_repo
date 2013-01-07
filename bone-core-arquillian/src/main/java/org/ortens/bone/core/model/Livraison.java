@@ -43,6 +43,13 @@ public class Livraison extends BaseEntity implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 	
+	public Livraison(String title, String description) {
+		super();
+		this.title = title;
+		this.setDescription(description);
+		this.setDisplayText(description);
+	}
+	
     public String getDisplayText() {
         
         return displayText;

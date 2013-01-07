@@ -46,6 +46,7 @@ public class Changement extends BaseEntity implements Serializable{
 	public Changement(String title, String description){
 		this.title=title;
 		this.setDescription(description);
+		this.setDisplayText(description);
 	}
 
 	public Changement() {

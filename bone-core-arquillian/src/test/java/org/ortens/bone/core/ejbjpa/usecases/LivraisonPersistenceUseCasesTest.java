@@ -1,4 +1,4 @@
-package org.ortens.bone.core.ejbjpa;
+package org.ortens.bone.core.ejbjpa.usecases;
 
 import java.util.List;
 import javax.inject.Inject;
@@ -262,6 +262,7 @@ public class LivraisonPersistenceUseCasesTest {
     }
     @Test
     public void shouldFindAllLivraisonsUsingJpqlQuery() throws Exception {
+    	_logger.info("==============>>>>>>>>>> INTO TEST : shouldFindAllLivraisonsUsingJpqlQuery()");
         // given
         String fetchingAllLivraisonsInJpql = "select l from Livraison l order by l.id";
 
@@ -273,6 +274,7 @@ public class LivraisonPersistenceUseCasesTest {
         _logger.info("Found " + livraisons.size() + " livraisons (using JPQL):");
         
         assertContainsAllLivraisons(livraisons);
+        _logger.info("==============>>>>>>>>>> OUT OF TEST : shouldFindAllLivraisonsUsingJpqlQuery()");
     }
     
     private static void assertContainsAllLivraisons(Collection<Livraison> retrievedLivraisons) {
@@ -296,6 +298,7 @@ public class LivraisonPersistenceUseCasesTest {
     
     @Test
     public void shouldFindAllLivraisonsUsingCriteriaApi() throws Exception {
+    	_logger.info("==============>>>>>>>>>> INTO TEST : shouldFindAllLivraisonsUsingCriteriaApi()");
         // given
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<Livraison> criteria = builder.createQuery(Livraison.class);
@@ -315,10 +318,13 @@ public class LivraisonPersistenceUseCasesTest {
         // then
         _logger.info("Found " + livraisons.size() + " livraisons (using Criteria):");
         assertContainsAllLivraisons(livraisons);
+        
+        _logger.info("==============>>>>>>>>>> OUT OF TEST : shouldFindAllLivraisonsUsingCriteriaApi()");
     }
     
     @Test
     public void moveAChangeWithDemandsToAnotherLivraison() throws SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException, SystemException, NotSupportedException{
+    	_logger.info("==============>>>>>>>>>> INTO TEST : moveAChangeWithDemandsToAnotherLivraison()");
     	// 2.Move a change with the demands
     	//		|__2.1 - To another Livraison
     	//
@@ -354,60 +360,77 @@ public class LivraisonPersistenceUseCasesTest {
 		//              |_____________demande : TestDemand3
     	
     	
-    	String fetchingChangementsInJpql = "select c from Changement c";
-    	String fetchingLivraisonsInJpql = "select l from Livraison l";
-    	List<Changement> changements = em.createQuery(fetchingChangementsInJpql, Changement.class).getResultList();
-    	List<Livraison> livraisons = em.createQuery(fetchingLivraisonsInJpql, Livraison.class).getResultList();
+    	String fetchingChangementsInJpql = "select c from Changement c where c.description = 'Correction'";
+    	Changement changement = em.createQuery(fetchingChangementsInJpql, Changement.class).getSingleResult();
+        
+    	String fetchingLivraisonInJpql = "select l from Livraison l where l.description = 'Document'";
+    	String fetchingLivraisonInJpqlNEW = "select l from Livraison l where l.description = 'Software'";
+    	Livraison livraison = em.createQuery(fetchingLivraisonInJpql, Livraison.class).getSingleResult();
+    	Livraison livraisonNEW = em.createQuery(fetchingLivraisonInJpqlNEW, Livraison.class).getSingleResult();
+
+    	_logger.info("livraison.getChangements().size() : "+livraison.getChangements().size());
+    	_logger.info("livraison.getChangements().toString() : "+livraison.getChangements().toString());
     	
-    	_logger.info("Found " + changements.size() + " changements (using Criteria)");
+    	Iterator<Changement> it = livraison.getChangements().iterator();
+    	Changement change = null;
+    	while (it.hasNext()){
+    		change = it.next();
+    		_logger.info("change.getDescription() : " + change.getDescription());
+    		if ("Correction".equals(change.getDescription())){
+    			_logger.info("change treated: Correction");
+    			it.remove();
+    			_logger.info("					|__ changement  : REMOVED !");
+    		}
+    	}
+    	livraisonNEW.getChangements().add(changement);
+ 
+    	em.merge(livraison);
+		em.persist(livraison);
     	
-    	for(Changement changement : changements){
-    		_logger.info("Selecting (using JPQL)...");
-    		_logger.info("					|__ description  : " + changement.getDescription());
-    		if ("Correction".equals(changement.getDescription())){
-    			for(Livraison livraisonTO_REPLACE : changement.getLivrables()){
-    				if ("Document".equals(livraisonTO_REPLACE.getDescription())){
-    					for(Livraison livraisonTO_ADD : livraisons){
-    						if("Software".equals(livraisonTO_ADD.getDescription())){
-    							changement.getLivrables().remove(livraisonTO_REPLACE);
-        						changement.getLivrables().add(livraisonTO_ADD);
-    						}
-    					}
+    	//==>
+    	utx.commit();
+    	em.clear();
+    	// -------------------->> VERIFICATION
+    	utx.begin();
+        em.joinTransaction();
+        String fetchingChangementsInJpqlAFTER_MOVE = "select c from Changement c where c.description = 'Correction'";
+    	String fetchingLivraisonsInJpqlAFTER_MOVE_Software = "select l from Livraison l where l.description = 'Software'";
+    	String fetchingLivraisonsInJpqlAFTER_MOVE_Document = "select l from Livraison l where l.description = 'Document'";
+    	Changement changementsAFTER_MOVE = em.createQuery(fetchingChangementsInJpqlAFTER_MOVE, Changement.class).getSingleResult();
+    	Livraison livraisonsAFTER_MOVE_Software = em.createQuery(fetchingLivraisonsInJpqlAFTER_MOVE_Software, Livraison.class).getSingleResult();
+    	Livraison livraisonsAFTER_MOVE_Document = em.createQuery(fetchingLivraisonsInJpqlAFTER_MOVE_Document, Livraison.class).getSingleResult();
+        
+		if (changementsAFTER_MOVE != null){
+			for (Livraison livraisonTOCHECK : changementsAFTER_MOVE.getLivrables()){
+				_logger.info("livraison.getDescription() in Changement CORRECTION : "+livraisonTOCHECK.getDescription());
+			}
+		}
+    	if (livraisonsAFTER_MOVE_Software != null){
+    		for (Changement changementAFTER_MOVE_Software : livraisonsAFTER_MOVE_Software.getChangements()){
+    			_logger.info("changementAFTER_MOVE_Software.getDescription() in Livraison SOFTWARE : "+changementAFTER_MOVE_Software.getDescription());
+    			if ("Correction".equals(changementAFTER_MOVE_Software.getDescription())){
+    				for (Demand demande : changementAFTER_MOVE_Software.getDemandes()){
+    					_logger.info("CORRECTION in SOFTWARE : demande.getDescription() : "+demande.getDescription());
     				}
     			}
     		}
     	}
-    	utx.commit();
-    	// -------------------->> VERIFICATION
-    	utx.begin();
-        em.joinTransaction();
-        String fetchingChangementsInJpqlAFTER_MOVE = "select c from Changement c";
-    	String fetchingLivraisonsInJpqlAFTER_MOVE = "select l from Livraison l";
-    	List<Changement> changementsAFTER_MOVE = em.createQuery(fetchingChangementsInJpqlAFTER_MOVE, Changement.class).getResultList();
-    	List<Livraison> livraisonsAFTER_MOVE = em.createQuery(fetchingLivraisonsInJpqlAFTER_MOVE, Livraison.class).getResultList();
-        
-    	for(Changement changement : changementsAFTER_MOVE){
-    		if("Correction".equals(changement.getDescription())){
-    			for(Livraison livraison : changement.getLivrables()){
-    				_logger.info("livraison.getDescription() in CORRECTION : "+livraison.getDescription());
-    			}
+    	
+    	if (livraisonsAFTER_MOVE_Document != null){
+    		for (Changement changementAFTER_MOVE_Document : livraisonsAFTER_MOVE_Document.getChangements()){
+    			_logger.info("changementAFTER_MOVE_Document.getDescription() in Livraison DOCUMENT : "+changementAFTER_MOVE_Document.getDescription());
     		}
     	}
+
     	
-    	for(Livraison livraison : livraisonsAFTER_MOVE){
-    		if("Software".equals(livraison.getDescription())){
-    			for(Changement changement : livraison.getChangements()){
-    				_logger.info("changement.getDescription() in CORRECTION : "+changement.getDescription());
-    			}
-    		}
-    	}
-    	
+    	_logger.info("==============>>>>>>>>>> OUT OF TEST : moveAChangeWithDemandsToAnotherLivraison()");
         
 
     }
     
     @Test
     public void moveADemand() throws SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException, SystemException, NotSupportedException{
+    	_logger.info("==============>>>>>>>>>> INTO TEST : moveADemand()");
     	// 1.Move a demand
     	//		|__1.1 - To another Changement but same Livraison
     	//		|
@@ -493,6 +516,7 @@ public class LivraisonPersistenceUseCasesTest {
         		}
         	}
         }
+        _logger.info("==============>>>>>>>>>> OUT OF TEST : moveADemand()");
     }
     
 //    @Test
