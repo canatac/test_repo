@@ -18,7 +18,7 @@ import javax.persistence.*;
  *
  */
 @MappedSuperclass
-public abstract class BaseEntity {
+public abstract class BaseEntity implements Cloneable{
 
     private Long id;
     private Date createdOn;
@@ -111,5 +111,9 @@ public abstract class BaseEntity {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public BaseEntity clone() throws CloneNotSupportedException {
+		return (BaseEntity)super.clone();
 	}
 }
