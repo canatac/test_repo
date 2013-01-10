@@ -48,8 +48,8 @@ public class LivraisonDao {
 
 		// then
 		_logger.info("Found " + livraisons.size() + " livraisons (using JPQL):");
+		
 		return livraisons;
-
 	}
 
 }

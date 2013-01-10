@@ -116,5 +116,20 @@ public class DemandDao {
 			em.persist(change);
 		}
 	}
+	
+	public List<Demand> getList() {
+		// given
+		String fetchingAllDemandsInJpql = "select d from Demand d order by d.id";
+
+		// when
+		_logger.info("Selecting (using JPQL)...");
+		List<Demand> demands = em.createQuery(
+				fetchingAllDemandsInJpql, Demand.class).getResultList();
+
+		// then
+		_logger.info("Found " + demands.size() + " demands (using JPQL):");
+		
+		return demands;
+	}
 
 }
