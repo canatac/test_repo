@@ -1019,6 +1019,7 @@ public class LivraisonPersistenceUseCasesTest{
 		utx.commit();
 		
 		// ----> VERIFICATION
+		
 		utx.begin();
 		em.joinTransaction();
 		
@@ -1082,7 +1083,6 @@ public class LivraisonPersistenceUseCasesTest{
 				}
 			}
 		}
-
 		if (livraisonsAFTER_MOVE_Document != null) {
 			for (Changement changementAFTER_MOVE_Document : livraisonsAFTER_MOVE_Document
 					.getChangements()) {
@@ -1167,7 +1167,6 @@ public class LivraisonPersistenceUseCasesTest{
 		}
 	
 		utx.commit();
-	
 	}
 
 	/**
