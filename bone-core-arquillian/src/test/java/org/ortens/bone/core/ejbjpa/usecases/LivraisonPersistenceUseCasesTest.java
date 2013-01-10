@@ -29,9 +29,11 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.junit.Assert;
+import org.ortens.bone.core.ejbjpa.ChangementDao;
 import org.ortens.bone.core.ejbjpa.DemandDao;
 import org.ortens.bone.core.ejbjpa.LivraisonDao;
 import org.ortens.bone.core.model.BaseEntity;
@@ -48,12 +50,14 @@ public class LivraisonPersistenceUseCasesTest{
 
 	public static Logger _logger = Logger
 			.getLogger(LivraisonPersistenceUseCasesTest.class.getName());
+	
+	
 	@Deployment
 	public static Archive<?> createDeployment() {
 		return ShrinkWrap
 				.create(WebArchive.class, "test.war")
 				.addClasses(BaseEntity.class, Demand.class, Livraison.class,
-						Changement.class, LivraisonDao.class, DemandDao.class)
+						Changement.class, LivraisonDao.class, DemandDao.class, ChangementDao.class)
 				.addAsResource("test-persistence.xml",
 						"META-INF/persistence.xml")
 				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
@@ -74,14 +78,19 @@ public class LivraisonPersistenceUseCasesTest{
 	@Inject
 	LivraisonDao livraisonDao;
 	@Inject
+	ChangementDao changementDao;
+	@Inject
 	Changement changement,changement2,changement3,changement4;
 	@Inject
 	Demand demand,demand2,demand3,demand4,demand5,demand6;
 	@Inject
 	Livraison livraison;
 	
+	
+	
 	@Before
 	public void preparePersistenceTest() throws Exception {
+		_logger.setLevel(Level.INFO);
 		clearData();
 		insertData();
 		starttransaction();
@@ -91,7 +100,7 @@ public class LivraisonPersistenceUseCasesTest{
 	public void shouldFindAllLivraisonsUsingJpqlQuery() throws Exception {
 		_logger.info("==============>>>>>>>>>> INTO TEST : shouldFindAllLivraisonsUsingJpqlQuery()");
 		
-		List<Livraison> livraisons = getList();
+		List<Livraison> livraisons = livraisonDao.getList();
 
 		assertContainsAllLivraisons(livraisons);
 		_logger.info("==============>>>>>>>>>> OUT OF TEST : shouldFindAllLivraisonsUsingJpqlQuery()");
@@ -195,8 +204,13 @@ public class LivraisonPersistenceUseCasesTest{
 				+ livraison.getChangements().toString());
 
 		// ----->> OPERATION
-		move(changement, livraison, livraisonNEW);
 		
+		livraisonDao.move(changement, livraison, livraisonNEW);
+
+		// ==>
+		
+		utx.commit();
+		em.clear();
 		
 		// ----->> VERIFICATION
 		verifyTreeMove();
@@ -205,24 +219,28 @@ public class LivraisonPersistenceUseCasesTest{
 
 	}
 
+	/**
+	 * 
+	 * @throws SecurityException
+	 * @throws IllegalStateException
+	 * @throws RollbackException
+	 * @throws HeuristicMixedException
+	 * @throws HeuristicRollbackException
+	 * @throws SystemException
+	 * @throws NotSupportedException
+	 */
 	@Test
-	public void moveADemand() throws SecurityException, IllegalStateException,
+	public void moveADemandToOtherChangementSameLivraison() throws SecurityException, IllegalStateException,
 			RollbackException, HeuristicMixedException,
 			HeuristicRollbackException, SystemException, NotSupportedException {
-		_logger.info("==============>>>>>>>>>> INTO TEST : moveADemand()");
-		// 1.Move a demand
-		// |__1.1 - To another Changement but same Livraison
-		// |
-		// |__1.2 - To another Changement and other Livraison
-		//
+		_logger.info("==============>>>>>>>>>> INTO TEST : moveADemandToOtherChangementSameLivraison()");
 
-		// 1.1 - Move a demand to another Changement but same Livraison
-
-		// ----->> INIT
+		// -------------------->> INIT
 		String fetchingADemandInJpql = "select d from Demand d where d.description = 'TestDemand5'";
 		String fetchingChangementsInJpql = "select c from Changement c";
 
 		_logger.info("Selecting (using JPQL)...");
+		
 		Demand demand = em.createQuery(fetchingADemandInJpql, Demand.class)
 				.getSingleResult();
 		List<Changement> changements = em.createQuery(
@@ -232,8 +250,8 @@ public class LivraisonPersistenceUseCasesTest{
 		_logger.info("			|__ Nb of linked changements : "
 				+ demand.getTravaux().size());
 		
-		// ----->> OPERATION
-		move(demand, changements);
+		// -------------------->> OPERATION
+		demandDao.move(demand, changements);
 		
 		utx.commit();
 		// -------------------->> VERIFICATION
@@ -263,8 +281,28 @@ public class LivraisonPersistenceUseCasesTest{
 				}
 			}
 		}
+		_logger.info("==============>>>>>>>>>> OUT OF TEST : moveADemandToOtherChangementSameLivraison()");
 
-		// 1.2 - Move a demand to another Changement and another Livraison
+	}
+
+	/**
+	 * @throws SystemException 
+	 * @throws HeuristicRollbackException 
+	 * @throws HeuristicMixedException 
+	 * @throws RollbackException 
+	 * @throws IllegalStateException 
+	 * @throws SecurityException 
+	 * @throws NotSupportedException 
+	 * 
+	 */
+	@Test
+	public void moveADemandToOtherChangementOtherLivraison() throws SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException, SystemException, NotSupportedException{
+		_logger.info("==============>>>>>>>>>> INTO TEST : moveADemandToOtherChangementOtherLivraison()");
+		String fetchingChangementsInJpql = "select c from Changement c";
+
+		_logger.info("Selecting (using JPQL)...");
+		List<Changement> changements = em.createQuery(
+				fetchingChangementsInJpql, Changement.class).getResultList();
 		String fetchingAnotherDemandInJpql = "select d from Demand d where d.description = 'TestDemand2'";
 
 		_logger.info("Selecting (using JPQL)...");
@@ -275,7 +313,9 @@ public class LivraisonPersistenceUseCasesTest{
 				+ anotherDemand.getDescription());
 		_logger.info("			|__ Nb of linked changements : "
 				+ anotherDemand.getTravaux().size());
-		moveWithoutChildren(changements, anotherDemand);
+		
+		demandDao.moveWithoutChildren(changements, anotherDemand);
+		
 		utx.commit();
 		// -------------------->> VERIFICATION
 		utx.begin();
@@ -304,9 +344,8 @@ public class LivraisonPersistenceUseCasesTest{
 				}
 			}
 		}
-		_logger.info("==============>>>>>>>>>> OUT OF TEST : moveADemand()");
+		_logger.info("==============>>>>>>>>>> OUT OF TEST : moveADemandToOtherChangementOtherLivraison()");
 	}
-
 
 	/**
 	 * //
@@ -357,8 +396,9 @@ public class LivraisonPersistenceUseCasesTest{
 
 		String description = "Correction1";
 		String descriptionOLD = "TestDemand2";
-		updateDescription(description, descriptionOLD);
-
+		
+		demandDao.updateDescription(description,descriptionOLD);
+		
 		// -------------------->> VERIFICATION
 
 		String fetchingChangementInJpql = "select c from Changement c where c.description = 'Correction'";
@@ -431,7 +471,8 @@ public class LivraisonPersistenceUseCasesTest{
 		Demand demand = em.createQuery(fetchingADemandInJpql, Demand.class)
 				.getSingleResult();
 
-		deleteDemand(demand);
+		demandDao.delete(demand);
+		
 		utx.commit();
 
 		//
@@ -553,16 +594,9 @@ public class LivraisonPersistenceUseCasesTest{
 	@Test
 	public void addOneItem() {
 		_logger.info("==============>>>>>>>>>> INTO TEST : addOneItem()");
-		// 1 - Demand Creation
-		Demand demandX = new Demand();
-		demandX.setDescription("testDemandX");
-		// 2 - Demand linking to Change : TestChangement4
-		String query = "select c from Changement c where c.description = 'TestChangement4'";
-		Changement changement = em.createQuery(query, Changement.class)
-				.getSingleResult();
-		demandX.getTravaux().add(changement);
-		changement.getDemandes().add(demandX);
-		em.flush();
+		
+		// -------------------->> OPERATION
+		demandDao.addOneDemand();
 
 		// -------------------->> VERIFICATION
 		String fetchingChangementInJpql = "select c from Changement c where c.description = 'TestChangement4'";
@@ -626,66 +660,47 @@ public class LivraisonPersistenceUseCasesTest{
 	public void moveSeveralItems() throws SecurityException,
 			IllegalStateException, RollbackException, HeuristicMixedException,
 			HeuristicRollbackException, SystemException, NotSupportedException {
-		
 
 		_logger.info("==============>>>>>>>>>> INTO TEST : moveSeveralItems()");
-		// Move TestChangement3
-		String sChange = "TestChangement3";
+		// Move TestChangement3 from Software to Document
+		
+		String sChange = "TestChangement3";		
+		String sLivraison = "Software";
 		String sChange2 = "Correction";
+		String sLivraison2 = "Document";
+		
 		String fetchingChangementsInJpql = "select c from Changement c where c.description = '"
 				+ sChange + "'";
+		String fetchingLivraisonInJpql = "select l from Livraison l where l.description = '"
+				+sLivraison+"'";
 		String fetchingChangementsInJpql2 = "select c from Changement c where c.description = '"
 				+ sChange2 + "'";
+		String fetchingLivraisonInJpqlNEW = "select l from Livraison l where l.description = '"
+				+sLivraison2+"'";
+		
 		Changement changement = em.createQuery(fetchingChangementsInJpql,
 				Changement.class).getSingleResult();
-		Changement changement2 = em.createQuery(fetchingChangementsInJpql2,
-				Changement.class).getSingleResult();
-
-		String fetchingLivraisonInJpql = "select l from Livraison l where l.description = 'Software'";
-		String fetchingLivraisonInJpqlNEW = "select l from Livraison l where l.description = 'Document'";
 		Livraison livraison = em.createQuery(fetchingLivraisonInJpql,
 				Livraison.class).getSingleResult();
+		Changement changement2 = em.createQuery(fetchingChangementsInJpql2,
+				Changement.class).getSingleResult();
 		Livraison livraisonNEW = em.createQuery(fetchingLivraisonInJpqlNEW,
 				Livraison.class).getSingleResult();
-
-		_logger.info("livraison.getChangements().size() : "
-				+ livraison.getChangements().size());
-		_logger.info("livraison.getChangements().toString() : "
-				+ livraison.getChangements().toString());
-
-		_logger.info("livraisonNEW.getChangements().size() : "
-				+ livraisonNEW.getChangements().size());
-		_logger.info("livraisonNEW.getChangements().toString() : "
-				+ livraisonNEW.getChangements().toString());
-
-		Iterator<Changement> it = livraison.getChangements().iterator();
-		Iterator<Changement> it2 = livraisonNEW.getChangements().iterator();
-
-		while (it.hasNext()) {
-			if (sChange.equals(it.next().getDescription())) {
-				it.remove();
-				_logger.info("					|__ changement  1 : REMOVED !");
-			}
-		}
-		em.flush();
-
-		// Move Correction
-		while (it2.hasNext()) {
-			if (sChange2.equals(it2.next().getDescription())) {
-				it2.remove();
-				_logger.info("					|__ changement  2 : REMOVED !");
-			}
-		}
-
-		livraison.getChangements().add(changement2);
-		livraisonNEW.getChangements().add(changement);
-
-		em.merge(livraison);
-		em.merge(livraisonNEW);
 		
-		em.persist(livraison);
-		em.persist(livraisonNEW);
-
+		_logger.info("livraison : "+sLivraison+" getChangements().size() : "
+				+ livraison.getChangements().size());
+		_logger.info("livraison : "+sLivraison+" getChangements().toString() : "
+				+ livraison.getChangements().toString());
+		_logger.info("livraison : "+sLivraison2+" .getChangements().size() : "
+				+ livraisonNEW.getChangements().size());
+		_logger.info("livraison : "+sLivraison2+" getChangements().toString() : "
+				+ livraisonNEW.getChangements().toString());
+		
+		
+		// ----> OPERATION
+		changementDao.move(changement,livraison,livraisonNEW);
+		changementDao.move(changement2,livraisonNEW,livraison);
+		
 		// ==>
 		utx.commit();
 		em.clear();
@@ -852,24 +867,9 @@ public class LivraisonPersistenceUseCasesTest{
 			
 		_logger.info("==============>>>>>>>>>> INTO TEST : deleteSeveralItems()");
 		
-		String queryLivraison = "select l from Livraison l where l.description = 'Document'";
-		Livraison livraison = em.createQuery(queryLivraison, Livraison.class).getSingleResult();
+		String lDescription = "Document";
 		
-		Iterator<Changement> it = livraison.getChangements().iterator();
-		Changement change = null;
-		Demand demand = null;
-		while (it.hasNext()){
-			change = it.next();
-			Iterator<Demand> it2 = change.getDemandes().iterator();
-			while(it2.hasNext()){
-				demand = it2.next();
-				demand.getTravaux().remove(change);
-				it2.remove();				
-				em.flush();
-				em.persist(demand);
-			}
-			em.persist(change);
-		}
+		demandDao.deleteDemandsFromOneLivraison(lDescription);
 		
 		utx.commit();
 		
@@ -877,7 +877,7 @@ public class LivraisonPersistenceUseCasesTest{
 		
 		utx.begin();
 		em.joinTransaction();
-		
+		String queryLivraison = "select l from Livraison l where l.description = '"+lDescription+"'";
 		Livraison livraisonTOCHECK = em.createQuery(queryLivraison, Livraison.class).getSingleResult();
 		Iterator<Changement> it3 = livraisonTOCHECK.getChangements().iterator();
 		Changement changeTOCHECK = null;
@@ -941,28 +941,12 @@ public class LivraisonPersistenceUseCasesTest{
 	public void addSeveralItems() throws SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException, SystemException, NotSupportedException {
 			
 		 _logger.info("==============>>>>>>>>>> INTO TEST : addSeveralItems()");
-		 String query = "select c from Changement c where c.description = 'TestChangement3'";
+		 
+		 String cDescription = "TestChangement3";
+		 
+		 String query = "select c from Changement c where c.description = '"+cDescription+"'";
 		 Changement changement = em.createQuery(query, Changement.class).getSingleResult();
-		 Demand demandX = new Demand();
-		 Demand demandY = new Demand();
-		 Demand demandZ = new Demand();
-		 demandX.setDescription("TestDemandX");
-		 demandY.setDescription("TestDemandY");
-		 demandZ.setDescription("TestDemandZ");
-		 
-		 demandX.getTravaux().add(changement);
-		 demandY.getTravaux().add(changement);
-		 demandZ.getTravaux().add(changement);
-		 em.flush();
-		 em.persist(demandX);
-		 em.persist(demandY);
-		 em.persist(demandZ);
-		 
-		 changement.getDemandes().add(demandX);
-		 changement.getDemandes().add(demandY);
-		 changement.getDemandes().add(demandZ);
-		 em.flush();
-		 em.persist(changement);
+		 changementDao.addDemands(changement);
 
 		 utx.commit();
 		 
@@ -1023,12 +1007,16 @@ public class LivraisonPersistenceUseCasesTest{
 	public void copyOneItem() throws SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException, SystemException, NotSupportedException {
 		_logger.info("==============>>>>>>>>>> INTO TEST : copyOneItem()");
 		
+		// ----> INIT
 		String queryC = "select c from Changement c where c.description = 'Evolution'";
 		Changement change = em.createQuery(queryC, Changement.class).getSingleResult();
 		String queryL = "select l from Livraison l where l.description = 'Software'";
 		Livraison livraison = em.createQuery(queryL,Livraison.class).getSingleResult();
 		
-		copy(change, livraison);
+		// ----> OPERATION
+		changementDao.copy(change, livraison);
+		
+		utx.commit();
 		
 		// ----> VERIFICATION
 		utx.begin();
@@ -1038,6 +1026,7 @@ public class LivraisonPersistenceUseCasesTest{
 		Livraison livraisonTOCHECK = em.createQuery(queryL, Livraison.class).getSingleResult();
 		
 		_logger.info("livraisonTOCHECK.getDescription() : " + livraisonTOCHECK.getDescription());
+		
 		for (Changement changeTOCHECK : livraisonTOCHECK.getChangements()){
 			_logger.info("		|__changeTOCHECK : "+ changeTOCHECK.getDescription());
 		}
@@ -1048,40 +1037,8 @@ public class LivraisonPersistenceUseCasesTest{
 				_logger.info("		|__livraison2.getDescription() : "+livraison2.getDescription());
 			}
 		}
+		
 		_logger.info("==============>>>>>>>>>> OUT OF TEST : copyOneItem()");
-	}
-
-	/**
-	 * @param change
-	 * @param livraison
-	 * @throws RollbackException
-	 * @throws HeuristicMixedException
-	 * @throws HeuristicRollbackException
-	 * @throws SystemException
-	 */
-	private void copy(Changement change, Livraison livraison)
-			throws RollbackException, HeuristicMixedException,
-			HeuristicRollbackException, SystemException {
-		Changement changeCopy = new Changement();
-		Demand demandCopy = new Demand();
-		
-		changeCopy.setDescription(change.getDescription());
-		changeCopy.getDemandes().addAll(change.getDemandes());
-		changeCopy.getLivrables().add(livraison);
-		
-		Iterator<Demand> it = change.getDemandes().iterator();
-		while(it.hasNext()){
-			demand = it.next();
-			demandCopy.setDescription(demand.getDescription());
-			demandCopy.getTravaux().addAll(demand.getTravaux());
-		}
-		em.persist(demandCopy);
-		em.persist(changeCopy);
-		
-		livraison.getChangements().add(changeCopy);
-		em.persist(livraison);
-		
-		utx.commit();
 	}
 	/**
 	 * @throws NotSupportedException
@@ -1157,18 +1114,7 @@ public class LivraisonPersistenceUseCasesTest{
 		Assert.assertTrue(retrievedLivraisonTitles.containsAll(Arrays
 				.asList(LIVRAISON_TITLES)));
 	}
-	/**
-	 * @param demand
-	 */
-	private void deleteDemand(Demand demand) {
-		demandDao.delete(demand);
-	}
-	/**
-	 * @return
-	 */
-	private List<Livraison> getList() {
-		return livraisonDao.getList();
-	}
+	
 	private void clearData() throws Exception {
 		utx.begin();
 		em.joinTransaction();
@@ -1337,56 +1283,7 @@ public class LivraisonPersistenceUseCasesTest{
 		utx.begin();
 		em.joinTransaction();
 	}
-	/**
-	 * @param changement
-	 * @param livraison
-	 * @param livraisonNEW
-	 * @throws RollbackException
-	 * @throws HeuristicMixedException
-	 * @throws HeuristicRollbackException
-	 * @throws SystemException
-	 */
-	private void move(Changement changement, Livraison livraison,
-			Livraison livraisonNEW) throws RollbackException,
-			HeuristicMixedException, HeuristicRollbackException,
-			SystemException {
-		
-		livraisonDao.move(changement, livraison, livraisonNEW);
 
-		em.merge(livraison);
-		em.persist(livraison);
-
-		// ==>
-		utx.commit();
-		em.clear();
-	}
-
-	/**
-	 * @param changements
-	 * @param anotherDemand
-	 */
-	private void moveWithoutChildren(List<Changement> changements,
-			Demand anotherDemand) {
-		demandDao.moveWithoutChildren(changements,anotherDemand);
-	}
-
-	/**
-	 * @param demand
-	 * @param changements
-	 */
-	private void move(Demand demand, List<Changement> changements) {
-		demandDao.move(demand,changements);
-	}
-
-	/**
-	 * @param description
-	 * @param descriptionOLD
-	 */
-	private void updateDescription(String description, String descriptionOLD) {
-		demandDao.updateDescription(description,descriptionOLD);
-	}
-
-	
 	@After
 	public void committransaction() throws Exception {
 		utx.commit();
