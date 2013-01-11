@@ -1,7 +1,13 @@
 package org.ortens.bone.core.model;
 
 import java.util.Date;
+import java.util.List;
+import java.util.logging.Logger;
+
+import javax.inject.Inject;
 import javax.persistence.*;
+
+import org.ortens.bone.core.ejbjpa.BaseEntityDao;
 
 /**
  * This is the base {@link MappedSuperclass} for all the entities in the
@@ -19,12 +25,17 @@ import javax.persistence.*;
  */
 @MappedSuperclass
 public abstract class BaseEntity{
-
+	public static Logger _logger = Logger
+			.getLogger(BaseEntity.class.getName());
     private Long id;
     private Date createdOn;
     private Date modifiedOn;
     private String description;
+    private List<BaseEntity> children;
 
+    @PersistenceContext
+    EntityManager em;
+  
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="ID")
@@ -111,6 +122,13 @@ public abstract class BaseEntity{
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public List<BaseEntity> getChildren(BaseEntity entityClass) {
+
+		children = BaseEntityDao.getList(entityClass);
+
+		return children;
 	}
 	
 
