@@ -33,6 +33,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.junit.Assert;
+import org.ortens.bone.core.ejbjpa.BaseEntityDao;
 import org.ortens.bone.core.ejbjpa.ChangementDao;
 import org.ortens.bone.core.ejbjpa.DemandDao;
 import org.ortens.bone.core.ejbjpa.LivraisonDao;
@@ -57,7 +58,7 @@ public class LivraisonPersistenceUseCasesTest{
 		return ShrinkWrap
 				.create(WebArchive.class, "test.war")
 				.addClasses(BaseEntity.class, Demand.class, Livraison.class,
-						Changement.class, LivraisonDao.class, DemandDao.class, ChangementDao.class)
+						Changement.class, BaseEntityDao.class, LivraisonDao.class, DemandDao.class, ChangementDao.class)
 				.addAsResource("test-persistence.xml",
 						"META-INF/persistence.xml")
 				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
@@ -96,16 +97,50 @@ public class LivraisonPersistenceUseCasesTest{
 		starttransaction();
 	}
 
+//	@Test
+//	public void shouldFindAllLivraisonsUsingJpqlQuery() throws Exception {
+//		_logger.info("==============>>>>>>>>>> INTO TEST : shouldFindAllLivraisonsUsingJpqlQuery()");
+//		
+//		List<Livraison> livraisons = livraisonDao.getList();
+//		
+//
+//		assertContainsAllLivraisons(livraisons);
+//		_logger.info("==============>>>>>>>>>> OUT OF TEST : shouldFindAllLivraisonsUsingJpqlQuery()");
+//	}
+
 	@Test
-	public void shouldFindAllLivraisonsUsingJpqlQuery() throws Exception {
-		_logger.info("==============>>>>>>>>>> INTO TEST : shouldFindAllLivraisonsUsingJpqlQuery()");
+	public void getEntitiesListTest(){
+		_logger.info("==============>>>>>>>>>> INTO TEST : getEntitiesListTest()");
+		List<BaseEntity> entities = livraisonDao.getList(livraison);
 		
-		List<Livraison> livraisons = livraisonDao.getList();
-
-		assertContainsAllLivraisons(livraisons);
-		_logger.info("==============>>>>>>>>>> OUT OF TEST : shouldFindAllLivraisonsUsingJpqlQuery()");
+		assertContainsAllEntities(entities);
+		_logger.info("==============>>>>>>>>>> OUT OF TEST : getEntitiesListTest()");
 	}
+	
+	private static void assertContainsAllEntities(
+			Collection<BaseEntity> retrievedEntities) {
+		Assert.assertEquals(LIVRAISON_TITLES.length, retrievedEntities.size());
 
+		final Set<String> retrievedEntitiesTitles = new HashSet<String>();
+		for (BaseEntity livraison : retrievedEntities) {
+			_logger.info("* " + livraison);
+			_logger.info("---------> livraison.getDescription() : "
+					+ livraison.getDescription());
+			for (Changement changement : ((Livraison) livraison).getChangements()) {
+				_logger.info("		|_____________changement : "
+						+ changement.getDescription());
+				for (Demand demand : changement.getDemandes()) {
+					_logger.info("			|_____________demand : "
+							+ demand.getDescription());
+				}
+			}
+			
+			retrievedEntitiesTitles.add(livraison.getDescription());
+		}
+		Assert.assertTrue(retrievedEntitiesTitles.containsAll(Arrays
+				.asList(LIVRAISON_TITLES)));
+	}
+	
 	@Test
 	public void shouldFindAllLivraisonsUsingCriteriaApi() throws Exception {
 		_logger.info("==============>>>>>>>>>> INTO TEST : shouldFindAllLivraisonsUsingCriteriaApi()");

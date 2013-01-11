@@ -8,11 +8,12 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.ortens.bone.core.model.BaseEntity;
 import org.ortens.bone.core.model.Changement;
 import org.ortens.bone.core.model.Livraison;
 
 @Stateless
-public class LivraisonDao {
+public class LivraisonDao extends BaseEntityDao{
 	public static Logger _logger = Logger
 			.getLogger(LivraisonDao.class.getName());
 	
@@ -37,19 +38,19 @@ public class LivraisonDao {
 		em.persist(livraison);
 	}
 
-	public List<Livraison> getList() {
-		// given
-		String fetchingAllLivraisonsInJpql = "select l from Livraison l order by l.id";
-
-		// when
-		_logger.info("Selecting (using JPQL)...");
-		List<Livraison> livraisons = em.createQuery(
-				fetchingAllLivraisonsInJpql, Livraison.class).getResultList();
-
-		// then
-		_logger.info("Found " + livraisons.size() + " livraisons (using JPQL):");
-		
-		return livraisons;
-	}
+//	public List<Livraison> getList() {
+//		// given
+//		String fetchingAllLivraisonsInJpql = "select l from Livraison l order by l.id";
+//
+//		// when
+//		_logger.info("Selecting (using JPQL)...");
+//		List<Livraison> livraisons = em.createQuery(
+//				fetchingAllLivraisonsInJpql, Livraison.class).getResultList();
+//
+//		// then
+//		_logger.info("Found " + livraisons.size() + " livraisons (using JPQL):");
+//		
+//		return livraisons;
+//	}
 
 }

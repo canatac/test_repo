@@ -9,12 +9,13 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.ortens.bone.core.model.BaseEntity;
 import org.ortens.bone.core.model.Changement;
 import org.ortens.bone.core.model.Demand;
 import org.ortens.bone.core.model.Livraison;
 
 @Stateless
-public class ChangementDao {
+public class ChangementDao extends BaseEntityDao{
 	public static Logger _logger = Logger.getLogger(ChangementDao.class
 			.getName());
 
@@ -85,18 +86,4 @@ public class ChangementDao {
 		em.persist(livraison);
 	}
 
-	public List<Changement> getList() {
-		// given
-		String fetchingAllChangementsInJpql = "select c from Changement c order by c.id";
-
-		// when
-		_logger.info("Selecting (using JPQL)...");
-		List<Changement> changements = em.createQuery(fetchingAllChangementsInJpql,
-				Changement.class).getResultList();
-
-		// then
-		_logger.info("Found " + changements.size() + " changements (using JPQL):");
-
-		return changements;
-	}
 }

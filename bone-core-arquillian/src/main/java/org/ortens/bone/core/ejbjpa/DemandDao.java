@@ -9,12 +9,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.ortens.bone.core.model.BaseEntity;
 import org.ortens.bone.core.model.Changement;
 import org.ortens.bone.core.model.Demand;
 import org.ortens.bone.core.model.Livraison;
 
 @Stateless
-public class DemandDao {
+public class DemandDao extends BaseEntityDao{
 	public static Logger _logger = Logger
 			.getLogger(DemandDao.class.getName());
 	
@@ -117,19 +118,19 @@ public class DemandDao {
 		}
 	}
 	
-	public List<Demand> getList() {
-		// given
-		String fetchingAllDemandsInJpql = "select d from Demand d order by d.id";
-
-		// when
-		_logger.info("Selecting (using JPQL)...");
-		List<Demand> demands = em.createQuery(
-				fetchingAllDemandsInJpql, Demand.class).getResultList();
-
-		// then
-		_logger.info("Found " + demands.size() + " demands (using JPQL):");
-		
-		return demands;
-	}
+//	public List<Demand> getList() {
+//		// given
+//		String fetchingAllDemandsInJpql = "select d from Demand d order by d.id";
+//
+//		// when
+//		_logger.info("Selecting (using JPQL)...");
+//		List<Demand> demands = em.createQuery(
+//				fetchingAllDemandsInJpql, Demand.class).getResultList();
+//
+//		// then
+//		_logger.info("Found " + demands.size() + " demands (using JPQL):");
+//		
+//		return demands;
+//	}
 
 }

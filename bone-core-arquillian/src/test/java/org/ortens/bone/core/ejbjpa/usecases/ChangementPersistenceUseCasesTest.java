@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.ejb.EJB;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -30,6 +29,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.ortens.bone.core.ejbjpa.BaseEntityDao;
 import org.ortens.bone.core.ejbjpa.ChangementDao;
 import org.ortens.bone.core.ejbjpa.DemandDao;
 import org.ortens.bone.core.ejbjpa.LivraisonDao;
@@ -48,7 +48,7 @@ public class ChangementPersistenceUseCasesTest {
 		return ShrinkWrap
 				.create(WebArchive.class, "test.war")
 				.addClasses(BaseEntity.class, Demand.class, Livraison.class,
-						Changement.class, LivraisonDao.class, DemandDao.class,
+						Changement.class, BaseEntityDao.class, LivraisonDao.class, DemandDao.class,
 						ChangementDao.class)
 				.addAsResource("test-persistence.xml",
 						"META-INF/persistence.xml")
@@ -69,10 +69,6 @@ public class ChangementPersistenceUseCasesTest {
 	protected EntityManager em;
 	@Inject
 	protected UserTransaction utx;
-	@EJB
-	DemandDao demandDao;
-	@Inject
-	LivraisonDao livraisonDao;
 	@Inject
 	ChangementDao changementDao;
 	@Inject
@@ -96,37 +92,36 @@ public class ChangementPersistenceUseCasesTest {
 	}
 
 	@Test
-	public void getListTest(){
-		_logger.info("==============>>>>>>>>>> INTO TEST : getListTest()");
-		List<Changement> changements = changementDao.getList();
+	public void getEntitiesListTest(){
+		_logger.info("==============>>>>>>>>>> INTO TEST : getEntitiesListTest()");
+		List<BaseEntity> entities = changementDao.getList(changement);
 		
-		assertContainsAllChangements(changements);
-		_logger.info("==============>>>>>>>>>> OUT OF TEST : getListTest()");
+		assertContainsAllEntities(entities);
+		_logger.info("==============>>>>>>>>>> OUT OF TEST : getEntitiesListTest()");
 	}
 	
-	private static void assertContainsAllChangements(
-			Collection<Changement> retrievedChangements) {
-		Assert.assertEquals(CHANGEMENT_TITLES.length, retrievedChangements.size());
+	private static void assertContainsAllEntities(
+			Collection<BaseEntity> retrievedEntities) {
+		Assert.assertEquals(CHANGEMENT_TITLES.length, retrievedEntities.size());
 
-		final Set<String> retrievedChangementTitles = new HashSet<String>();
-		for (Changement changement : retrievedChangements) {
+		final Set<String> retrievedEntitiesTitles = new HashSet<String>();
+		for (BaseEntity changement : retrievedEntities) {
 			_logger.info("* " + changement);
 			_logger.info("---------> changement.getDescription() : "
 					+ changement.getDescription());
-			for (Demand demand : changement.getDemandes()) {
+			for (Demand demande : ((Changement) changement).getDemandes()) {
 				_logger.info("		|_____________demand : "
-						+ demand.getDescription());
-				for (Livraison livraison : changement.getLivrables()) {
-					_logger.info("		|_____________livraison : "
-							+ livraison.getDescription());
-				}
+						+ demande.getDescription());
 			}
-			retrievedChangementTitles.add(changement.getDescription());
+			for (Livraison livraison : ((Changement) changement).getLivrables()) {
+				_logger.info("		|_____________livraison : "
+						+ livraison.getDescription());
+			}
+			retrievedEntitiesTitles.add(changement.getDescription());
 		}
-		Assert.assertTrue(retrievedChangementTitles.containsAll(Arrays
+		Assert.assertTrue(retrievedEntitiesTitles.containsAll(Arrays
 				.asList(CHANGEMENT_TITLES)));
 	}
-	
 	
 	private void clearData() throws NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
 		utx.begin();
