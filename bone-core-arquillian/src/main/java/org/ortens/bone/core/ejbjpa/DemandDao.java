@@ -117,20 +117,35 @@ public class DemandDao extends BaseEntityDao{
 			em.persist(change);
 		}
 	}
-	
-//	public List<Demand> getList() {
-//		// given
-//		String fetchingAllDemandsInJpql = "select d from Demand d order by d.id";
-//
-//		// when
-//		_logger.info("Selecting (using JPQL)...");
-//		List<Demand> demands = em.createQuery(
-//				fetchingAllDemandsInJpql, Demand.class).getResultList();
-//
-//		// then
-//		_logger.info("Found " + demands.size() + " demands (using JPQL):");
-//		
-//		return demands;
-//	}
 
+	@Override
+	public BaseEntity update(BaseEntity entity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean delete(BaseEntity entity) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean create(BaseEntity entity) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public BaseEntity get(String description) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void move(BaseEntity entityToMove, BaseEntity entityFROM,
+			BaseEntity entityTO) {
+		// TODO Auto-generated method stub
+		
+	}
 }

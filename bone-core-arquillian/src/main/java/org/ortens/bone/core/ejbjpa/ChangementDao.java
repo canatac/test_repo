@@ -1,7 +1,6 @@
 package org.ortens.bone.core.ejbjpa;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
@@ -25,9 +24,10 @@ public class ChangementDao extends BaseEntityDao{
 	@Inject
 	Demand demand;
 
-	public void move(Changement changement, Livraison livraison,
-			Livraison livraisonNEW) {
-		Iterator<Changement> it = livraison.getChangements().iterator();
+	@Override
+	public void move(BaseEntity changement, BaseEntity livraison,
+			BaseEntity livraisonNEW) {
+		Iterator<Changement> it = ((Livraison)livraison).getChangements().iterator();
 		while (it.hasNext()) {
 			if (changement.getDescription().equals(it.next().getDescription())) {
 				it.remove();
@@ -36,12 +36,12 @@ public class ChangementDao extends BaseEntityDao{
 			}
 		}
 
-		livraisonNEW.getChangements().add(changement);
+		((Livraison) livraisonNEW).getChangements().add((Changement) changement);
 		em.flush();
 		em.persist(livraison);
 		em.persist(livraisonNEW);
 	}
-
+	
 	public void addDemands(Changement changement) {
 		Demand demandX = new Demand();
 		Demand demandY = new Demand();
@@ -86,4 +86,27 @@ public class ChangementDao extends BaseEntityDao{
 		em.persist(livraison);
 	}
 
+	@Override
+	public BaseEntity update(BaseEntity entity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean delete(BaseEntity entity) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean create(BaseEntity entity) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public BaseEntity get(String description) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

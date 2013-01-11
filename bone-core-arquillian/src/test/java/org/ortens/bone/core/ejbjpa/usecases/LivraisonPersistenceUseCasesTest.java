@@ -97,17 +97,6 @@ public class LivraisonPersistenceUseCasesTest{
 		starttransaction();
 	}
 
-//	@Test
-//	public void shouldFindAllLivraisonsUsingJpqlQuery() throws Exception {
-//		_logger.info("==============>>>>>>>>>> INTO TEST : shouldFindAllLivraisonsUsingJpqlQuery()");
-//		
-//		List<Livraison> livraisons = livraisonDao.getList();
-//		
-//
-//		assertContainsAllLivraisons(livraisons);
-//		_logger.info("==============>>>>>>>>>> OUT OF TEST : shouldFindAllLivraisonsUsingJpqlQuery()");
-//	}
-
 	@Test
 	public void getEntitiesListTest(){
 		_logger.info("==============>>>>>>>>>> INTO TEST : getEntitiesListTest()");
