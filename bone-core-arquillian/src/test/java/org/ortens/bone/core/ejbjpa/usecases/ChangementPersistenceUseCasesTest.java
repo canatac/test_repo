@@ -29,14 +29,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.ortens.bone.core.ejbjpa.BaseEntityDao;
-import org.ortens.bone.core.ejbjpa.ChangementDao;
-import org.ortens.bone.core.ejbjpa.DemandDao;
-import org.ortens.bone.core.ejbjpa.LivraisonDao;
-import org.ortens.bone.core.model.BaseEntity;
-import org.ortens.bone.core.model.Changement;
-import org.ortens.bone.core.model.Demand;
-import org.ortens.bone.core.model.Livraison;
+import org.ortens.bone.core.ejbjpa.*;
+import org.ortens.bone.core.model.*;
 
 @RunWith(Arquillian.class)
 public class ChangementPersistenceUseCasesTest {
@@ -47,8 +41,8 @@ public class ChangementPersistenceUseCasesTest {
 	public static Archive<?> createDeployment() {
 		return ShrinkWrap
 				.create(WebArchive.class, "test.war")
-				.addClasses(BaseEntity.class, Demand.class, Livraison.class,
-						Changement.class, BaseEntityDao.class, LivraisonDao.class, DemandDao.class,
+				.addClasses(GenericEntity.class, Demand.class, Livraison.class,
+						Changement.class, GenericEntityDaoImpl.class, LivraisonDao.class, DemandDao.class,
 						ChangementDao.class)
 				.addAsResource("test-persistence.xml",
 						"META-INF/persistence.xml")
@@ -94,18 +88,18 @@ public class ChangementPersistenceUseCasesTest {
 	@Test
 	public void getEntitiesListTest(){
 		_logger.info("==============>>>>>>>>>> INTO TEST : getEntitiesListTest()");
-		List<BaseEntity> entities = changementDao.getList(changement);
+		List<GenericEntity> entities = changementDao.getList(changement);
 		
 		assertContainsAllEntities(entities);
 		_logger.info("==============>>>>>>>>>> OUT OF TEST : getEntitiesListTest()");
 	}
 	
 	private static void assertContainsAllEntities(
-			Collection<BaseEntity> retrievedEntities) {
+			Collection<GenericEntity> retrievedEntities) {
 		Assert.assertEquals(CHANGEMENT_TITLES.length, retrievedEntities.size());
 
 		final Set<String> retrievedEntitiesTitles = new HashSet<String>();
-		for (BaseEntity changement : retrievedEntities) {
+		for (GenericEntity changement : retrievedEntities) {
 			_logger.info("* " + changement);
 			_logger.info("---------> changement.getDescription() : "
 					+ changement.getDescription());

@@ -9,13 +9,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import org.ortens.bone.core.model.BaseEntity;
-import org.ortens.bone.core.model.Changement;
-import org.ortens.bone.core.model.Demand;
-import org.ortens.bone.core.model.Livraison;
+import org.ortens.bone.core.model.*;
 
 @Stateless
-public class DemandDao extends BaseEntityDao{
+//public class DemandDao extends BaseEntityDaoImpl{
+public class DemandDao extends GenericEntityDaoImpl{
 	public static Logger _logger = Logger
 			.getLogger(DemandDao.class.getName());
 	
@@ -118,33 +116,32 @@ public class DemandDao extends BaseEntityDao{
 		}
 	}
 
-	@Override
 	public BaseEntity update(BaseEntity entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
-	public boolean delete(BaseEntity entity) {
+
+	public boolean delete(GenericEntity entity) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
-	public boolean create(BaseEntity entity) {
+
+	public boolean create(GenericEntity entity) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
-	public BaseEntity get(String description) {
+
+	public GenericEntity get(String description) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
-	public void move(BaseEntity entityToMove, BaseEntity entityFROM,
-			BaseEntity entityTO) {
+	
+	public void move(GenericEntity entityToMove, GenericEntity entityFROM,
+			GenericEntity entityTO) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -29,9 +29,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.ortens.bone.core.ejbjpa.BaseEntityDao;
+import org.ortens.bone.core.ejbjpa.GenericEntityDaoImpl;
 import org.ortens.bone.core.ejbjpa.DemandDao;
-import org.ortens.bone.core.model.BaseEntity;
+import org.ortens.bone.core.model.GenericEntity;
 import org.ortens.bone.core.model.Changement;
 import org.ortens.bone.core.model.Demand;
 import org.ortens.bone.core.model.Livraison;
@@ -45,8 +45,8 @@ public class DemandPersistenceUseCasesTest {
 	public static Archive<?> createDeployment() {
 		return ShrinkWrap
 				.create(WebArchive.class, "test.war")
-				.addClasses(BaseEntity.class, Demand.class, Livraison.class,
-						Changement.class, BaseEntityDao.class, DemandDao.class)
+				.addClasses(GenericEntity.class, Demand.class, Livraison.class,
+						Changement.class, GenericEntityDaoImpl.class, DemandDao.class)
 				.addAsResource("test-persistence.xml",
 						"META-INF/persistence.xml")
 				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
@@ -91,18 +91,18 @@ public class DemandPersistenceUseCasesTest {
 	@Test
 	public void getEntitiesListTest(){
 		_logger.info("==============>>>>>>>>>> INTO TEST : getEntitiesListTest()");
-		List<BaseEntity> entities = demandDao.getList(demand);
+		List<GenericEntity> entities = demandDao.getList(demand);
 		
 		assertContainsAllEntities(entities);
 		_logger.info("==============>>>>>>>>>> OUT OF TEST : getEntitiesListTest()");
 	}
 	
 	private static void assertContainsAllEntities(
-			Collection<BaseEntity> retrievedEntities) {
+			Collection<GenericEntity> retrievedEntities) {
 		Assert.assertEquals(DEMAND_TITLES.length, retrievedEntities.size());
 
 		final Set<String> retrievedEntitiesTitles = new HashSet<String>();
-		for (BaseEntity demand : retrievedEntities) {
+		for (GenericEntity demand : retrievedEntities) {
 			_logger.info("* " + demand);
 			_logger.info("---------> demand.getDescription() : "
 					+ demand.getDescription());

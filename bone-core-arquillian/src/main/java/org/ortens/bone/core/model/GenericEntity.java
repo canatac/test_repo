@@ -1,52 +1,33 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package org.ortens.bone.core.model;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
-
 import javax.inject.Inject;
 import javax.persistence.*;
-
-import org.ortens.bone.core.ejbjpa.BaseEntityDaoImpl;
+import org.ortens.bone.core.ejbjpa.GenericDao;
 
 /**
- * This is the base {@link MappedSuperclass} for all the entities in the
- * application. It implements the Id and the created and modified time stamps.
- * It also includes the callback methods for populating the timestamp values,
- * and implements hashcode and equals based on the id.
- * <p/>
- * The abstract {@link BaseEntity#getDisplayText()} method provides a nice way
- * to get a textual representation of who or what the entity is (course or
- * person name). Since it is baked into the superclass, it will be available for
- * all entity classes.
  *
- * @author Andy Gibson
- *
+ * @author canatac
  */
 @MappedSuperclass
-public abstract class BaseEntity<T>{
-	public static Logger _logger = Logger
-			.getLogger(BaseEntity.class.getName());
+public abstract class GenericEntity {
+    public static Logger _logger = Logger
+			.getLogger(GenericEntity.class.getName());
     private Long id;
     private Date createdOn;
     private Date modifiedOn;
     private String description;
-    private List<BaseEntity> children;
-
-
-    private Class< T > type;
+    private List<GenericEntity> children;
     
-
+    @Inject
+    private GenericDao<GenericEntity> genericEntityDao;
     
-    public BaseEntity() {
-        Type t = getClass().getGenericSuperclass();
-        ParameterizedType pt = (ParameterizedType) t;
-        type = (Class) pt.getActualTypeArguments()[0];
-    }
-
-  
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="ID")
@@ -116,7 +97,7 @@ public abstract class BaseEntity<T>{
         if (getClass() != obj.getClass()) {
             return false;
         }
-        BaseEntity other = (BaseEntity) obj;
+        GenericEntity other = (GenericEntity) obj;
         if (id == null) {
             if (other.id != null) {
                 return false;
@@ -135,12 +116,11 @@ public abstract class BaseEntity<T>{
 		this.description = description;
 	}
 
-	public List<BaseEntity> getChildren(BaseEntity entityClass) {
+	public List<GenericEntity> getChildren(GenericEntity entityClass) {
 
-		//children = baseEntityDao<entityClass.getClass().getSimpleName()>.getList(entityClass);
+		children = genericEntityDao.getList(entityClass);
 
-		return null;
+		return children;
 	}
 	
-
 }

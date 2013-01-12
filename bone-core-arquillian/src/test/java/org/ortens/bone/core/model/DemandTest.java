@@ -21,7 +21,7 @@ public class DemandTest {
 	@Deployment
 	public static JavaArchive createDeployment(){
 		JavaArchive jar = ShrinkWrap.create(JavaArchive.class)
-				.addClasses(Changement.class, BaseEntity.class, Livraison.class, Demand.class)
+				.addClasses(Changement.class, GenericEntity.class, Livraison.class, Demand.class)
 				.addAsManifestResource(EmptyAsset.INSTANCE,"beans.xml");
 		
 		_logger.info(jar.toString(true));

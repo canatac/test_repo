@@ -16,13 +16,13 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 //import org.hibernate.validator.constraints.NotEmpty;
 
-import org.ortens.bone.core.model.BaseEntity;
+import org.ortens.bone.core.model.GenericEntity;
 
 @Entity
 //<editor-fold defaultstate="collapsed" desc="comment">
 public
         //</editor-fold>
- class Demand extends BaseEntity implements Serializable {
+ class Demand extends GenericEntity implements Serializable {
      /**
 	 * 
 	 */
@@ -31,6 +31,7 @@ public
         private static final    int TRAVAUX_COLUMN_LENGTH      =   25;
         private static final    int TITLE_MAX_COLUMN_SIZE          =   25;
         private static final    int DESCRIPTION_MAX_COLUMN_SIZE    =   25;
+    @Id
         private String displayText;
 	
 	@Column(length = TITLE_COLUMN_LENGTH, nullable = false)
@@ -42,7 +43,8 @@ public
 
 
 //	@ManyToMany()
-	private Set<Changement> travaux = new HashSet<Changement>(0);
+    @ManyToMany()
+	private Set<Changement> travaux = new HashSet<>(0);
 	
 	public Demand() {
 		// TODO Auto-generated constructor stub
@@ -67,7 +69,7 @@ public
 
 
     
-    public String getDisplayText() {
+        public String getDisplayText() {
         
         return displayText;
     }    
@@ -77,8 +79,7 @@ public
     	this.displayText = text;
     }
 
-	@ManyToMany()
-	public Set<Changement> getTravaux() {
+		public Set<Changement> getTravaux() {
 		return travaux;
 	}
 

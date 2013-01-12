@@ -22,6 +22,11 @@
                 src/test/resources-glassfish-embedded/glassfish-resources.xml
             </property>
         </configuration>
+        <container qualifier="jbossas-managed" default="true">
+        <configuration>
+            <property name="jbossHome">/Library/jboss-as-7.1.1.Final</property>
+        </configuration>
+    </container>
     </container>
     
     

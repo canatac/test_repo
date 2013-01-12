@@ -6,19 +6,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 //import org.hibernate.validator.constraints.NotEmpty;
 
-import org.ortens.bone.core.model.BaseEntity;
+import org.ortens.bone.core.model.GenericEntity;
 
 @Entity
-public class Livraison extends BaseEntity implements Serializable{
+public class Livraison extends GenericEntity implements Serializable{
         /**
 	 * 
 	 */
@@ -35,8 +30,10 @@ public class Livraison extends BaseEntity implements Serializable{
 
 
 //	@ManyToMany()
+    @ManyToMany()
 	private Set<Changement> changements = new HashSet<Changement>(0);
 	
+    @Id
 	private String displayText;
     
 	public Livraison() {
@@ -50,7 +47,7 @@ public class Livraison extends BaseEntity implements Serializable{
 		this.setDisplayText(description);
 	}
 	
-    public String getDisplayText() {
+        public String getDisplayText() {
         
         return displayText;
     }    
@@ -72,8 +69,7 @@ public class Livraison extends BaseEntity implements Serializable{
 
 
 
-	@ManyToMany()
-	public Set<Changement> getChangements() {
+		public Set<Changement> getChangements() {
 		return changements;
 	}
 

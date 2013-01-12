@@ -1,10 +1,7 @@
 package org.ortens.bone.core.model;
 
 import java.util.logging.Logger;
-
-
 import javax.inject.Inject;
-
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -21,7 +18,7 @@ public class CheckPointTest {
 	@Deployment
 	public static JavaArchive createDeployment(){
 		JavaArchive jar = ShrinkWrap.create(JavaArchive.class)
-				.addClasses(CheckPoint.class, BaseEntity.class)
+				.addClasses(CheckPoint.class, GenericEntity.class)
 				.addAsManifestResource(EmptyAsset.INSTANCE,"beans.xml");
 		
 		_logger.info(jar.toString(true));

@@ -21,7 +21,7 @@ public class FileTest {
 	@Deployment
 	public static JavaArchive createDeployment(){
 		JavaArchive jar = ShrinkWrap.create(JavaArchive.class)
-				.addClasses(File.class,BaseEntity.class)
+				.addClasses(File.class,GenericEntity.class)
 				.addAsManifestResource(EmptyAsset.INSTANCE,"beans.xml");
 		_logger.info(jar.toString(true));
 		return jar;

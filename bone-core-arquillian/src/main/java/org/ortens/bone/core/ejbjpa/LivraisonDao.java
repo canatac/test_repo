@@ -8,10 +8,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.ortens.bone.core.model.BaseEntity;
+import org.ortens.bone.core.model.Livraison;
 
 
 @Stateless
-public class LivraisonDao extends BaseEntityDao{
+//public class LivraisonDao extends BaseEntityDaoImpl{
+public class LivraisonDao extends GenericEntityDaoImpl{
 	public static Logger _logger = Logger
 			.getLogger(LivraisonDao.class.getName());
 	
@@ -38,25 +40,25 @@ public class LivraisonDao extends BaseEntityDao{
 //		em.persist(livraisonNEW);
 //	}
 
-	@Override
+
 	public BaseEntity update(BaseEntity entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
+
 	public boolean delete(BaseEntity entity) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
+
 	public boolean create(BaseEntity entity) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
+
 	public BaseEntity get(String description) {
 		// TODO Auto-generated method stub
 		return null;

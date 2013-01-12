@@ -21,7 +21,7 @@ public class CompanyTest {
 	@Deployment
 	public static JavaArchive createDeployment(){
 		JavaArchive jar = ShrinkWrap.create(JavaArchive.class)
-				.addClasses(Company.class,BaseEntity.class)
+				.addClasses(Company.class,GenericEntity.class)
 				.addAsManifestResource(EmptyAsset.INSTANCE,"beans.xml");
 		
 		_logger.info(jar.toString(true));

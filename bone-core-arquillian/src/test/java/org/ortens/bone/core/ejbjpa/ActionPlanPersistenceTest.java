@@ -26,14 +26,14 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ortens.bone.core.model.ActionPlan;
-import org.ortens.bone.core.model.BaseEntity;
+import org.ortens.bone.core.model.GenericEntity;
 
 @RunWith(Arquillian.class)
 public class ActionPlanPersistenceTest {
     @Deployment
     public static Archive<?> createDeployment() {
         return ShrinkWrap.create(WebArchive.class, "test.war")
-            .addClasses(ActionPlan.class, BaseEntity.class)
+            .addClasses(ActionPlan.class, GenericEntity.class)
             .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
             .addAsWebInfResource("jbossas-ds.xml"); //arquillian-jbossas-managed profile. Can stay without perturbing arquillian-glassfish-embedded test 

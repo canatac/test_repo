@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
-import org.ortens.bone.core.model.BaseEntity;
+import org.ortens.bone.core.model.GenericEntity;
 import org.ortens.bone.core.model.Person;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -24,7 +24,7 @@ public class PersonTest {
 	public static JavaArchive createDeployment(){
 		
 		JavaArchive jar = ShrinkWrap.create(JavaArchive.class)
-			.addClasses(Person.class, BaseEntity.class)
+			.addClasses(Person.class, GenericEntity.class)
 			.addAsManifestResource(EmptyAsset.INSTANCE,"beans.xml");
 		_logger.info(jar.toString(true));
 	    return jar;

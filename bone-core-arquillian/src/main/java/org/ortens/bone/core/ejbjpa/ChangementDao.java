@@ -8,13 +8,14 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.ortens.bone.core.model.BaseEntity;
+import org.ortens.bone.core.model.GenericEntity;
 import org.ortens.bone.core.model.Changement;
 import org.ortens.bone.core.model.Demand;
 import org.ortens.bone.core.model.Livraison;
 
 @Stateless
-public class ChangementDao extends BaseEntityDao{
+//public class ChangementDao extends GenericEntityDaoImpl{
+public class ChangementDao extends GenericEntityDaoImpl{   
 	public static Logger _logger = Logger.getLogger(ChangementDao.class
 			.getName());
 
@@ -24,9 +25,9 @@ public class ChangementDao extends BaseEntityDao{
 	@Inject
 	Demand demand;
 
-	@Override
-	public void move(BaseEntity changement, BaseEntity livraison,
-			BaseEntity livraisonNEW) {
+
+	public void move(GenericEntity changement, GenericEntity livraison,
+			GenericEntity livraisonNEW) {
 		Iterator<Changement> it = ((Livraison)livraison).getChangements().iterator();
 		while (it.hasNext()) {
 			if (changement.getDescription().equals(it.next().getDescription())) {
@@ -86,26 +87,26 @@ public class ChangementDao extends BaseEntityDao{
 		em.persist(livraison);
 	}
 
-	@Override
-	public BaseEntity update(BaseEntity entity) {
+	
+	public GenericEntity update(GenericEntity entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
-	public boolean delete(BaseEntity entity) {
+	
+	public boolean delete(GenericEntity entity) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
-	public boolean create(BaseEntity entity) {
+	
+	public boolean create(GenericEntity entity) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
-	public BaseEntity get(String description) {
+	
+	public GenericEntity get(String description) {
 		// TODO Auto-generated method stub
 		return null;
 	}

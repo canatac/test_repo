@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import org.junit.Assert;
-import org.ortens.bone.core.model.BaseEntity;
+import org.ortens.bone.core.model.GenericEntity;
 import org.ortens.bone.core.model.Changement;
 import org.ortens.bone.core.model.Demand;
 import org.ortens.bone.core.model.Livraison;
@@ -40,7 +40,7 @@ public class DemandPersistenceTest {
     @Deployment
     public static Archive<?> createDeployment() {
         return ShrinkWrap.create(WebArchive.class, "test.war")
-            .addClasses(BaseEntity.class, Demand.class, Livraison.class, Changement.class)
+            .addClasses(GenericEntity.class, Demand.class, Livraison.class, Changement.class)
             .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
             .addAsWebInfResource("jbossas-ds.xml"); //arquillian-jbossas-managed profile. Can stay without perturbing arquillian-glassfish-embedded test 

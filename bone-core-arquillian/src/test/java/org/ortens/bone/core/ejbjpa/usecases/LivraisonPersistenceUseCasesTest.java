@@ -1,50 +1,36 @@
 package org.ortens.bone.core.ejbjpa.usecases;
 
-import java.util.List;
-
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
-
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import javax.transaction.*;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.runner.RunWith;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.junit.Assert;
-import org.ortens.bone.core.ejbjpa.BaseEntityDao;
+import org.junit.runner.RunWith;
 import org.ortens.bone.core.ejbjpa.ChangementDao;
 import org.ortens.bone.core.ejbjpa.DemandDao;
+import org.ortens.bone.core.ejbjpa.GenericEntityDaoImpl;
 import org.ortens.bone.core.ejbjpa.LivraisonDao;
-import org.ortens.bone.core.model.BaseEntity;
 import org.ortens.bone.core.model.Changement;
 import org.ortens.bone.core.model.Demand;
+import org.ortens.bone.core.model.GenericEntity;
 import org.ortens.bone.core.model.Livraison;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 @RunWith(Arquillian.class)
 public class LivraisonPersistenceUseCasesTest{
@@ -57,8 +43,8 @@ public class LivraisonPersistenceUseCasesTest{
 	public static Archive<?> createDeployment() {
 		return ShrinkWrap
 				.create(WebArchive.class, "test.war")
-				.addClasses(BaseEntity.class, Demand.class, Livraison.class,
-						Changement.class, BaseEntityDao.class, LivraisonDao.class, DemandDao.class, ChangementDao.class)
+				.addClasses(GenericEntity.class, Demand.class, Livraison.class,
+						Changement.class, GenericEntityDaoImpl.class, LivraisonDao.class, DemandDao.class, ChangementDao.class)
 				.addAsResource("test-persistence.xml",
 						"META-INF/persistence.xml")
 				.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
@@ -100,18 +86,18 @@ public class LivraisonPersistenceUseCasesTest{
 	@Test
 	public void getEntitiesListTest(){
 		_logger.info("==============>>>>>>>>>> INTO TEST : getEntitiesListTest()");
-		List<BaseEntity> entities = livraisonDao.getList(livraison);
+		List<GenericEntity> entities = livraisonDao.getList(livraison);
 		
 		assertContainsAllEntities(entities);
 		_logger.info("==============>>>>>>>>>> OUT OF TEST : getEntitiesListTest()");
 	}
 	
 	private static void assertContainsAllEntities(
-			Collection<BaseEntity> retrievedEntities) {
+			Collection<GenericEntity> retrievedEntities) {
 		Assert.assertEquals(LIVRAISON_TITLES.length, retrievedEntities.size());
 
 		final Set<String> retrievedEntitiesTitles = new HashSet<String>();
-		for (BaseEntity livraison : retrievedEntities) {
+		for (GenericEntity livraison : retrievedEntities) {
 			_logger.info("* " + livraison);
 			_logger.info("---------> livraison.getDescription() : "
 					+ livraison.getDescription());

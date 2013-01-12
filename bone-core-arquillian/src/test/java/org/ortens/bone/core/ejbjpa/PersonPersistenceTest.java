@@ -20,9 +20,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.Assert;
-import org.ortens.bone.core.model.BaseEntity;
+import org.ortens.bone.core.model.GenericEntity;
 import org.ortens.bone.core.model.Person;
-import org.ortens.bone.core.model.Person_;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -33,7 +32,7 @@ public class PersonPersistenceTest {
     @Deployment
     public static Archive<?> createDeployment() {
         return ShrinkWrap.create(WebArchive.class, "test.war")
-            .addClasses(Person.class, BaseEntity.class)
+            .addClasses(Person.class, GenericEntity.class)
             .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
             .addAsWebInfResource("jbossas-ds.xml"); //arquillian-jbossas-managed profile. Can stay without perturbing arquillian-glassfish-embedded test 
